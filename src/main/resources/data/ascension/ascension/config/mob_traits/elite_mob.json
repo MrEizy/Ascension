@@ -1,0 +1,44 @@
+{
+  "type": "ascension:simple_trait",
+  "name": "Elite Creature",
+  "stats": {
+    "ascension:vitality": {
+      "flat": [
+        {
+          "id": "ascension:mob_elite_vitality",
+          "value": 9
+        }
+      ],
+      "multiplier": []
+    },
+    "ascension:strength": {
+      "flat": [
+        {
+          "id": "ascension:mob_elite_strength",
+          "value": 6
+        }
+      ],
+      "multiplier": []
+    }
+  },
+  "attributes": {
+    "minecraft:max_health": {
+      "flat": [
+        {
+          "id": "ascension:mob_elite_health",
+          "value": 36
+        }
+      ],
+      "multiplier": []
+    },
+    "minecraft:attack_damage": {
+      "flat": [
+        {
+          "id": "ascension:mob_elite_attack",
+          "value": 7
+        }
+      ],
+      "multiplier": []
+    }
+  }
+}

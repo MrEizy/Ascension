@@ -1,229 +1,5683 @@
 {
   "values": {
-    "minecraft:zombie": {
-      "tiers": {
-        "normal": {
-          "base_weight": 90
-        },
-        "elite": {
-          "base_weight": 9
-        },
-        "ancient": {
-          "base_weight": 1
+    "ascension:female_cultivator": {
+      "pools": [
+        {
+          "id": "ascension:rarity",
+          "rolls": 1,
+          "exclusive": true,
+          "entries": [
+            {
+              "id": "normal",
+              "base_weight": 90,
+              "traits": [
+                {
+                  "trait": "ascension:female_cultivator",
+                  "chance": 1.0
+                }
+              ]
+            },
+            {
+              "id": "elite",
+              "base_weight": 9,
+              "traits": [
+                {
+                  "trait": "ascension:female_cultivator",
+                  "chance": 1.0
+                },
+                {
+                  "trait": "ascension:elite_cultivator",
+                  "chance": 1.0
+                }
+              ]
+            },
+            {
+              "id": "ancient",
+              "base_weight": 1,
+              "traits": [
+                {
+                  "trait": "ascension:female_cultivator",
+                  "chance": 1.0
+                },
+                {
+                  "trait": "ascension:ancient_cultivator",
+                  "chance": 1.0
+                }
+              ]
+            }
+          ]
         }
-      },
-      "traits": {
-        "normal": [
-          {
-            "trait": "ascension:sturdy",
-            "chance": 1.0
-          }
-        ]
-      }
+      ]
     },
     "ascension:male_cultivator": {
-      "tiers": {
-        "normal": {
-          "base_weight": 90
-        },
-        "elite": {
-          "base_weight": 9
-        },
-        "ancient": {
-          "base_weight": 1
+      "pools": [
+        {
+          "id": "ascension:rarity",
+          "rolls": 1,
+          "exclusive": true,
+          "entries": [
+            {
+              "id": "normal",
+              "base_weight": 90,
+              "traits": [
+                {
+                  "trait": "ascension:male_cultivator",
+                  "chance": 1.0
+                }
+              ]
+            },
+            {
+              "id": "elite",
+              "base_weight": 9,
+              "traits": [
+                {
+                  "trait": "ascension:male_cultivator",
+                  "chance": 1.0
+                },
+                {
+                  "trait": "ascension:elite_cultivator",
+                  "chance": 1.0
+                }
+              ]
+            },
+            {
+              "id": "ancient",
+              "base_weight": 1,
+              "traits": [
+                {
+                  "trait": "ascension:male_cultivator",
+                  "chance": 1.0
+                },
+                {
+                  "trait": "ascension:ancient_cultivator",
+                  "chance": 1.0
+                }
+              ]
+            }
+          ]
         }
-      },
-      "traits": {
-        "normal": [
-          {
-            "trait": "ascension:male_cultivator",
-            "chance": 1.0
-          }
-        ],
-        "elite": [
-          {
-            "trait": "ascension:male_cultivator",
-            "chance": 1.0
-          },
-          {
-            "trait": "ascension:elite_cultivator",
-            "chance": 1.0
-          }
-        ],
-        "ancient": [
-          {
-            "trait": "ascension:male_cultivator",
-            "chance": 1.0
-          },
-          {
-            "trait": "ascension:ancient_cultivator",
-            "chance": 1.0
-          }
-        ]
-      }
-    },
-    "ascension:female_cultivator": {
-      "tiers": {
-        "normal": {
-          "base_weight": 90
-        },
-        "elite": {
-          "base_weight": 9
-        },
-        "ancient": {
-          "base_weight": 1
-        }
-      },
-      "traits": {
-        "normal": [
-          {
-            "trait": "ascension:female_cultivator",
-            "chance": 1.0
-          }
-        ],
-        "elite": [
-          {
-            "trait": "ascension:female_cultivator",
-            "chance": 1.0
-          },
-          {
-            "trait": "ascension:elite_cultivator",
-            "chance": 1.0
-          }
-        ],
-        "ancient": [
-          {
-            "trait": "ascension:female_cultivator",
-            "chance": 1.0
-          },
-          {
-            "trait": "ascension:ancient_cultivator",
-            "chance": 1.0
-          }
-        ]
-      }
-    },
-    "ascension:young_master": {
-      "tiers": {
-        "normal": {
-          "base_weight": 90
-        },
-        "elite": {
-          "base_weight": 9
-        },
-        "ancient": {
-          "base_weight": 1
-        }
-      },
-      "traits": {
-        "normal": [
-          {
-            "trait": "ascension:young_master",
-            "chance": 1.0
-          }
-        ],
-        "elite": [
-          {
-            "trait": "ascension:young_master",
-            "chance": 1.0
-          },
-          {
-            "trait": "ascension:elite_cultivator",
-            "chance": 1.0
-          }
-        ],
-        "ancient": [
-          {
-            "trait": "ascension:young_master",
-            "chance": 1.0
-          },
-          {
-            "trait": "ascension:ancient_cultivator",
-            "chance": 1.0
-          }
-        ]
-      }
+      ]
     },
     "ascension:sect_elder": {
-      "tiers": {
-        "normal": {
-          "base_weight": 90
-        },
-        "elite": {
-          "base_weight": 9
-        },
-        "ancient": {
-          "base_weight": 1
+      "pools": [
+        {
+          "id": "ascension:rarity",
+          "rolls": 1,
+          "exclusive": true,
+          "entries": [
+            {
+              "id": "normal",
+              "base_weight": 90,
+              "traits": [
+                {
+                  "trait": "ascension:sect_elder",
+                  "chance": 1.0
+                }
+              ]
+            },
+            {
+              "id": "elite",
+              "base_weight": 9,
+              "traits": [
+                {
+                  "trait": "ascension:sect_elder",
+                  "chance": 1.0
+                },
+                {
+                  "trait": "ascension:elite_cultivator",
+                  "chance": 1.0
+                }
+              ]
+            },
+            {
+              "id": "ancient",
+              "base_weight": 1,
+              "traits": [
+                {
+                  "trait": "ascension:sect_elder",
+                  "chance": 1.0
+                },
+                {
+                  "trait": "ascension:ancient_cultivator",
+                  "chance": 1.0
+                }
+              ]
+            }
+          ]
         }
-      },
-      "traits": {
-        "normal": [
-          {
-            "trait": "ascension:sect_elder",
-            "chance": 1.0
-          }
-        ],
-        "elite": [
-          {
-            "trait": "ascension:sect_elder",
-            "chance": 1.0
-          },
-          {
-            "trait": "ascension:elite_cultivator",
-            "chance": 1.0
-          }
-        ],
-        "ancient": [
-          {
-            "trait": "ascension:sect_elder",
-            "chance": 1.0
-          },
-          {
-            "trait": "ascension:ancient_cultivator",
-            "chance": 1.0
-          }
-        ]
-      }
+      ]
     },
     "ascension:sect_master": {
-      "tiers": {
-        "normal": {
-          "base_weight": 90
-        },
-        "elite": {
-          "base_weight": 9
-        },
-        "ancient": {
-          "base_weight": 1
+      "pools": [
+        {
+          "id": "ascension:rarity",
+          "rolls": 1,
+          "exclusive": true,
+          "entries": [
+            {
+              "id": "normal",
+              "base_weight": 90,
+              "traits": [
+                {
+                  "trait": "ascension:sect_master",
+                  "chance": 1.0
+                }
+              ]
+            },
+            {
+              "id": "elite",
+              "base_weight": 9,
+              "traits": [
+                {
+                  "trait": "ascension:sect_master",
+                  "chance": 1.0
+                },
+                {
+                  "trait": "ascension:elite_cultivator",
+                  "chance": 1.0
+                }
+              ]
+            },
+            {
+              "id": "ancient",
+              "base_weight": 1,
+              "traits": [
+                {
+                  "trait": "ascension:sect_master",
+                  "chance": 1.0
+                },
+                {
+                  "trait": "ascension:ancient_cultivator",
+                  "chance": 1.0
+                }
+              ]
+            }
+          ]
         }
-      },
-      "traits": {
-        "normal": [
+      ]
+    },
+    "ascension:young_master": {
+      "pools": [
+        {
+          "id": "ascension:rarity",
+          "rolls": 1,
+          "exclusive": true,
+          "entries": [
+            {
+              "id": "normal",
+              "base_weight": 90,
+              "traits": [
+                {
+                  "trait": "ascension:young_master",
+                  "chance": 1.0
+                }
+              ]
+            },
+            {
+              "id": "elite",
+              "base_weight": 9,
+              "traits": [
+                {
+                  "trait": "ascension:young_master",
+                  "chance": 1.0
+                },
+                {
+                  "trait": "ascension:elite_cultivator",
+                  "chance": 1.0
+                }
+              ]
+            },
+            {
+              "id": "ancient",
+              "base_weight": 1,
+              "traits": [
+                {
+                  "trait": "ascension:young_master",
+                  "chance": 1.0
+                },
+                {
+                  "trait": "ascension:ancient_cultivator",
+                  "chance": 1.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "minecraft:blaze": {
+      "pools": [
+        {
+          "id": "ascension:rarity",
+          "rolls": 1,
+          "exclusive": true,
+          "entries": [
+            {
+              "id": "normal",
+              "base_weight": 960000
+            },
+            {
+              "id": "elite",
+              "base_weight": 36800,
+              "traits": [
+                {
+                  "trait": "ascension:elite_mob",
+                  "chance": 1.0
+                }
+              ]
+            },
+            {
+              "id": "ancient",
+              "base_weight": 3200,
+              "traits": [
+                {
+                  "trait": "ascension:ancient_mob",
+                  "chance": 1.0
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "cultivation": {
+        "foundation_paths": [
           {
-            "trait": "ascension:sect_master",
-            "chance": 1.0
-          }
-        ],
-        "elite": [
-          {
-            "trait": "ascension:sect_master",
-            "chance": 1.0
+            "path": "ascension:foundation/body",
+            "weight": 50,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
           },
           {
-            "trait": "ascension:elite_cultivator",
-            "chance": 1.0
-          }
-        ],
-        "ancient": [
-          {
-            "trait": "ascension:sect_master",
-            "chance": 1.0
+            "path": "ascension:foundation/essence",
+            "weight": 400,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
           },
           {
-            "trait": "ascension:ancient_cultivator",
-            "chance": 1.0
+            "path": "ascension:foundation/soul",
+            "weight": 600,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          }
+        ],
+        "subpaths": [
+          {
+            "path": "ascension:elemental/fire",
+            "weight": 1000,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          },
+          {
+            "path": "ascension:elemental/yang",
+            "weight": 200,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          }
+        ],
+        "subpath_count": {
+          "max": 2,
+          "min": 1
+        },
+        "skill_pools": [
+          {
+            "id": "ascension:generic/essence",
+            "rolls": {
+              "min": 0,
+              "max": 1
+            },
+            "entries": [
+              {
+                "skill": "ascension:mob_skill/qi_projectile",
+                "weight": 100,
+                "minimum_realm_score": 3,
+                "requires_path": "ascension:foundation/essence"
+              },
+              {
+                "skill": "ascension:mob_skill/elemental_pulse",
+                "weight": 90,
+                "minimum_realm_score": 4,
+                "requires_path": "ascension:foundation/essence"
+              },
+              {
+                "skill": "ascension:mob_skill/essence_guard",
+                "weight": 70,
+                "minimum_realm_score": 6,
+                "requires_path": "ascension:foundation/essence"
+              }
+            ]
+          },
+          {
+            "id": "ascension:generic/soul",
+            "rolls": {
+              "min": 0,
+              "max": 1
+            },
+            "entries": [
+              {
+                "skill": "ascension:mob_skill/fear_pulse",
+                "weight": 100,
+                "minimum_realm_score": 3,
+                "requires_path": "ascension:foundation/soul"
+              },
+              {
+                "skill": "ascension:mob_skill/spirit_barrier",
+                "weight": 90,
+                "minimum_realm_score": 4,
+                "requires_path": "ascension:foundation/soul"
+              },
+              {
+                "skill": "ascension:mob_skill/target_disruption",
+                "weight": 70,
+                "minimum_realm_score": 6,
+                "requires_path": "ascension:foundation/soul"
+              }
+            ]
+          },
+          {
+            "id": "ascension:species/blaze",
+            "rolls": {
+              "min": 0,
+              "max": 1
+            },
+            "entries": [
+              {
+                "skill": "ascension:mob_skill/flame_body_transformation",
+                "weight": 200,
+                "minimum_realm_score": 3
+              }
+            ]
           }
         ]
+      },
+      "stat_biases": {
+        "ascension:agility": 1.155,
+        "ascension:spirit": 1.68,
+        "ascension:strength": 0.7875,
+        "ascension:vitality": 0.84
+      }
+    },
+    "minecraft:creeper": {
+      "pools": [
+        {
+          "id": "ascension:rarity",
+          "rolls": 1,
+          "exclusive": true,
+          "entries": [
+            {
+              "id": "normal",
+              "base_weight": 975000
+            },
+            {
+              "id": "elite",
+              "base_weight": 23000,
+              "traits": [
+                {
+                  "trait": "ascension:elite_mob",
+                  "chance": 1.0
+                }
+              ]
+            },
+            {
+              "id": "ancient",
+              "base_weight": 2000,
+              "traits": [
+                {
+                  "trait": "ascension:ancient_mob",
+                  "chance": 1.0
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "cultivation": {
+        "foundation_paths": [
+          {
+            "path": "ascension:foundation/body",
+            "weight": 100,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:foundation/essence",
+            "weight": 600,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:foundation/soul",
+            "weight": 100,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          }
+        ],
+        "subpaths": [
+          {
+            "path": "ascension:elemental/fire",
+            "weight": 200,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:elemental/lightning",
+            "weight": 500,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:elemental/wood",
+            "weight": 200,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          }
+        ],
+        "subpath_count": {
+          "max": 2,
+          "min": 1
+        },
+        "skill_pools": [
+          {
+            "id": "ascension:generic/essence",
+            "rolls": {
+              "min": 0,
+              "max": 1
+            },
+            "entries": [
+              {
+                "skill": "ascension:mob_skill/qi_projectile",
+                "weight": 100,
+                "minimum_realm_score": 3,
+                "requires_path": "ascension:foundation/essence"
+              },
+              {
+                "skill": "ascension:mob_skill/elemental_pulse",
+                "weight": 90,
+                "minimum_realm_score": 4,
+                "requires_path": "ascension:foundation/essence"
+              },
+              {
+                "skill": "ascension:mob_skill/essence_guard",
+                "weight": 70,
+                "minimum_realm_score": 6,
+                "requires_path": "ascension:foundation/essence"
+              }
+            ]
+          }
+        ]
+      },
+      "stat_biases": {
+        "ascension:agility": 1.0,
+        "ascension:spirit": 1.05,
+        "ascension:strength": 1.25,
+        "ascension:vitality": 0.9
+      }
+    },
+    "minecraft:drowned": {
+      "pools": [
+        {
+          "id": "ascension:rarity",
+          "rolls": 1,
+          "exclusive": true,
+          "entries": [
+            {
+              "id": "normal",
+              "base_weight": 975000
+            },
+            {
+              "id": "elite",
+              "base_weight": 23000,
+              "traits": [
+                {
+                  "trait": "ascension:elite_mob",
+                  "chance": 1.0
+                }
+              ]
+            },
+            {
+              "id": "ancient",
+              "base_weight": 2000,
+              "traits": [
+                {
+                  "trait": "ascension:ancient_mob",
+                  "chance": 1.0
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "cultivation": {
+        "foundation_paths": [
+          {
+            "path": "ascension:foundation/body",
+            "weight": 400,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:foundation/essence",
+            "weight": 100,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:foundation/soul",
+            "weight": 300,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          }
+        ],
+        "subpaths": [
+          {
+            "path": "ascension:elemental/death",
+            "weight": 300,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:elemental/water",
+            "weight": 500,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:weapon/spear",
+            "weight": 500,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          }
+        ],
+        "subpath_count": {
+          "max": 2,
+          "min": 1
+        },
+        "skill_pools": [
+          {
+            "id": "ascension:generic/body",
+            "rolls": {
+              "min": 0,
+              "max": 1
+            },
+            "entries": [
+              {
+                "skill": "ascension:mob_skill/charging_strike",
+                "weight": 100,
+                "minimum_realm_score": 3,
+                "requires_path": "ascension:foundation/body"
+              },
+              {
+                "skill": "ascension:mob_skill/body_reinforcement",
+                "weight": 80,
+                "minimum_realm_score": 4,
+                "requires_path": "ascension:foundation/body"
+              },
+              {
+                "skill": "ascension:mob_skill/crushing_blow",
+                "weight": 70,
+                "minimum_realm_score": 6,
+                "requires_path": "ascension:foundation/body"
+              }
+            ]
+          },
+          {
+            "id": "ascension:generic/soul",
+            "rolls": {
+              "min": 0,
+              "max": 1
+            },
+            "entries": [
+              {
+                "skill": "ascension:mob_skill/fear_pulse",
+                "weight": 100,
+                "minimum_realm_score": 3,
+                "requires_path": "ascension:foundation/soul"
+              },
+              {
+                "skill": "ascension:mob_skill/spirit_barrier",
+                "weight": 90,
+                "minimum_realm_score": 4,
+                "requires_path": "ascension:foundation/soul"
+              },
+              {
+                "skill": "ascension:mob_skill/target_disruption",
+                "weight": 70,
+                "minimum_realm_score": 6,
+                "requires_path": "ascension:foundation/soul"
+              }
+            ]
+          }
+        ]
+      },
+      "stat_biases": {
+        "ascension:agility": 0.945,
+        "ascension:spirit": 1.05,
+        "ascension:strength": 1.2075,
+        "ascension:vitality": 1.2075
+      }
+    },
+    "minecraft:elder_guardian": {
+      "pools": [
+        {
+          "id": "ascension:rarity",
+          "rolls": 1,
+          "exclusive": true,
+          "entries": [
+            {
+              "id": "elite",
+              "base_weight": 800000,
+              "traits": [
+                {
+                  "trait": "ascension:elite_mob",
+                  "chance": 1.0
+                }
+              ]
+            },
+            {
+              "id": "ancient",
+              "base_weight": 200000,
+              "traits": [
+                {
+                  "trait": "ascension:ancient_mob",
+                  "chance": 1.0
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "cultivation": {
+        "foundation_paths": [
+          {
+            "path": "ascension:foundation/body",
+            "weight": 100,
+            "realms": [
+              {
+                "major_realm": 2,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 3,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          },
+          {
+            "path": "ascension:foundation/essence",
+            "weight": 400,
+            "realms": [
+              {
+                "major_realm": 2,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 3,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          },
+          {
+            "path": "ascension:foundation/soul",
+            "weight": 300,
+            "realms": [
+              {
+                "major_realm": 2,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 3,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          }
+        ],
+        "subpaths": [
+          {
+            "path": "ascension:elemental/metal",
+            "weight": 250,
+            "realms": [
+              {
+                "major_realm": 2,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 3,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          },
+          {
+            "path": "ascension:elemental/water",
+            "weight": 600,
+            "realms": [
+              {
+                "major_realm": 2,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 3,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          },
+          {
+            "path": "ascension:elemental/space",
+            "weight": 100,
+            "realms": [
+              {
+                "major_realm": 2,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 3,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          }
+        ],
+        "subpath_count": {
+          "max": 2,
+          "min": 1
+        },
+        "skill_pools": [
+          {
+            "id": "ascension:generic/essence",
+            "rolls": {
+              "min": 0,
+              "max": 1
+            },
+            "entries": [
+              {
+                "skill": "ascension:mob_skill/qi_projectile",
+                "weight": 100,
+                "minimum_realm_score": 3,
+                "requires_path": "ascension:foundation/essence"
+              },
+              {
+                "skill": "ascension:mob_skill/elemental_pulse",
+                "weight": 90,
+                "minimum_realm_score": 4,
+                "requires_path": "ascension:foundation/essence"
+              },
+              {
+                "skill": "ascension:mob_skill/essence_guard",
+                "weight": 70,
+                "minimum_realm_score": 6,
+                "requires_path": "ascension:foundation/essence"
+              }
+            ]
+          },
+          {
+            "id": "ascension:generic/soul",
+            "rolls": {
+              "min": 0,
+              "max": 1
+            },
+            "entries": [
+              {
+                "skill": "ascension:mob_skill/fear_pulse",
+                "weight": 100,
+                "minimum_realm_score": 3,
+                "requires_path": "ascension:foundation/soul"
+              },
+              {
+                "skill": "ascension:mob_skill/spirit_barrier",
+                "weight": 90,
+                "minimum_realm_score": 4,
+                "requires_path": "ascension:foundation/soul"
+              },
+              {
+                "skill": "ascension:mob_skill/target_disruption",
+                "weight": 70,
+                "minimum_realm_score": 6,
+                "requires_path": "ascension:foundation/soul"
+              }
+            ]
+          }
+        ]
+      },
+      "stat_biases": {
+        "ascension:agility": 1.2,
+        "ascension:spirit": 1.68,
+        "ascension:strength": 1.02,
+        "ascension:vitality": 1.62
+      }
+    },
+    "minecraft:ender_dragon": {
+      "pools": [
+        {
+          "id": "ascension:rarity",
+          "rolls": 1,
+          "exclusive": true,
+          "entries": [
+            {
+              "id": "elite",
+              "base_weight": 650000,
+              "traits": [
+                {
+                  "trait": "ascension:elite_mob",
+                  "chance": 1.0
+                }
+              ]
+            },
+            {
+              "id": "ancient",
+              "base_weight": 350000,
+              "traits": [
+                {
+                  "trait": "ascension:ancient_mob",
+                  "chance": 1.0
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "cultivation": {
+        "foundation_paths": [
+          {
+            "path": "ascension:foundation/body",
+            "weight": 300,
+            "realms": [
+              {
+                "major_realm": 3,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 4,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          },
+          {
+            "path": "ascension:foundation/essence",
+            "weight": 400,
+            "realms": [
+              {
+                "major_realm": 3,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 4,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          },
+          {
+            "path": "ascension:foundation/soul",
+            "weight": 600,
+            "realms": [
+              {
+                "major_realm": 3,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 4,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          }
+        ],
+        "subpaths": [
+          {
+            "path": "ascension:elemental/dark",
+            "weight": 400,
+            "realms": [
+              {
+                "major_realm": 3,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 4,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          },
+          {
+            "path": "ascension:elemental/fire",
+            "weight": 300,
+            "realms": [
+              {
+                "major_realm": 3,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 4,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          },
+          {
+            "path": "ascension:elemental/lightning",
+            "weight": 200,
+            "realms": [
+              {
+                "major_realm": 3,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 4,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          },
+          {
+            "path": "ascension:elemental/space",
+            "weight": 900,
+            "realms": [
+              {
+                "major_realm": 3,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 4,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          }
+        ],
+        "subpath_count": {
+          "max": 3,
+          "min": 2
+        },
+        "skill_pools": [
+          {
+            "id": "ascension:generic/body",
+            "rolls": {
+              "min": 0,
+              "max": 1
+            },
+            "entries": [
+              {
+                "skill": "ascension:mob_skill/charging_strike",
+                "weight": 100,
+                "minimum_realm_score": 3,
+                "requires_path": "ascension:foundation/body"
+              },
+              {
+                "skill": "ascension:mob_skill/body_reinforcement",
+                "weight": 80,
+                "minimum_realm_score": 4,
+                "requires_path": "ascension:foundation/body"
+              },
+              {
+                "skill": "ascension:mob_skill/crushing_blow",
+                "weight": 70,
+                "minimum_realm_score": 6,
+                "requires_path": "ascension:foundation/body"
+              }
+            ]
+          },
+          {
+            "id": "ascension:generic/essence",
+            "rolls": {
+              "min": 0,
+              "max": 1
+            },
+            "entries": [
+              {
+                "skill": "ascension:mob_skill/qi_projectile",
+                "weight": 100,
+                "minimum_realm_score": 3,
+                "requires_path": "ascension:foundation/essence"
+              },
+              {
+                "skill": "ascension:mob_skill/elemental_pulse",
+                "weight": 90,
+                "minimum_realm_score": 4,
+                "requires_path": "ascension:foundation/essence"
+              },
+              {
+                "skill": "ascension:mob_skill/essence_guard",
+                "weight": 70,
+                "minimum_realm_score": 6,
+                "requires_path": "ascension:foundation/essence"
+              }
+            ]
+          },
+          {
+            "id": "ascension:generic/soul",
+            "rolls": {
+              "min": 0,
+              "max": 1
+            },
+            "entries": [
+              {
+                "skill": "ascension:mob_skill/fear_pulse",
+                "weight": 100,
+                "minimum_realm_score": 3,
+                "requires_path": "ascension:foundation/soul"
+              },
+              {
+                "skill": "ascension:mob_skill/spirit_barrier",
+                "weight": 90,
+                "minimum_realm_score": 4,
+                "requires_path": "ascension:foundation/soul"
+              },
+              {
+                "skill": "ascension:mob_skill/target_disruption",
+                "weight": 70,
+                "minimum_realm_score": 6,
+                "requires_path": "ascension:foundation/soul"
+              }
+            ]
+          }
+        ]
+      },
+      "stat_biases": {
+        "ascension:agility": 1.43,
+        "ascension:spirit": 2.08,
+        "ascension:strength": 1.885,
+        "ascension:vitality": 2.08
+      }
+    },
+    "minecraft:enderman": {
+      "pools": [
+        {
+          "id": "ascension:rarity",
+          "rolls": 1,
+          "exclusive": true,
+          "entries": [
+            {
+              "id": "normal",
+              "base_weight": 975000
+            },
+            {
+              "id": "elite",
+              "base_weight": 23000,
+              "traits": [
+                {
+                  "trait": "ascension:elite_mob",
+                  "chance": 1.0
+                }
+              ]
+            },
+            {
+              "id": "ancient",
+              "base_weight": 2000,
+              "traits": [
+                {
+                  "trait": "ascension:ancient_mob",
+                  "chance": 1.0
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "cultivation": {
+        "foundation_paths": [
+          {
+            "path": "ascension:foundation/body",
+            "weight": 100,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          },
+          {
+            "path": "ascension:foundation/essence",
+            "weight": 300,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          },
+          {
+            "path": "ascension:foundation/soul",
+            "weight": 600,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          }
+        ],
+        "subpaths": [
+          {
+            "path": "ascension:elemental/dark",
+            "weight": 300,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          },
+          {
+            "path": "ascension:elemental/illusion",
+            "weight": 200,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          },
+          {
+            "path": "ascension:elemental/space",
+            "weight": 700,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          }
+        ],
+        "subpath_count": {
+          "max": 2,
+          "min": 1
+        },
+        "skill_pools": [
+          {
+            "id": "ascension:generic/soul",
+            "rolls": {
+              "min": 0,
+              "max": 1
+            },
+            "entries": [
+              {
+                "skill": "ascension:mob_skill/fear_pulse",
+                "weight": 100,
+                "minimum_realm_score": 3,
+                "requires_path": "ascension:foundation/soul"
+              },
+              {
+                "skill": "ascension:mob_skill/spirit_barrier",
+                "weight": 90,
+                "minimum_realm_score": 4,
+                "requires_path": "ascension:foundation/soul"
+              },
+              {
+                "skill": "ascension:mob_skill/target_disruption",
+                "weight": 70,
+                "minimum_realm_score": 6,
+                "requires_path": "ascension:foundation/soul"
+              }
+            ]
+          },
+          {
+            "id": "ascension:species/enderman",
+            "rolls": {
+              "min": 0,
+              "max": 1
+            },
+            "entries": [
+              {
+                "skill": "ascension:mob_skill/spatial_crossing",
+                "weight": 200,
+                "minimum_realm_score": 3
+              }
+            ]
+          }
+        ]
+      },
+      "stat_biases": {
+        "ascension:agility": 1.25,
+        "ascension:spirit": 1.35,
+        "ascension:strength": 0.95,
+        "ascension:vitality": 0.85
+      }
+    },
+    "minecraft:ghast": {
+      "pools": [
+        {
+          "id": "ascension:rarity",
+          "rolls": 1,
+          "exclusive": true,
+          "entries": [
+            {
+              "id": "normal",
+              "base_weight": 975000
+            },
+            {
+              "id": "elite",
+              "base_weight": 23000,
+              "traits": [
+                {
+                  "trait": "ascension:elite_mob",
+                  "chance": 1.0
+                }
+              ]
+            },
+            {
+              "id": "ancient",
+              "base_weight": 2000,
+              "traits": [
+                {
+                  "trait": "ascension:ancient_mob",
+                  "chance": 1.0
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "cultivation": {
+        "foundation_paths": [
+          {
+            "path": "ascension:foundation/body",
+            "weight": 50,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          },
+          {
+            "path": "ascension:foundation/essence",
+            "weight": 400,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          },
+          {
+            "path": "ascension:foundation/soul",
+            "weight": 500,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          }
+        ],
+        "subpaths": [
+          {
+            "path": "ascension:elemental/dark",
+            "weight": 200,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          },
+          {
+            "path": "ascension:elemental/fire",
+            "weight": 500,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          },
+          {
+            "path": "ascension:elemental/space",
+            "weight": 150,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          }
+        ],
+        "subpath_count": {
+          "max": 2,
+          "min": 1
+        },
+        "skill_pools": [
+          {
+            "id": "ascension:generic/essence",
+            "rolls": {
+              "min": 0,
+              "max": 1
+            },
+            "entries": [
+              {
+                "skill": "ascension:mob_skill/qi_projectile",
+                "weight": 100,
+                "minimum_realm_score": 3,
+                "requires_path": "ascension:foundation/essence"
+              },
+              {
+                "skill": "ascension:mob_skill/elemental_pulse",
+                "weight": 90,
+                "minimum_realm_score": 4,
+                "requires_path": "ascension:foundation/essence"
+              },
+              {
+                "skill": "ascension:mob_skill/essence_guard",
+                "weight": 70,
+                "minimum_realm_score": 6,
+                "requires_path": "ascension:foundation/essence"
+              }
+            ]
+          },
+          {
+            "id": "ascension:generic/soul",
+            "rolls": {
+              "min": 0,
+              "max": 1
+            },
+            "entries": [
+              {
+                "skill": "ascension:mob_skill/fear_pulse",
+                "weight": 100,
+                "minimum_realm_score": 3,
+                "requires_path": "ascension:foundation/soul"
+              },
+              {
+                "skill": "ascension:mob_skill/spirit_barrier",
+                "weight": 90,
+                "minimum_realm_score": 4,
+                "requires_path": "ascension:foundation/soul"
+              },
+              {
+                "skill": "ascension:mob_skill/target_disruption",
+                "weight": 70,
+                "minimum_realm_score": 6,
+                "requires_path": "ascension:foundation/soul"
+              }
+            ]
+          }
+        ]
+      },
+      "stat_biases": {
+        "ascension:agility": 1.045,
+        "ascension:spirit": 1.705,
+        "ascension:strength": 0.77,
+        "ascension:vitality": 0.825
+      }
+    },
+    "minecraft:glow_squid": {
+      "pools": [
+        {
+          "id": "ascension:rarity",
+          "rolls": 1,
+          "exclusive": true,
+          "entries": [
+            {
+              "id": "normal",
+              "base_weight": 975000
+            },
+            {
+              "id": "elite",
+              "base_weight": 23000,
+              "traits": [
+                {
+                  "trait": "ascension:elite_mob",
+                  "chance": 1.0
+                }
+              ]
+            },
+            {
+              "id": "ancient",
+              "base_weight": 2000,
+              "traits": [
+                {
+                  "trait": "ascension:ancient_mob",
+                  "chance": 1.0
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "cultivation": {
+        "foundation_paths": [
+          {
+            "path": "ascension:foundation/body",
+            "weight": 100,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:foundation/essence",
+            "weight": 300,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:foundation/soul",
+            "weight": 400,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          }
+        ],
+        "subpaths": [
+          {
+            "path": "ascension:elemental/water",
+            "weight": 500,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:elemental/yin",
+            "weight": 250,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          }
+        ],
+        "subpath_count": {
+          "max": 2,
+          "min": 1
+        },
+        "skill_pools": [
+          {
+            "id": "ascension:generic/essence",
+            "rolls": {
+              "min": 0,
+              "max": 1
+            },
+            "entries": [
+              {
+                "skill": "ascension:mob_skill/qi_projectile",
+                "weight": 100,
+                "minimum_realm_score": 3,
+                "requires_path": "ascension:foundation/essence"
+              },
+              {
+                "skill": "ascension:mob_skill/elemental_pulse",
+                "weight": 90,
+                "minimum_realm_score": 4,
+                "requires_path": "ascension:foundation/essence"
+              },
+              {
+                "skill": "ascension:mob_skill/essence_guard",
+                "weight": 70,
+                "minimum_realm_score": 6,
+                "requires_path": "ascension:foundation/essence"
+              }
+            ]
+          },
+          {
+            "id": "ascension:generic/soul",
+            "rolls": {
+              "min": 0,
+              "max": 1
+            },
+            "entries": [
+              {
+                "skill": "ascension:mob_skill/fear_pulse",
+                "weight": 100,
+                "minimum_realm_score": 3,
+                "requires_path": "ascension:foundation/soul"
+              },
+              {
+                "skill": "ascension:mob_skill/spirit_barrier",
+                "weight": 90,
+                "minimum_realm_score": 4,
+                "requires_path": "ascension:foundation/soul"
+              },
+              {
+                "skill": "ascension:mob_skill/target_disruption",
+                "weight": 70,
+                "minimum_realm_score": 6,
+                "requires_path": "ascension:foundation/soul"
+              }
+            ]
+          }
+        ]
+      },
+      "stat_biases": {
+        "ascension:agility": 0.95,
+        "ascension:spirit": 1.35,
+        "ascension:strength": 0.65,
+        "ascension:vitality": 0.75
+      }
+    },
+    "minecraft:guardian": {
+      "pools": [
+        {
+          "id": "ascension:rarity",
+          "rolls": 1,
+          "exclusive": true,
+          "entries": [
+            {
+              "id": "normal",
+              "base_weight": 975000
+            },
+            {
+              "id": "elite",
+              "base_weight": 23000,
+              "traits": [
+                {
+                  "trait": "ascension:elite_mob",
+                  "chance": 1.0
+                }
+              ]
+            },
+            {
+              "id": "ancient",
+              "base_weight": 2000,
+              "traits": [
+                {
+                  "trait": "ascension:ancient_mob",
+                  "chance": 1.0
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "cultivation": {
+        "foundation_paths": [
+          {
+            "path": "ascension:foundation/body",
+            "weight": 300,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:foundation/essence",
+            "weight": 500,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:foundation/soul",
+            "weight": 100,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          }
+        ],
+        "subpaths": [
+          {
+            "path": "ascension:elemental/lightning",
+            "weight": 300,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:elemental/water",
+            "weight": 800,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:weapon/spear",
+            "weight": 200,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          }
+        ],
+        "subpath_count": {
+          "max": 2,
+          "min": 1
+        },
+        "skill_pools": [
+          {
+            "id": "ascension:generic/essence",
+            "rolls": {
+              "min": 0,
+              "max": 1
+            },
+            "entries": [
+              {
+                "skill": "ascension:mob_skill/qi_projectile",
+                "weight": 100,
+                "minimum_realm_score": 3,
+                "requires_path": "ascension:foundation/essence"
+              },
+              {
+                "skill": "ascension:mob_skill/elemental_pulse",
+                "weight": 90,
+                "minimum_realm_score": 4,
+                "requires_path": "ascension:foundation/essence"
+              },
+              {
+                "skill": "ascension:mob_skill/essence_guard",
+                "weight": 70,
+                "minimum_realm_score": 6,
+                "requires_path": "ascension:foundation/essence"
+              }
+            ]
+          }
+        ]
+      },
+      "stat_biases": {
+        "ascension:agility": 0.9,
+        "ascension:spirit": 1.2,
+        "ascension:strength": 1.0,
+        "ascension:vitality": 1.25
+      }
+    },
+    "minecraft:husk": {
+      "pools": [
+        {
+          "id": "ascension:rarity",
+          "rolls": 1,
+          "exclusive": true,
+          "entries": [
+            {
+              "id": "normal",
+              "base_weight": 975000
+            },
+            {
+              "id": "elite",
+              "base_weight": 23000,
+              "traits": [
+                {
+                  "trait": "ascension:elite_mob",
+                  "chance": 1.0
+                }
+              ]
+            },
+            {
+              "id": "ancient",
+              "base_weight": 2000,
+              "traits": [
+                {
+                  "trait": "ascension:ancient_mob",
+                  "chance": 1.0
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "cultivation": {
+        "foundation_paths": [
+          {
+            "path": "ascension:foundation/body",
+            "weight": 500,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:foundation/essence",
+            "weight": 100,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:foundation/soul",
+            "weight": 200,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          }
+        ],
+        "subpaths": [
+          {
+            "path": "ascension:elemental/death",
+            "weight": 300,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:elemental/earth",
+            "weight": 300,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:elemental/fire",
+            "weight": 150,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:weapon/fist",
+            "weight": 300,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          }
+        ],
+        "subpath_count": {
+          "max": 2,
+          "min": 1
+        },
+        "skill_pools": [
+          {
+            "id": "ascension:generic/body",
+            "rolls": {
+              "min": 0,
+              "max": 1
+            },
+            "entries": [
+              {
+                "skill": "ascension:mob_skill/charging_strike",
+                "weight": 100,
+                "minimum_realm_score": 3,
+                "requires_path": "ascension:foundation/body"
+              },
+              {
+                "skill": "ascension:mob_skill/body_reinforcement",
+                "weight": 80,
+                "minimum_realm_score": 4,
+                "requires_path": "ascension:foundation/body"
+              },
+              {
+                "skill": "ascension:mob_skill/crushing_blow",
+                "weight": 70,
+                "minimum_realm_score": 6,
+                "requires_path": "ascension:foundation/body"
+              }
+            ]
+          }
+        ]
+      },
+      "stat_biases": {
+        "ascension:agility": 0.8925,
+        "ascension:spirit": 0.84,
+        "ascension:strength": 1.26,
+        "ascension:vitality": 1.26
+      }
+    },
+    "minecraft:iron_golem": {
+      "pools": [
+        {
+          "id": "ascension:rarity",
+          "rolls": 1,
+          "exclusive": true,
+          "entries": [
+            {
+              "id": "normal",
+              "base_weight": 985000
+            },
+            {
+              "id": "elite",
+              "base_weight": 13800,
+              "traits": [
+                {
+                  "trait": "ascension:elite_mob",
+                  "chance": 1.0
+                }
+              ]
+            },
+            {
+              "id": "ancient",
+              "base_weight": 1200,
+              "traits": [
+                {
+                  "trait": "ascension:ancient_mob",
+                  "chance": 1.0
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "cultivation": {
+        "foundation_paths": [
+          {
+            "path": "ascension:foundation/body",
+            "weight": 800,
+            "realms": [
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 2,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          },
+          {
+            "path": "ascension:foundation/essence",
+            "weight": 100,
+            "realms": [
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 2,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          },
+          {
+            "path": "ascension:foundation/soul",
+            "weight": 20,
+            "realms": [
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 2,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          }
+        ],
+        "subpaths": [
+          {
+            "path": "ascension:elemental/earth",
+            "weight": 400,
+            "realms": [
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 2,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          },
+          {
+            "path": "ascension:elemental/metal",
+            "weight": 800,
+            "realms": [
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 2,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          },
+          {
+            "path": "ascension:weapon/fist",
+            "weight": 500,
+            "realms": [
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 2,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          }
+        ],
+        "subpath_count": {
+          "max": 2,
+          "min": 1
+        },
+        "skill_pools": [
+          {
+            "id": "ascension:generic/body",
+            "rolls": {
+              "min": 0,
+              "max": 1
+            },
+            "entries": [
+              {
+                "skill": "ascension:mob_skill/charging_strike",
+                "weight": 100,
+                "minimum_realm_score": 3,
+                "requires_path": "ascension:foundation/body"
+              },
+              {
+                "skill": "ascension:mob_skill/body_reinforcement",
+                "weight": 80,
+                "minimum_realm_score": 4,
+                "requires_path": "ascension:foundation/body"
+              },
+              {
+                "skill": "ascension:mob_skill/crushing_blow",
+                "weight": 70,
+                "minimum_realm_score": 6,
+                "requires_path": "ascension:foundation/body"
+              }
+            ]
+          }
+        ]
+      },
+      "stat_biases": {
+        "ascension:agility": 0.6325,
+        "ascension:spirit": 0.7475,
+        "ascension:strength": 1.6675,
+        "ascension:vitality": 1.725
+      }
+    },
+    "minecraft:magma_cube": {
+      "pools": [
+        {
+          "id": "ascension:rarity",
+          "rolls": 1,
+          "exclusive": true,
+          "entries": [
+            {
+              "id": "normal",
+              "base_weight": 975000
+            },
+            {
+              "id": "elite",
+              "base_weight": 23000,
+              "traits": [
+                {
+                  "trait": "ascension:elite_mob",
+                  "chance": 1.0
+                }
+              ]
+            },
+            {
+              "id": "ancient",
+              "base_weight": 2000,
+              "traits": [
+                {
+                  "trait": "ascension:ancient_mob",
+                  "chance": 1.0
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "cultivation": {
+        "foundation_paths": [
+          {
+            "path": "ascension:foundation/body",
+            "weight": 300,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:foundation/essence",
+            "weight": 400,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:foundation/soul",
+            "weight": 100,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          }
+        ],
+        "subpaths": [
+          {
+            "path": "ascension:elemental/fire",
+            "weight": 600,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:weapon/fist",
+            "weight": 200,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          }
+        ],
+        "subpath_count": {
+          "max": 2,
+          "min": 1
+        },
+        "skill_pools": [
+          {
+            "id": "ascension:generic/body",
+            "rolls": {
+              "min": 0,
+              "max": 1
+            },
+            "entries": [
+              {
+                "skill": "ascension:mob_skill/charging_strike",
+                "weight": 100,
+                "minimum_realm_score": 3,
+                "requires_path": "ascension:foundation/body"
+              },
+              {
+                "skill": "ascension:mob_skill/body_reinforcement",
+                "weight": 80,
+                "minimum_realm_score": 4,
+                "requires_path": "ascension:foundation/body"
+              },
+              {
+                "skill": "ascension:mob_skill/crushing_blow",
+                "weight": 70,
+                "minimum_realm_score": 6,
+                "requires_path": "ascension:foundation/body"
+              }
+            ]
+          },
+          {
+            "id": "ascension:generic/essence",
+            "rolls": {
+              "min": 0,
+              "max": 1
+            },
+            "entries": [
+              {
+                "skill": "ascension:mob_skill/qi_projectile",
+                "weight": 100,
+                "minimum_realm_score": 3,
+                "requires_path": "ascension:foundation/essence"
+              },
+              {
+                "skill": "ascension:mob_skill/elemental_pulse",
+                "weight": 90,
+                "minimum_realm_score": 4,
+                "requires_path": "ascension:foundation/essence"
+              },
+              {
+                "skill": "ascension:mob_skill/essence_guard",
+                "weight": 70,
+                "minimum_realm_score": 6,
+                "requires_path": "ascension:foundation/essence"
+              }
+            ]
+          }
+        ]
+      },
+      "stat_biases": {
+        "ascension:agility": 0.935,
+        "ascension:spirit": 0.935,
+        "ascension:strength": 1.265,
+        "ascension:vitality": 1.43
+      }
+    },
+    "minecraft:piglin": {
+      "pools": [
+        {
+          "id": "ascension:rarity",
+          "rolls": 1,
+          "exclusive": true,
+          "entries": [
+            {
+              "id": "normal",
+              "base_weight": 975000
+            },
+            {
+              "id": "elite",
+              "base_weight": 23000,
+              "traits": [
+                {
+                  "trait": "ascension:elite_mob",
+                  "chance": 1.0
+                }
+              ]
+            },
+            {
+              "id": "ancient",
+              "base_weight": 2000,
+              "traits": [
+                {
+                  "trait": "ascension:ancient_mob",
+                  "chance": 1.0
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "cultivation": {
+        "foundation_paths": [
+          {
+            "path": "ascension:foundation/body",
+            "weight": 300,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:foundation/essence",
+            "weight": 300,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:foundation/soul",
+            "weight": 100,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          }
+        ],
+        "subpaths": [
+          {
+            "path": "ascension:elemental/fire",
+            "weight": 500,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:elemental/metal",
+            "weight": 400,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:weapon/axe",
+            "weight": 300,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:weapon/sword",
+            "weight": 300,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          }
+        ],
+        "subpath_count": {
+          "max": 2,
+          "min": 1
+        },
+        "skill_pools": [
+          {
+            "id": "ascension:generic/body",
+            "rolls": {
+              "min": 0,
+              "max": 1
+            },
+            "entries": [
+              {
+                "skill": "ascension:mob_skill/charging_strike",
+                "weight": 100,
+                "minimum_realm_score": 3,
+                "requires_path": "ascension:foundation/body"
+              },
+              {
+                "skill": "ascension:mob_skill/body_reinforcement",
+                "weight": 80,
+                "minimum_realm_score": 4,
+                "requires_path": "ascension:foundation/body"
+              },
+              {
+                "skill": "ascension:mob_skill/crushing_blow",
+                "weight": 70,
+                "minimum_realm_score": 6,
+                "requires_path": "ascension:foundation/body"
+              }
+            ]
+          },
+          {
+            "id": "ascension:generic/essence",
+            "rolls": {
+              "min": 0,
+              "max": 1
+            },
+            "entries": [
+              {
+                "skill": "ascension:mob_skill/qi_projectile",
+                "weight": 100,
+                "minimum_realm_score": 3,
+                "requires_path": "ascension:foundation/essence"
+              },
+              {
+                "skill": "ascension:mob_skill/elemental_pulse",
+                "weight": 90,
+                "minimum_realm_score": 4,
+                "requires_path": "ascension:foundation/essence"
+              },
+              {
+                "skill": "ascension:mob_skill/essence_guard",
+                "weight": 70,
+                "minimum_realm_score": 6,
+                "requires_path": "ascension:foundation/essence"
+              }
+            ]
+          }
+        ]
+      },
+      "stat_biases": {
+        "ascension:agility": 1.0,
+        "ascension:spirit": 0.9,
+        "ascension:strength": 1.15,
+        "ascension:vitality": 1.05
+      }
+    },
+    "minecraft:piglin_brute": {
+      "pools": [
+        {
+          "id": "ascension:rarity",
+          "rolls": 1,
+          "exclusive": true,
+          "entries": [
+            {
+              "id": "normal",
+              "base_weight": 975000
+            },
+            {
+              "id": "elite",
+              "base_weight": 23000,
+              "traits": [
+                {
+                  "trait": "ascension:elite_mob",
+                  "chance": 1.0
+                }
+              ]
+            },
+            {
+              "id": "ancient",
+              "base_weight": 2000,
+              "traits": [
+                {
+                  "trait": "ascension:ancient_mob",
+                  "chance": 1.0
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "cultivation": {
+        "foundation_paths": [
+          {
+            "path": "ascension:foundation/body",
+            "weight": 500,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          },
+          {
+            "path": "ascension:foundation/essence",
+            "weight": 200,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          },
+          {
+            "path": "ascension:foundation/soul",
+            "weight": 100,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          }
+        ],
+        "subpaths": [
+          {
+            "path": "ascension:elemental/fire",
+            "weight": 300,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          },
+          {
+            "path": "ascension:elemental/metal",
+            "weight": 350,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          },
+          {
+            "path": "ascension:weapon/axe",
+            "weight": 600,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          },
+          {
+            "path": "ascension:weapon/fist",
+            "weight": 200,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          }
+        ],
+        "subpath_count": {
+          "max": 2,
+          "min": 1
+        },
+        "skill_pools": [
+          {
+            "id": "ascension:generic/body",
+            "rolls": {
+              "min": 0,
+              "max": 1
+            },
+            "entries": [
+              {
+                "skill": "ascension:mob_skill/charging_strike",
+                "weight": 100,
+                "minimum_realm_score": 3,
+                "requires_path": "ascension:foundation/body"
+              },
+              {
+                "skill": "ascension:mob_skill/body_reinforcement",
+                "weight": 80,
+                "minimum_realm_score": 4,
+                "requires_path": "ascension:foundation/body"
+              },
+              {
+                "skill": "ascension:mob_skill/crushing_blow",
+                "weight": 70,
+                "minimum_realm_score": 6,
+                "requires_path": "ascension:foundation/body"
+              }
+            ]
+          }
+        ]
+      },
+      "stat_biases": {
+        "ascension:agility": 1.0925,
+        "ascension:spirit": 0.92,
+        "ascension:strength": 1.5525,
+        "ascension:vitality": 1.38
+      }
+    },
+    "minecraft:ravager": {
+      "pools": [
+        {
+          "id": "ascension:rarity",
+          "rolls": 1,
+          "exclusive": true,
+          "entries": [
+            {
+              "id": "normal",
+              "base_weight": 700000
+            },
+            {
+              "id": "elite",
+              "base_weight": 276000,
+              "traits": [
+                {
+                  "trait": "ascension:elite_mob",
+                  "chance": 1.0
+                }
+              ]
+            },
+            {
+              "id": "ancient",
+              "base_weight": 24000,
+              "traits": [
+                {
+                  "trait": "ascension:ancient_mob",
+                  "chance": 1.0
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "cultivation": {
+        "foundation_paths": [
+          {
+            "path": "ascension:foundation/body",
+            "weight": 700,
+            "realms": [
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          },
+          {
+            "path": "ascension:foundation/essence",
+            "weight": 100,
+            "realms": [
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          },
+          {
+            "path": "ascension:foundation/soul",
+            "weight": 100,
+            "realms": [
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          }
+        ],
+        "subpaths": [
+          {
+            "path": "ascension:elemental/earth",
+            "weight": 300,
+            "realms": [
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          },
+          {
+            "path": "ascension:weapon/fist",
+            "weight": 500,
+            "realms": [
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          },
+          {
+            "path": "ascension:weapon/mace",
+            "weight": 200,
+            "realms": [
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          }
+        ],
+        "subpath_count": {
+          "max": 2,
+          "min": 1
+        },
+        "skill_pools": [
+          {
+            "id": "ascension:generic/body",
+            "rolls": {
+              "min": 0,
+              "max": 1
+            },
+            "entries": [
+              {
+                "skill": "ascension:mob_skill/charging_strike",
+                "weight": 100,
+                "minimum_realm_score": 3,
+                "requires_path": "ascension:foundation/body"
+              },
+              {
+                "skill": "ascension:mob_skill/body_reinforcement",
+                "weight": 80,
+                "minimum_realm_score": 4,
+                "requires_path": "ascension:foundation/body"
+              },
+              {
+                "skill": "ascension:mob_skill/crushing_blow",
+                "weight": 70,
+                "minimum_realm_score": 6,
+                "requires_path": "ascension:foundation/body"
+              }
+            ]
+          }
+        ]
+      },
+      "stat_biases": {
+        "ascension:agility": 0.96,
+        "ascension:spirit": 0.9,
+        "ascension:strength": 1.74,
+        "ascension:vitality": 1.74
+      }
+    },
+    "minecraft:skeleton": {
+      "pools": [
+        {
+          "id": "ascension:rarity",
+          "rolls": 1,
+          "exclusive": true,
+          "entries": [
+            {
+              "id": "normal",
+              "base_weight": 975000
+            },
+            {
+              "id": "elite",
+              "base_weight": 23000,
+              "traits": [
+                {
+                  "trait": "ascension:elite_mob",
+                  "chance": 1.0
+                }
+              ]
+            },
+            {
+              "id": "ancient",
+              "base_weight": 2000,
+              "traits": [
+                {
+                  "trait": "ascension:ancient_mob",
+                  "chance": 1.0
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "cultivation": {
+        "foundation_paths": [
+          {
+            "path": "ascension:foundation/body",
+            "weight": 100,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:foundation/essence",
+            "weight": 300,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:foundation/soul",
+            "weight": 400,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          }
+        ],
+        "subpaths": [
+          {
+            "path": "ascension:elemental/death",
+            "weight": 300,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:elemental/ice",
+            "weight": 100,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:elemental/yin",
+            "weight": 200,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:weapon/bow",
+            "weight": 700,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          }
+        ],
+        "subpath_count": {
+          "max": 2,
+          "min": 1
+        },
+        "skill_pools": [
+          {
+            "id": "ascension:generic/essence",
+            "rolls": {
+              "min": 0,
+              "max": 1
+            },
+            "entries": [
+              {
+                "skill": "ascension:mob_skill/qi_projectile",
+                "weight": 100,
+                "minimum_realm_score": 3,
+                "requires_path": "ascension:foundation/essence"
+              },
+              {
+                "skill": "ascension:mob_skill/elemental_pulse",
+                "weight": 90,
+                "minimum_realm_score": 4,
+                "requires_path": "ascension:foundation/essence"
+              },
+              {
+                "skill": "ascension:mob_skill/essence_guard",
+                "weight": 70,
+                "minimum_realm_score": 6,
+                "requires_path": "ascension:foundation/essence"
+              }
+            ]
+          },
+          {
+            "id": "ascension:generic/soul",
+            "rolls": {
+              "min": 0,
+              "max": 1
+            },
+            "entries": [
+              {
+                "skill": "ascension:mob_skill/fear_pulse",
+                "weight": 100,
+                "minimum_realm_score": 3,
+                "requires_path": "ascension:foundation/soul"
+              },
+              {
+                "skill": "ascension:mob_skill/spirit_barrier",
+                "weight": 90,
+                "minimum_realm_score": 4,
+                "requires_path": "ascension:foundation/soul"
+              },
+              {
+                "skill": "ascension:mob_skill/target_disruption",
+                "weight": 70,
+                "minimum_realm_score": 6,
+                "requires_path": "ascension:foundation/soul"
+              }
+            ]
+          },
+          {
+            "id": "ascension:species/skeleton",
+            "rolls": {
+              "min": 0,
+              "max": 1
+            },
+            "entries": [
+              {
+                "skill": "ascension:mob_skill/qi_infused_shot",
+                "weight": 200,
+                "minimum_realm_score": 3
+              }
+            ]
+          }
+        ]
+      },
+      "stat_biases": {
+        "ascension:agility": 1.2,
+        "ascension:spirit": 1.2,
+        "ascension:strength": 0.9,
+        "ascension:vitality": 0.85
+      }
+    },
+    "minecraft:slime": {
+      "pools": [
+        {
+          "id": "ascension:rarity",
+          "rolls": 1,
+          "exclusive": true,
+          "entries": [
+            {
+              "id": "normal",
+              "base_weight": 975000
+            },
+            {
+              "id": "elite",
+              "base_weight": 23000,
+              "traits": [
+                {
+                  "trait": "ascension:elite_mob",
+                  "chance": 1.0
+                }
+              ]
+            },
+            {
+              "id": "ancient",
+              "base_weight": 2000,
+              "traits": [
+                {
+                  "trait": "ascension:ancient_mob",
+                  "chance": 1.0
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "cultivation": {
+        "foundation_paths": [
+          {
+            "path": "ascension:foundation/body",
+            "weight": 600,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:foundation/essence",
+            "weight": 200,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:foundation/soul",
+            "weight": 50,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          }
+        ],
+        "subpaths": [
+          {
+            "path": "ascension:elemental/earth",
+            "weight": 200,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:elemental/water",
+            "weight": 400,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:weapon/fist",
+            "weight": 200,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          }
+        ],
+        "subpath_count": {
+          "max": 2,
+          "min": 1
+        },
+        "skill_pools": [
+          {
+            "id": "ascension:generic/body",
+            "rolls": {
+              "min": 0,
+              "max": 1
+            },
+            "entries": [
+              {
+                "skill": "ascension:mob_skill/charging_strike",
+                "weight": 100,
+                "minimum_realm_score": 3,
+                "requires_path": "ascension:foundation/body"
+              },
+              {
+                "skill": "ascension:mob_skill/body_reinforcement",
+                "weight": 80,
+                "minimum_realm_score": 4,
+                "requires_path": "ascension:foundation/body"
+              },
+              {
+                "skill": "ascension:mob_skill/crushing_blow",
+                "weight": 70,
+                "minimum_realm_score": 6,
+                "requires_path": "ascension:foundation/body"
+              }
+            ]
+          }
+        ]
+      },
+      "stat_biases": {
+        "ascension:agility": 0.85,
+        "ascension:spirit": 0.75,
+        "ascension:strength": 1.0,
+        "ascension:vitality": 1.3
+      }
+    },
+    "minecraft:spider": {
+      "pools": [
+        {
+          "id": "ascension:rarity",
+          "rolls": 1,
+          "exclusive": true,
+          "entries": [
+            {
+              "id": "normal",
+              "base_weight": 975000
+            },
+            {
+              "id": "elite",
+              "base_weight": 23000,
+              "traits": [
+                {
+                  "trait": "ascension:elite_mob",
+                  "chance": 1.0
+                }
+              ]
+            },
+            {
+              "id": "ancient",
+              "base_weight": 2000,
+              "traits": [
+                {
+                  "trait": "ascension:ancient_mob",
+                  "chance": 1.0
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "cultivation": {
+        "foundation_paths": [
+          {
+            "path": "ascension:foundation/body",
+            "weight": 400,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:foundation/essence",
+            "weight": 200,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:foundation/soul",
+            "weight": 100,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          }
+        ],
+        "subpaths": [
+          {
+            "path": "ascension:elemental/poison",
+            "weight": 600,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:elemental/wood",
+            "weight": 200,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:weapon/fist",
+            "weight": 200,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          }
+        ],
+        "subpath_count": {
+          "max": 2,
+          "min": 1
+        },
+        "skill_pools": [
+          {
+            "id": "ascension:generic/body",
+            "rolls": {
+              "min": 0,
+              "max": 1
+            },
+            "entries": [
+              {
+                "skill": "ascension:mob_skill/charging_strike",
+                "weight": 100,
+                "minimum_realm_score": 3,
+                "requires_path": "ascension:foundation/body"
+              },
+              {
+                "skill": "ascension:mob_skill/body_reinforcement",
+                "weight": 80,
+                "minimum_realm_score": 4,
+                "requires_path": "ascension:foundation/body"
+              },
+              {
+                "skill": "ascension:mob_skill/crushing_blow",
+                "weight": 70,
+                "minimum_realm_score": 6,
+                "requires_path": "ascension:foundation/body"
+              }
+            ]
+          },
+          {
+            "id": "ascension:species/spider",
+            "rolls": {
+              "min": 0,
+              "max": 1
+            },
+            "entries": [
+              {
+                "skill": "ascension:mob_skill/fang_leap",
+                "weight": 200,
+                "minimum_realm_score": 3
+              }
+            ]
+          }
+        ]
+      },
+      "stat_biases": {
+        "ascension:agility": 1.3,
+        "ascension:spirit": 0.85,
+        "ascension:strength": 1.0,
+        "ascension:vitality": 0.9
+      }
+    },
+    "minecraft:squid": {
+      "pools": [
+        {
+          "id": "ascension:rarity",
+          "rolls": 1,
+          "exclusive": true,
+          "entries": [
+            {
+              "id": "normal",
+              "base_weight": 1
+            }
+          ]
+        }
+      ],
+      "cultivation": {
+        "foundation_paths": [
+          {
+            "path": "ascension:foundation/body",
+            "weight": 100,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:foundation/essence",
+            "weight": 400,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:foundation/soul",
+            "weight": 200,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          }
+        ],
+        "subpaths": [
+          {
+            "path": "ascension:elemental/water",
+            "weight": 600,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          }
+        ],
+        "subpath_count": {
+          "max": 1,
+          "min": 1
+        },
+        "skill_pools": [
+          {
+            "id": "ascension:generic/essence",
+            "rolls": {
+              "min": 0,
+              "max": 1
+            },
+            "entries": [
+              {
+                "skill": "ascension:mob_skill/qi_projectile",
+                "weight": 100,
+                "minimum_realm_score": 3,
+                "requires_path": "ascension:foundation/essence"
+              },
+              {
+                "skill": "ascension:mob_skill/elemental_pulse",
+                "weight": 90,
+                "minimum_realm_score": 4,
+                "requires_path": "ascension:foundation/essence"
+              },
+              {
+                "skill": "ascension:mob_skill/essence_guard",
+                "weight": 70,
+                "minimum_realm_score": 6,
+                "requires_path": "ascension:foundation/essence"
+              }
+            ]
+          }
+        ]
+      },
+      "stat_biases": {
+        "ascension:agility": 0.95,
+        "ascension:spirit": 1.045,
+        "ascension:strength": 0.665,
+        "ascension:vitality": 0.8075
+      }
+    },
+    "minecraft:stray": {
+      "pools": [
+        {
+          "id": "ascension:rarity",
+          "rolls": 1,
+          "exclusive": true,
+          "entries": [
+            {
+              "id": "normal",
+              "base_weight": 975000
+            },
+            {
+              "id": "elite",
+              "base_weight": 23000,
+              "traits": [
+                {
+                  "trait": "ascension:elite_mob",
+                  "chance": 1.0
+                }
+              ]
+            },
+            {
+              "id": "ancient",
+              "base_weight": 2000,
+              "traits": [
+                {
+                  "trait": "ascension:ancient_mob",
+                  "chance": 1.0
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "cultivation": {
+        "foundation_paths": [
+          {
+            "path": "ascension:foundation/body",
+            "weight": 100,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:foundation/essence",
+            "weight": 300,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:foundation/soul",
+            "weight": 400,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          }
+        ],
+        "subpaths": [
+          {
+            "path": "ascension:elemental/death",
+            "weight": 200,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:elemental/ice",
+            "weight": 500,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:weapon/bow",
+            "weight": 600,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          }
+        ],
+        "subpath_count": {
+          "max": 2,
+          "min": 1
+        },
+        "skill_pools": [
+          {
+            "id": "ascension:generic/essence",
+            "rolls": {
+              "min": 0,
+              "max": 1
+            },
+            "entries": [
+              {
+                "skill": "ascension:mob_skill/qi_projectile",
+                "weight": 100,
+                "minimum_realm_score": 3,
+                "requires_path": "ascension:foundation/essence"
+              },
+              {
+                "skill": "ascension:mob_skill/elemental_pulse",
+                "weight": 90,
+                "minimum_realm_score": 4,
+                "requires_path": "ascension:foundation/essence"
+              },
+              {
+                "skill": "ascension:mob_skill/essence_guard",
+                "weight": 70,
+                "minimum_realm_score": 6,
+                "requires_path": "ascension:foundation/essence"
+              }
+            ]
+          },
+          {
+            "id": "ascension:generic/soul",
+            "rolls": {
+              "min": 0,
+              "max": 1
+            },
+            "entries": [
+              {
+                "skill": "ascension:mob_skill/fear_pulse",
+                "weight": 100,
+                "minimum_realm_score": 3,
+                "requires_path": "ascension:foundation/soul"
+              },
+              {
+                "skill": "ascension:mob_skill/spirit_barrier",
+                "weight": 90,
+                "minimum_realm_score": 4,
+                "requires_path": "ascension:foundation/soul"
+              },
+              {
+                "skill": "ascension:mob_skill/target_disruption",
+                "weight": 70,
+                "minimum_realm_score": 6,
+                "requires_path": "ascension:foundation/soul"
+              }
+            ]
+          },
+          {
+            "id": "ascension:species/skeleton",
+            "rolls": {
+              "min": 0,
+              "max": 1
+            },
+            "entries": [
+              {
+                "skill": "ascension:mob_skill/qi_infused_shot",
+                "weight": 200,
+                "minimum_realm_score": 3
+              }
+            ]
+          }
+        ]
+      },
+      "stat_biases": {
+        "ascension:agility": 1.2075,
+        "ascension:spirit": 1.26,
+        "ascension:strength": 0.945,
+        "ascension:vitality": 0.945
+      }
+    },
+    "minecraft:warden": {
+      "pools": [
+        {
+          "id": "ascension:rarity",
+          "rolls": 1,
+          "exclusive": true,
+          "entries": [
+            {
+              "id": "elite",
+              "base_weight": 750000,
+              "traits": [
+                {
+                  "trait": "ascension:elite_mob",
+                  "chance": 1.0
+                }
+              ]
+            },
+            {
+              "id": "ancient",
+              "base_weight": 250000,
+              "traits": [
+                {
+                  "trait": "ascension:ancient_mob",
+                  "chance": 1.0
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "cultivation": {
+        "foundation_paths": [
+          {
+            "path": "ascension:foundation/body",
+            "weight": 500,
+            "realms": [
+              {
+                "major_realm": 2,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 3,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          },
+          {
+            "path": "ascension:foundation/essence",
+            "weight": 100,
+            "realms": [
+              {
+                "major_realm": 2,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 3,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          },
+          {
+            "path": "ascension:foundation/soul",
+            "weight": 400,
+            "realms": [
+              {
+                "major_realm": 2,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 3,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          }
+        ],
+        "subpaths": [
+          {
+            "path": "ascension:elemental/dark",
+            "weight": 400,
+            "realms": [
+              {
+                "major_realm": 2,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 3,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          },
+          {
+            "path": "ascension:elemental/death",
+            "weight": 200,
+            "realms": [
+              {
+                "major_realm": 2,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 3,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          },
+          {
+            "path": "ascension:weapon/fist",
+            "weight": 500,
+            "realms": [
+              {
+                "major_realm": 2,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 3,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          }
+        ],
+        "subpath_count": {
+          "max": 2,
+          "min": 1
+        },
+        "skill_pools": [
+          {
+            "id": "ascension:generic/body",
+            "rolls": {
+              "min": 0,
+              "max": 1
+            },
+            "entries": [
+              {
+                "skill": "ascension:mob_skill/charging_strike",
+                "weight": 100,
+                "minimum_realm_score": 3,
+                "requires_path": "ascension:foundation/body"
+              },
+              {
+                "skill": "ascension:mob_skill/body_reinforcement",
+                "weight": 80,
+                "minimum_realm_score": 4,
+                "requires_path": "ascension:foundation/body"
+              },
+              {
+                "skill": "ascension:mob_skill/crushing_blow",
+                "weight": 70,
+                "minimum_realm_score": 6,
+                "requires_path": "ascension:foundation/body"
+              }
+            ]
+          },
+          {
+            "id": "ascension:generic/soul",
+            "rolls": {
+              "min": 0,
+              "max": 1
+            },
+            "entries": [
+              {
+                "skill": "ascension:mob_skill/fear_pulse",
+                "weight": 100,
+                "minimum_realm_score": 3,
+                "requires_path": "ascension:foundation/soul"
+              },
+              {
+                "skill": "ascension:mob_skill/spirit_barrier",
+                "weight": 90,
+                "minimum_realm_score": 4,
+                "requires_path": "ascension:foundation/soul"
+              },
+              {
+                "skill": "ascension:mob_skill/target_disruption",
+                "weight": 70,
+                "minimum_realm_score": 6,
+                "requires_path": "ascension:foundation/soul"
+              }
+            ]
+          }
+        ]
+      },
+      "stat_biases": {
+        "ascension:agility": 1.08,
+        "ascension:spirit": 1.6875,
+        "ascension:strength": 2.025,
+        "ascension:vitality": 2.0925
+      }
+    },
+    "minecraft:witch": {
+      "pools": [
+        {
+          "id": "ascension:rarity",
+          "rolls": 1,
+          "exclusive": true,
+          "entries": [
+            {
+              "id": "normal",
+              "base_weight": 975000
+            },
+            {
+              "id": "elite",
+              "base_weight": 23000,
+              "traits": [
+                {
+                  "trait": "ascension:elite_mob",
+                  "chance": 1.0
+                }
+              ]
+            },
+            {
+              "id": "ancient",
+              "base_weight": 2000,
+              "traits": [
+                {
+                  "trait": "ascension:ancient_mob",
+                  "chance": 1.0
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "cultivation": {
+        "foundation_paths": [
+          {
+            "path": "ascension:foundation/body",
+            "weight": 50,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:foundation/essence",
+            "weight": 400,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:foundation/soul",
+            "weight": 500,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          }
+        ],
+        "subpaths": [
+          {
+            "path": "ascension:elemental/poison",
+            "weight": 600,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:elemental/water",
+            "weight": 300,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:elemental/wood",
+            "weight": 300,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          }
+        ],
+        "subpath_count": {
+          "max": 2,
+          "min": 1
+        },
+        "skill_pools": [
+          {
+            "id": "ascension:generic/essence",
+            "rolls": {
+              "min": 0,
+              "max": 1
+            },
+            "entries": [
+              {
+                "skill": "ascension:mob_skill/qi_projectile",
+                "weight": 100,
+                "minimum_realm_score": 3,
+                "requires_path": "ascension:foundation/essence"
+              },
+              {
+                "skill": "ascension:mob_skill/elemental_pulse",
+                "weight": 90,
+                "minimum_realm_score": 4,
+                "requires_path": "ascension:foundation/essence"
+              },
+              {
+                "skill": "ascension:mob_skill/essence_guard",
+                "weight": 70,
+                "minimum_realm_score": 6,
+                "requires_path": "ascension:foundation/essence"
+              }
+            ]
+          },
+          {
+            "id": "ascension:generic/soul",
+            "rolls": {
+              "min": 0,
+              "max": 1
+            },
+            "entries": [
+              {
+                "skill": "ascension:mob_skill/fear_pulse",
+                "weight": 100,
+                "minimum_realm_score": 3,
+                "requires_path": "ascension:foundation/soul"
+              },
+              {
+                "skill": "ascension:mob_skill/spirit_barrier",
+                "weight": 90,
+                "minimum_realm_score": 4,
+                "requires_path": "ascension:foundation/soul"
+              },
+              {
+                "skill": "ascension:mob_skill/target_disruption",
+                "weight": 70,
+                "minimum_realm_score": 6,
+                "requires_path": "ascension:foundation/soul"
+              }
+            ]
+          }
+        ]
+      },
+      "stat_biases": {
+        "ascension:agility": 0.95,
+        "ascension:spirit": 1.45,
+        "ascension:strength": 0.7,
+        "ascension:vitality": 0.9
+      }
+    },
+    "minecraft:wither": {
+      "pools": [
+        {
+          "id": "ascension:rarity",
+          "rolls": 1,
+          "exclusive": true,
+          "entries": [
+            {
+              "id": "elite",
+              "base_weight": 800000,
+              "traits": [
+                {
+                  "trait": "ascension:elite_mob",
+                  "chance": 1.0
+                }
+              ]
+            },
+            {
+              "id": "ancient",
+              "base_weight": 200000,
+              "traits": [
+                {
+                  "trait": "ascension:ancient_mob",
+                  "chance": 1.0
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "cultivation": {
+        "foundation_paths": [
+          {
+            "path": "ascension:foundation/body",
+            "weight": 100,
+            "realms": [
+              {
+                "major_realm": 2,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 3,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          },
+          {
+            "path": "ascension:foundation/essence",
+            "weight": 300,
+            "realms": [
+              {
+                "major_realm": 2,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 3,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          },
+          {
+            "path": "ascension:foundation/soul",
+            "weight": 800,
+            "realms": [
+              {
+                "major_realm": 2,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 3,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          }
+        ],
+        "subpaths": [
+          {
+            "path": "ascension:elemental/dark",
+            "weight": 500,
+            "realms": [
+              {
+                "major_realm": 2,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 3,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          },
+          {
+            "path": "ascension:elemental/death",
+            "weight": 900,
+            "realms": [
+              {
+                "major_realm": 2,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 3,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          },
+          {
+            "path": "ascension:elemental/poison",
+            "weight": 300,
+            "realms": [
+              {
+                "major_realm": 2,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 3,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          }
+        ],
+        "subpath_count": {
+          "max": 3,
+          "min": 2
+        },
+        "skill_pools": [
+          {
+            "id": "ascension:generic/soul",
+            "rolls": {
+              "min": 0,
+              "max": 1
+            },
+            "entries": [
+              {
+                "skill": "ascension:mob_skill/fear_pulse",
+                "weight": 100,
+                "minimum_realm_score": 3,
+                "requires_path": "ascension:foundation/soul"
+              },
+              {
+                "skill": "ascension:mob_skill/spirit_barrier",
+                "weight": 90,
+                "minimum_realm_score": 4,
+                "requires_path": "ascension:foundation/soul"
+              },
+              {
+                "skill": "ascension:mob_skill/target_disruption",
+                "weight": 70,
+                "minimum_realm_score": 6,
+                "requires_path": "ascension:foundation/soul"
+              }
+            ]
+          },
+          {
+            "id": "ascension:generic/essence",
+            "rolls": {
+              "min": 0,
+              "max": 1
+            },
+            "entries": [
+              {
+                "skill": "ascension:mob_skill/qi_projectile",
+                "weight": 100,
+                "minimum_realm_score": 3,
+                "requires_path": "ascension:foundation/essence"
+              },
+              {
+                "skill": "ascension:mob_skill/elemental_pulse",
+                "weight": 90,
+                "minimum_realm_score": 4,
+                "requires_path": "ascension:foundation/essence"
+              },
+              {
+                "skill": "ascension:mob_skill/essence_guard",
+                "weight": 70,
+                "minimum_realm_score": 6,
+                "requires_path": "ascension:foundation/essence"
+              }
+            ]
+          }
+        ]
+      },
+      "stat_biases": {
+        "ascension:agility": 1.2,
+        "ascension:spirit": 1.98,
+        "ascension:strength": 1.44,
+        "ascension:vitality": 1.62
+      }
+    },
+    "minecraft:wither_skeleton": {
+      "pools": [
+        {
+          "id": "ascension:rarity",
+          "rolls": 1,
+          "exclusive": true,
+          "entries": [
+            {
+              "id": "normal",
+              "base_weight": 975000
+            },
+            {
+              "id": "elite",
+              "base_weight": 23000,
+              "traits": [
+                {
+                  "trait": "ascension:elite_mob",
+                  "chance": 1.0
+                }
+              ]
+            },
+            {
+              "id": "ancient",
+              "base_weight": 2000,
+              "traits": [
+                {
+                  "trait": "ascension:ancient_mob",
+                  "chance": 1.0
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "cultivation": {
+        "foundation_paths": [
+          {
+            "path": "ascension:foundation/body",
+            "weight": 400,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          },
+          {
+            "path": "ascension:foundation/essence",
+            "weight": 100,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          },
+          {
+            "path": "ascension:foundation/soul",
+            "weight": 400,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          }
+        ],
+        "subpaths": [
+          {
+            "path": "ascension:elemental/dark",
+            "weight": 200,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          },
+          {
+            "path": "ascension:elemental/death",
+            "weight": 500,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          },
+          {
+            "path": "ascension:elemental/fire",
+            "weight": 250,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          },
+          {
+            "path": "ascension:weapon/sword",
+            "weight": 500,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 1,
+                "max_realm": 2,
+                "weight": 1
+              }
+            ]
+          }
+        ],
+        "subpath_count": {
+          "max": 2,
+          "min": 1
+        },
+        "skill_pools": [
+          {
+            "id": "ascension:generic/body",
+            "rolls": {
+              "min": 0,
+              "max": 1
+            },
+            "entries": [
+              {
+                "skill": "ascension:mob_skill/charging_strike",
+                "weight": 100,
+                "minimum_realm_score": 3,
+                "requires_path": "ascension:foundation/body"
+              },
+              {
+                "skill": "ascension:mob_skill/body_reinforcement",
+                "weight": 80,
+                "minimum_realm_score": 4,
+                "requires_path": "ascension:foundation/body"
+              },
+              {
+                "skill": "ascension:mob_skill/crushing_blow",
+                "weight": 70,
+                "minimum_realm_score": 6,
+                "requires_path": "ascension:foundation/body"
+              }
+            ]
+          },
+          {
+            "id": "ascension:generic/soul",
+            "rolls": {
+              "min": 0,
+              "max": 1
+            },
+            "entries": [
+              {
+                "skill": "ascension:mob_skill/fear_pulse",
+                "weight": 100,
+                "minimum_realm_score": 3,
+                "requires_path": "ascension:foundation/soul"
+              },
+              {
+                "skill": "ascension:mob_skill/spirit_barrier",
+                "weight": 90,
+                "minimum_realm_score": 4,
+                "requires_path": "ascension:foundation/soul"
+              },
+              {
+                "skill": "ascension:mob_skill/target_disruption",
+                "weight": 70,
+                "minimum_realm_score": 6,
+                "requires_path": "ascension:foundation/soul"
+              }
+            ]
+          }
+        ]
+      },
+      "stat_biases": {
+        "ascension:agility": 1.045,
+        "ascension:spirit": 1.21,
+        "ascension:strength": 1.485,
+        "ascension:vitality": 1.375
+      }
+    },
+    "minecraft:wolf": {
+      "pools": [
+        {
+          "id": "ascension:rarity",
+          "rolls": 1,
+          "exclusive": true,
+          "entries": [
+            {
+              "id": "normal",
+              "base_weight": 975000
+            },
+            {
+              "id": "elite",
+              "base_weight": 23000,
+              "traits": [
+                {
+                  "trait": "ascension:elite_mob",
+                  "chance": 1.0
+                }
+              ]
+            },
+            {
+              "id": "ancient",
+              "base_weight": 2000,
+              "traits": [
+                {
+                  "trait": "ascension:ancient_mob",
+                  "chance": 1.0
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "cultivation": {
+        "foundation_paths": [
+          {
+            "path": "ascension:foundation/body",
+            "weight": 600,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:foundation/essence",
+            "weight": 100,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:foundation/soul",
+            "weight": 200,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          }
+        ],
+        "subpaths": [
+          {
+            "path": "ascension:elemental/wind",
+            "weight": 400,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:elemental/wood",
+            "weight": 100,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:weapon/fist",
+            "weight": 400,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          }
+        ],
+        "subpath_count": {
+          "max": 2,
+          "min": 1
+        },
+        "skill_pools": [
+          {
+            "id": "ascension:generic/body",
+            "rolls": {
+              "min": 0,
+              "max": 1
+            },
+            "entries": [
+              {
+                "skill": "ascension:mob_skill/charging_strike",
+                "weight": 100,
+                "minimum_realm_score": 3,
+                "requires_path": "ascension:foundation/body"
+              },
+              {
+                "skill": "ascension:mob_skill/body_reinforcement",
+                "weight": 80,
+                "minimum_realm_score": 4,
+                "requires_path": "ascension:foundation/body"
+              },
+              {
+                "skill": "ascension:mob_skill/crushing_blow",
+                "weight": 70,
+                "minimum_realm_score": 6,
+                "requires_path": "ascension:foundation/body"
+              }
+            ]
+          },
+          {
+            "id": "ascension:species/wolf",
+            "rolls": {
+              "min": 0,
+              "max": 1
+            },
+            "entries": [
+              {
+                "skill": "ascension:mob_skill/pack_howl",
+                "weight": 200,
+                "minimum_realm_score": 3
+              }
+            ]
+          }
+        ]
+      },
+      "stat_biases": {
+        "ascension:agility": 1.25,
+        "ascension:spirit": 1.0,
+        "ascension:strength": 1.15,
+        "ascension:vitality": 1.0
+      }
+    },
+    "minecraft:zombie": {
+      "pools": [
+        {
+          "id": "ascension:rarity",
+          "rolls": 1,
+          "exclusive": true,
+          "entries": [
+            {
+              "id": "normal",
+              "base_weight": 90,
+              "traits": [
+                {
+                  "trait": "ascension:sturdy",
+                  "chance": 1.0
+                }
+              ],
+              "cultivation": {
+                "subpath_count": {
+                  "min": 0,
+                  "max": 1
+                },
+                "subpaths": [
+                  {
+                    "path": "ascension:elemental/death",
+                    "weight": 4,
+                    "realms": [
+                      {
+                        "major_realm": 0,
+                        "min_realm": 0,
+                        "max_realm": 1,
+                        "weight": 1
+                      }
+                    ]
+                  },
+                  {
+                    "path": "ascension:elemental/poison",
+                    "weight": 2,
+                    "realms": [
+                      {
+                        "major_realm": 0,
+                        "min_realm": 0,
+                        "max_realm": 1,
+                        "weight": 1
+                      }
+                    ]
+                  },
+                  {
+                    "path": "ascension:weapon/fist",
+                    "weight": 2,
+                    "realms": [
+                      {
+                        "major_realm": 0,
+                        "min_realm": 0,
+                        "max_realm": 1,
+                        "weight": 1
+                      }
+                    ]
+                  }
+                ],
+                "skill_pools": [
+                  {
+                    "id": "ascension:zombie_instincts",
+                    "rolls": {
+                      "min": 0,
+                      "max": 1
+                    },
+                    "entries": [
+                      {
+                        "skill": "ascension:mob_skill/corpse_resilience",
+                        "weight": 4,
+                        "minimum_realm_score": 0
+                      },
+                      {
+                        "skill": "ascension:mob_skill/qi_projectile",
+                        "weight": 1,
+                        "minimum_realm_score": 0
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "elite",
+              "base_weight": 9,
+              "traits": [
+                {
+                  "trait": "ascension:elite_mob",
+                  "chance": 1.0
+                }
+              ]
+            },
+            {
+              "id": "ancient",
+              "base_weight": 1,
+              "traits": [
+                {
+                  "trait": "ascension:ancient_mob",
+                  "chance": 1.0
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "cultivation": {
+        "foundation_paths": [
+          {
+            "path": "ascension:foundation/body",
+            "weight": 500,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:foundation/essence",
+            "weight": 100,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:foundation/soul",
+            "weight": 300,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          }
+        ],
+        "subpaths": [
+          {
+            "path": "ascension:elemental/death",
+            "weight": 400,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:elemental/poison",
+            "weight": 200,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          },
+          {
+            "path": "ascension:weapon/fist",
+            "weight": 200,
+            "realms": [
+              {
+                "major_realm": 0,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 80
+              },
+              {
+                "major_realm": 1,
+                "min_realm": 0,
+                "max_realm": 2,
+                "weight": 20
+              }
+            ]
+          }
+        ],
+        "subpath_count": {
+          "max": 2,
+          "min": 1
+        },
+        "skill_pools": [
+          {
+            "id": "ascension:generic/body",
+            "rolls": {
+              "min": 0,
+              "max": 1
+            },
+            "entries": [
+              {
+                "skill": "ascension:mob_skill/charging_strike",
+                "weight": 100,
+                "minimum_realm_score": 3,
+                "requires_path": "ascension:foundation/body"
+              },
+              {
+                "skill": "ascension:mob_skill/body_reinforcement",
+                "weight": 80,
+                "minimum_realm_score": 4,
+                "requires_path": "ascension:foundation/body"
+              },
+              {
+                "skill": "ascension:mob_skill/crushing_blow",
+                "weight": 70,
+                "minimum_realm_score": 6,
+                "requires_path": "ascension:foundation/body"
+              }
+            ]
+          },
+          {
+            "id": "ascension:generic/soul",
+            "rolls": {
+              "min": 0,
+              "max": 1
+            },
+            "entries": [
+              {
+                "skill": "ascension:mob_skill/fear_pulse",
+                "weight": 100,
+                "minimum_realm_score": 3,
+                "requires_path": "ascension:foundation/soul"
+              },
+              {
+                "skill": "ascension:mob_skill/spirit_barrier",
+                "weight": 90,
+                "minimum_realm_score": 4,
+                "requires_path": "ascension:foundation/soul"
+              },
+              {
+                "skill": "ascension:mob_skill/target_disruption",
+                "weight": 70,
+                "minimum_realm_score": 6,
+                "requires_path": "ascension:foundation/soul"
+              }
+            ]
+          },
+          {
+            "id": "ascension:species/zombie",
+            "rolls": {
+              "min": 0,
+              "max": 1
+            },
+            "entries": [
+              {
+                "skill": "ascension:mob_skill/corpse_resilience",
+                "weight": 200,
+                "minimum_realm_score": 3
+              }
+            ]
+          }
+        ]
+      },
+      "stat_biases": {
+        "ascension:agility": 0.85,
+        "ascension:spirit": 0.9,
+        "ascension:strength": 1.1,
+        "ascension:vitality": 1.15
       }
     }
   }
