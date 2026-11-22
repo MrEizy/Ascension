@@ -37,6 +37,8 @@
 * Passive Skills have Levels, Active Skills have Ranks for master
 * Buffed the effect of focus steering 
 * Cultivation Pill Tooltips now show percentage of gain
+* Mob Cultivation expanded
+  * randomized cultivation paths, skills, rarity traits, and species-specific configurations for 26 mobs
 
 ### Fixes
 * Projection Skills actually project, deal some damage and break blocks
