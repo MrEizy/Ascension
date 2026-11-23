@@ -1,7 +1,11 @@
 {
   "type": "ascension:active",
-  "name": {"translate": "ascension.skill.fang_leap.name"},
-  "description": {"translate": "ascension.skill.fang_leap.desc"},
+  "name": {
+    "translate": "ascension.skill.fang_leap.name"
+  },
+  "description": {
+    "translate": "ascension.skill.fang_leap.desc"
+  },
   "target": {
     "type": "ascension:radial",
     "radius": 8,
@@ -28,17 +32,32 @@
       ],
       "path": "ascension:foundation/body",
       "subject": "target",
-      "base": 4.0,
+      "base": {
+        "base": 4.0,
+        "per_mastery": 0.36,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:path_realm_multiplier",
+              "path": "ascension:foundation/body",
+              "bonus_per_major_realm": 0.08,
+              "bonus_per_minor_realm": 0.012,
+              "maximum_bonus": 1.5
+            },
+            "operation": "multiply"
+          }
+        ]
+      },
       "stats": {
         "ascension:agility": 0.25
       },
       "minimum": 0.0,
-      "maximum": 16.0
+      "maximum": 23.2
     },
     {
       "type": "ascension:particles",
       "particle": "minecraft:crit",
-      "count": 3,
+      "count": 6,
       "spread": 0.25,
       "speed": 0.06,
       "subject": "target"
@@ -51,5 +70,14 @@
       "subject": "caster"
     }
   ],
-  "cooldown": 90
+  "cooldown": {
+    "base": 90,
+    "per_mastery": -3,
+    "minimum": 68
+  },
+  "cost": {
+    "resource": "ascension:qi",
+    "amount": 6
+  },
+  "mastery_xp_per_use": 1.0
 }

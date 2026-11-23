@@ -1,7 +1,11 @@
 {
   "type": "ascension:active",
-  "name": {"translate": "ascension.skill.charging_strike.name"},
-  "description": {"translate": "ascension.skill.charging_strike.desc"},
+  "name": {
+    "translate": "ascension.skill.charging_strike.name"
+  },
+  "description": {
+    "translate": "ascension.skill.charging_strike.desc"
+  },
   "target": {
     "type": "ascension:radial",
     "radius": 7,
@@ -11,7 +15,7 @@
     {
       "type": "ascension:particles",
       "particle": "minecraft:cloud",
-      "count": 3,
+      "count": 6,
       "spread": 0.25,
       "speed": 0.02,
       "subject": "caster"
@@ -36,17 +40,32 @@
       ],
       "path": "ascension:foundation/body",
       "subject": "target",
-      "base": 4.0,
+      "base": {
+        "base": 4.0,
+        "per_mastery": 0.36,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:path_realm_multiplier",
+              "path": "ascension:foundation/body",
+              "bonus_per_major_realm": 0.08,
+              "bonus_per_minor_realm": 0.012,
+              "maximum_bonus": 1.5
+            },
+            "operation": "multiply"
+          }
+        ]
+      },
       "stats": {
         "ascension:strength": 0.28
       },
       "minimum": 0.0,
-      "maximum": 18.0
+      "maximum": 26.1
     },
     {
       "type": "ascension:particles",
       "particle": "minecraft:crit",
-      "count": 4,
+      "count": 8,
       "spread": 0.3,
       "speed": 0.08,
       "subject": "target"
@@ -59,5 +78,14 @@
       "subject": "target"
     }
   ],
-  "cooldown": 70
+  "cooldown": {
+    "base": 70,
+    "per_mastery": -2,
+    "minimum": 52
+  },
+  "cost": {
+    "resource": "ascension:qi",
+    "amount": 5
+  },
+  "mastery_xp_per_use": 1.0
 }

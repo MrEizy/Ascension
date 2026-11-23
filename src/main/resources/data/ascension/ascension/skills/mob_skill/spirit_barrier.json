@@ -1,11 +1,19 @@
 {
   "type": "ascension:active",
-  "name": {"translate": "ascension.skill.spirit_barrier.name"},
-  "description": {"translate": "ascension.skill.spirit_barrier.desc"},
+  "name": {
+    "translate": "ascension.skill.spirit_barrier.name"
+  },
+  "description": {
+    "translate": "ascension.skill.spirit_barrier.desc"
+  },
   "definitions": {
     "barriers": {
       "guard": {
-        "duration": 120,
+        "duration": {
+          "base": 120,
+          "per_mastery": 4,
+          "maximum": 144
+        },
         "durability": {
           "base": 7.0,
           "terms": [
@@ -15,10 +23,21 @@
                 "stat": "ascension:spirit"
               },
               "scale": 0.5
+            },
+            {
+              "source": {
+                "type": "ascension:path_realm_multiplier",
+                "path": "ascension:foundation/soul",
+                "bonus_per_major_realm": 0.08,
+                "bonus_per_minor_realm": 0.012,
+                "maximum_bonus": 1.5
+              },
+              "operation": "multiply"
             }
           ],
           "minimum": 0.0,
-          "maximum": 34.0
+          "maximum": 34.0,
+          "per_mastery": 1.5
         },
         "absorption": 0.75,
         "overflow": true,
@@ -38,7 +57,7 @@
     {
       "type": "ascension:particles",
       "particle": "minecraft:end_rod",
-      "count": 3,
+      "count": 6,
       "spread": 0.3,
       "speed": 0.02,
       "subject": "caster"
@@ -51,5 +70,14 @@
       "subject": "caster"
     }
   ],
-  "cooldown": 200
+  "cooldown": {
+    "base": 200,
+    "per_mastery": -7,
+    "minimum": 150
+  },
+  "cost": {
+    "resource": "ascension:qi",
+    "amount": 8
+  },
+  "mastery_xp_per_use": 1.0
 }

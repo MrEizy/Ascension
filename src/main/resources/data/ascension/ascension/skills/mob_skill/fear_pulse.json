@@ -1,7 +1,11 @@
 {
   "type": "ascension:active",
-  "name": {"translate": "ascension.skill.fear_pulse.name"},
-  "description": {"translate": "ascension.skill.fear_pulse.desc"},
+  "name": {
+    "translate": "ascension.skill.fear_pulse.name"
+  },
+  "description": {
+    "translate": "ascension.skill.fear_pulse.desc"
+  },
   "definitions": {
     "stagger": {
       "shock": {
@@ -33,7 +37,7 @@
     {
       "type": "ascension:particles",
       "particle": "minecraft:witch",
-      "count": 2,
+      "count": 6,
       "spread": 0.35,
       "speed": 0.02,
       "subject": "target"
@@ -46,5 +50,14 @@
       "subject": "caster"
     }
   ],
-  "cooldown": 130
+  "cooldown": {
+    "base": 130,
+    "per_mastery": -4,
+    "minimum": 98
+  },
+  "cost": {
+    "resource": "ascension:qi",
+    "amount": 8
+  },
+  "mastery_xp_per_use": 1.0
 }
