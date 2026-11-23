@@ -1,5 +1,6 @@
 package net.zic.ascension.common.item;
 
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.ToolMaterial;
 import net.zic.ascension.common.util.ModTags;
 
@@ -8,6 +9,8 @@ public class AscToolTiers {
             638, 6.5f, 2.4f, 18, ModTags.Items.BLACK_IRON_REPAIRABLE);
     public static final ToolMaterial FROST_SILVER = new ToolMaterial(ModTags.Blocks.INCORRECT_FOR_FROST_SILVER_TOOL,
             518, 12.0f, 2.1f, 22, ModTags.Items.FROST_SILVER_REPAIRABLE);
+    public static final ToolMaterial JADE = new ToolMaterial(BlockTags.INCORRECT_FOR_DIAMOND_TOOL,
+            1270, 8.0f, 2.9f, 22, ModTags.Items.JADE_REPAIRABLE);
     public static final ToolMaterial SPIRITUAL_STONE = new ToolMaterial(ModTags.Blocks.INCORRECT_FOR_SPIRITUAL_STONE_TOOL,
             2758, 9.5f, 4.6f, 28, ModTags.Items.SPIRITUAL_STONE_REPAIRABLE);
 

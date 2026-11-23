@@ -1,6 +1,14 @@
 {
   "values": [
-    "#minecraft:hoes",
+    "ascension:copper_scythe",
+    "ascension:iron_scythe",
+    "ascension:golden_scythe",
+    "ascension:diamond_scythe",
+    "ascension:netherite_scythe",
+    "ascension:black_iron_scythe",
+    "ascension:frost_silver_scythe",
+    "ascension:jade_scythe",
+    "ascension:spiritual_stone_scythe",
     {
       "id": "#c:tools/scythe",
       "required": false

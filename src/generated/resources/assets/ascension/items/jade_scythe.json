@@ -1,0 +1,7 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "ascension:item/jade_scythe"
+  },
+  "swap_animation_scale": 1.95
+}

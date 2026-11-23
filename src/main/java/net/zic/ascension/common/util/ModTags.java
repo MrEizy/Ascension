@@ -77,6 +77,7 @@ public class ModTags {
 
 
         public static final TagKey<Item> BLACK_IRON_REPAIRABLE = createItemTag("black_iron_repairable");
+        public static final TagKey<Item> JADE_REPAIRABLE = createItemTag("jade_repairable");
         public static final TagKey<Item> FROST_SILVER_REPAIRABLE = createItemTag("frost_silver_repairable");
         public static final TagKey<Item> SPIRITUAL_STONE_REPAIRABLE = createItemTag("spiritual_stone_repairable");
 
