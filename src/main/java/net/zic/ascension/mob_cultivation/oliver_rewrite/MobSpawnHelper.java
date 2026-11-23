@@ -11,6 +11,7 @@ import net.zic.ascension.configuration.mob_traits.MobTraitRoll;
 import net.zic.ascension.configuration.mob_traits.RollableMobTraitDefinition;
 import net.zic.ascension.configuration.mobs.MobConfiguration;
 import net.zic.ascension.configuration.mobs.MobCultivationRules;
+import net.zic.ascension.configuration.mobs.MobFallbackConfigurations;
 import net.zic.ascension.configuration.mobs.MobTraitPool;
 import net.zic.ascension.configuration.mobs.MobTraitPoolEntry;
 import net.zic.ascension.configuration.mobs.PotentialTrait;
@@ -23,11 +24,16 @@ import java.util.Set;
 
 public class MobSpawnHelper {
     public static boolean hasConfig(Mob mob) {
-        return mob.getData(ConfigurationDataMaps.MOB_CONFIGURATION) != null;
+        return getConfig(mob) != null;
     }
 
     public static MobConfiguration getConfig(Mob mob) {
-        return mob.getData(ConfigurationDataMaps.MOB_CONFIGURATION);
+        MobConfiguration explicit = mob.getData(ConfigurationDataMaps.MOB_CONFIGURATION);
+        return explicit != null ? explicit : MobFallbackConfigurations.get(mob);
+    }
+
+    public static boolean hasExplicitConfig(Mob mob) {
+        return mob.getData(ConfigurationDataMaps.MOB_CONFIGURATION) != null;
     }
 
     public static boolean hasConfigHolder(Mob mob) {
@@ -39,8 +45,9 @@ public class MobSpawnHelper {
     }
 
     public static void buildConfigurationInstance(Mob mob) {
-        if (mob.level().isClientSide() || !hasConfig(mob) || hasConfigHolder(mob)) return;
+        if (mob.level().isClientSide() || hasConfigHolder(mob)) return;
         MobConfiguration configuration = getConfig(mob);
+        if (configuration == null) return;
         getConfigHolder(mob).setMobConfigurationInstance(generateInstance(configuration, mob));
     }
 

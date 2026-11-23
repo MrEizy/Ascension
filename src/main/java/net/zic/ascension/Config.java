@@ -7,11 +7,13 @@ public class Config {
     public static AscensionCommonConfig COMMON;
     public static AscensionClientConfig CLIENT;
     public static AlchemyServerConfig ALCHEMY_SERVER;
+    public static MobCultivationServerConfig MOB_CULTIVATION_SERVER;
 
     public static ModConfigSpec CULTIVATION_SPEC;
     public static ModConfigSpec COMMON_SPEC;
     public static ModConfigSpec CLIENT_SPEC;
     public static ModConfigSpec ALCHEMY_SERVER_SPEC;
+    public static ModConfigSpec MOB_CULTIVATION_SERVER_SPEC;
 
 
     static {
@@ -27,6 +29,10 @@ public class Config {
         ModConfigSpec.Builder alchemyServerBuilder = new ModConfigSpec.Builder();
         ALCHEMY_SERVER = new AlchemyServerConfig(alchemyServerBuilder);
         ALCHEMY_SERVER_SPEC = alchemyServerBuilder.build();
+
+        ModConfigSpec.Builder mobCultivationBuilder = new ModConfigSpec.Builder();
+        MOB_CULTIVATION_SERVER = new MobCultivationServerConfig(mobCultivationBuilder);
+        MOB_CULTIVATION_SERVER_SPEC = mobCultivationBuilder.build();
 
         ModConfigSpec.Builder clientBuilder = new ModConfigSpec.Builder();
         CLIENT = new AscensionClientConfig(clientBuilder);

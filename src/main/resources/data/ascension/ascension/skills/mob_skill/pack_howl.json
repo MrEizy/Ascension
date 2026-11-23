@@ -1,11 +1,19 @@
 {
   "type": "ascension:active",
-  "name": {"translate": "ascension.skill.pack_howl.name"},
-  "description": {"translate": "ascension.skill.pack_howl.desc"},
+  "name": {
+    "translate": "ascension.skill.pack_howl.name"
+  },
+  "description": {
+    "translate": "ascension.skill.pack_howl.desc"
+  },
   "definitions": {
     "barriers": {
       "pack_guard": {
-        "duration": 80,
+        "duration": {
+          "base": 80,
+          "per_mastery": 4,
+          "maximum": 104
+        },
         "durability": {
           "base": 4.0,
           "terms": [
@@ -15,10 +23,21 @@
                 "stat": "ascension:spirit"
               },
               "scale": 0.22
+            },
+            {
+              "source": {
+                "type": "ascension:path_realm_multiplier",
+                "path": "ascension:foundation/body",
+                "bonus_per_major_realm": 0.08,
+                "bonus_per_minor_realm": 0.012,
+                "maximum_bonus": 1.5
+              },
+              "operation": "multiply"
             }
           ],
           "minimum": 0.0,
-          "maximum": 16.0
+          "maximum": 16.0,
+          "per_mastery": 1.5
         },
         "absorption": 0.45,
         "overflow": true,
@@ -50,7 +69,7 @@
     {
       "type": "ascension:particles",
       "particle": "minecraft:poof",
-      "count": 2,
+      "count": 6,
       "spread": 0.25,
       "speed": 0.01,
       "subject": "target"
@@ -63,5 +82,14 @@
       "subject": "caster"
     }
   ],
-  "cooldown": 220
+  "cooldown": {
+    "base": 220,
+    "per_mastery": -7,
+    "minimum": 165
+  },
+  "cost": {
+    "resource": "ascension:qi",
+    "amount": 8
+  },
+  "mastery_xp_per_use": 1.0
 }

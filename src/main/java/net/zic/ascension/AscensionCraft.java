@@ -193,6 +193,7 @@ public class AscensionCraft {
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.CULTIVATION_SPEC, "ascension/Ascension-Cultivation.toml");
         modContainer.registerConfig(ModConfig.Type.CLIENT, Config.CLIENT_SPEC, "ascension/Ascension-Client.toml");
         modContainer.registerConfig(ModConfig.Type.SERVER, Config.ALCHEMY_SERVER_SPEC, "ascension/Ascension-Alchemy.toml");
+        modContainer.registerConfig(ModConfig.Type.SERVER, Config.MOB_CULTIVATION_SERVER_SPEC, "ascension/Ascension-Mob-Cultivation.toml");
 
     }
 

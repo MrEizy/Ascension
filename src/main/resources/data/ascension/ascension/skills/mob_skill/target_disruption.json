@@ -1,7 +1,11 @@
 {
   "type": "ascension:active",
-  "name": {"translate": "ascension.skill.target_disruption.name"},
-  "description": {"translate": "ascension.skill.target_disruption.desc"},
+  "name": {
+    "translate": "ascension.skill.target_disruption.name"
+  },
+  "description": {
+    "translate": "ascension.skill.target_disruption.desc"
+  },
   "definitions": {
     "stagger": {
       "disruption": {
@@ -41,7 +45,7 @@
     {
       "type": "ascension:particles",
       "particle": "minecraft:reverse_portal",
-      "count": 3,
+      "count": 6,
       "spread": 0.3,
       "speed": 0.01,
       "subject": "target"
@@ -54,5 +58,14 @@
       "subject": "target"
     }
   ],
-  "cooldown": 150
+  "cooldown": {
+    "base": 150,
+    "per_mastery": -5,
+    "minimum": 112
+  },
+  "cost": {
+    "resource": "ascension:qi",
+    "amount": 7
+  },
+  "mastery_xp_per_use": 1.0
 }

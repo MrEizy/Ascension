@@ -1,11 +1,19 @@
 {
   "type": "ascension:active",
-  "name": {"translate": "ascension.skill.essence_guard.name"},
-  "description": {"translate": "ascension.skill.essence_guard.desc"},
+  "name": {
+    "translate": "ascension.skill.essence_guard.name"
+  },
+  "description": {
+    "translate": "ascension.skill.essence_guard.desc"
+  },
   "definitions": {
     "barriers": {
       "guard": {
-        "duration": 100,
+        "duration": {
+          "base": 100,
+          "per_mastery": 4,
+          "maximum": 124
+        },
         "durability": {
           "base": 5.0,
           "terms": [
@@ -15,10 +23,21 @@
                 "stat": "ascension:spirit"
               },
               "scale": 0.4
+            },
+            {
+              "source": {
+                "type": "ascension:path_realm_multiplier",
+                "path": "ascension:foundation/essence",
+                "bonus_per_major_realm": 0.08,
+                "bonus_per_minor_realm": 0.012,
+                "maximum_bonus": 1.5
+              },
+              "operation": "multiply"
             }
           ],
           "minimum": 0.0,
-          "maximum": 26.0
+          "maximum": 26.0,
+          "per_mastery": 1.5
         },
         "absorption": 0.65,
         "overflow": true,
@@ -38,7 +57,7 @@
     {
       "type": "ascension:particles",
       "particle": "minecraft:enchant",
-      "count": 3,
+      "count": 6,
       "spread": 0.3,
       "speed": 0.02,
       "subject": "caster"
@@ -51,5 +70,14 @@
       "subject": "caster"
     }
   ],
-  "cooldown": 190
+  "cooldown": {
+    "base": 190,
+    "per_mastery": -6,
+    "minimum": 142
+  },
+  "cost": {
+    "resource": "ascension:qi",
+    "amount": 6
+  },
+  "mastery_xp_per_use": 1.0
 }

@@ -1,7 +1,11 @@
 {
   "type": "ascension:active",
-  "name": {"translate": "ascension.skill.qi_infused_shot.name"},
-  "description": {"translate": "ascension.skill.qi_infused_shot.desc"},
+  "name": {
+    "translate": "ascension.skill.qi_infused_shot.name"
+  },
+  "description": {
+    "translate": "ascension.skill.qi_infused_shot.desc"
+  },
   "definitions": {
     "projectiles": {
       "shot": {
@@ -22,12 +26,27 @@
             ],
             "path": "ascension:foundation/essence",
             "subject": "target",
-            "base": 5.0,
+            "base": {
+              "base": 5.0,
+              "per_mastery": 0.45,
+              "terms": [
+                {
+                  "source": {
+                    "type": "ascension:path_realm_multiplier",
+                    "path": "ascension:foundation/essence",
+                    "bonus_per_major_realm": 0.08,
+                    "bonus_per_minor_realm": 0.012,
+                    "maximum_bonus": 1.5
+                  },
+                  "operation": "multiply"
+                }
+              ]
+            },
             "stats": {
               "ascension:spirit": 0.23
             },
             "minimum": 0.0,
-            "maximum": 20.0
+            "maximum": 29.0
           },
           {
             "type": "ascension:particles",
@@ -64,5 +83,14 @@
       "subject": "target"
     }
   ],
-  "cooldown": 80
+  "cooldown": {
+    "base": 80,
+    "per_mastery": -2,
+    "minimum": 60
+  },
+  "cost": {
+    "resource": "ascension:qi",
+    "amount": 7
+  },
+  "mastery_xp_per_use": 1.0
 }

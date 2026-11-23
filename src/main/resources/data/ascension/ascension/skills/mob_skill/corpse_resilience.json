@@ -1,11 +1,19 @@
 {
   "type": "ascension:active",
-  "name": {"translate": "ascension.skill.corpse_resilience.name"},
-  "description": {"translate": "ascension.skill.corpse_resilience.desc"},
+  "name": {
+    "translate": "ascension.skill.corpse_resilience.name"
+  },
+  "description": {
+    "translate": "ascension.skill.corpse_resilience.desc"
+  },
   "definitions": {
     "barriers": {
       "corpse_guard": {
-        "duration": 120,
+        "duration": {
+          "base": 120,
+          "per_mastery": 4,
+          "maximum": 144
+        },
         "durability": {
           "base": 8.0,
           "terms": [
@@ -15,10 +23,21 @@
                 "stat": "ascension:vitality"
               },
               "scale": 0.5
+            },
+            {
+              "source": {
+                "type": "ascension:path_realm_multiplier",
+                "path": "ascension:foundation/body",
+                "bonus_per_major_realm": 0.08,
+                "bonus_per_minor_realm": 0.012,
+                "maximum_bonus": 1.5
+              },
+              "operation": "multiply"
             }
           ],
           "minimum": 0.0,
-          "maximum": 38.0
+          "maximum": 38.0,
+          "per_mastery": 1.5
         },
         "absorption": 0.7,
         "overflow": true,
@@ -44,7 +63,7 @@
     {
       "type": "ascension:particles",
       "particle": "minecraft:ash",
-      "count": 3,
+      "count": 6,
       "spread": 0.3,
       "speed": 0.01,
       "subject": "caster"
@@ -57,5 +76,14 @@
       "subject": "caster"
     }
   ],
-  "cooldown": 240
+  "cooldown": {
+    "base": 240,
+    "per_mastery": -8,
+    "minimum": 180
+  },
+  "cost": {
+    "resource": "ascension:qi",
+    "amount": 6
+  },
+  "mastery_xp_per_use": 1.0
 }
