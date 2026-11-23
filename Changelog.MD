@@ -9,6 +9,7 @@
 ### Added
 * Added 2 new Technique, Bloodline and Physique Type (Connected Type, Evolution Type)
 * Added a new Technique and Physique using the Connected Types
+* Added a new Skill Type
 * Mastery related changes to many skills
 * Added cultivation path assignment and management commands
 * Added Cloth Fist Wraps, the first fist weapon. They're crafted from wool and string and can be dyed.
