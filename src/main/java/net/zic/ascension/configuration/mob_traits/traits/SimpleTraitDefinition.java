@@ -79,7 +79,10 @@ public record SimpleTraitDefinition(Component name,
         ZenithAttributeHolder attributeHolder = mob.getData(ZenithAttachments.ATTRIBUTE_HOLDER);
         attributeHolder.startProcess("bulk_attribute_modification");
         for (Map.Entry<Identifier, ModifierHolder<Double>> modifiers : attributeModifiers.entrySet()) {
-            ZenithAttribute attribute = attributeHolder.getAttribute(SuppressedAttributeHelper.getAttribute(modifiers.getKey()));
+            var attributeKey = SuppressedAttributeHelper.getAttribute(modifiers.getKey());
+            if (attributeKey == null || !attributeHolder.hasAttribute(attributeKey)) continue;
+            ZenithAttribute attribute = attributeHolder.getAttribute(attributeKey);
+            if (attribute == null) continue;
             attribute.startProcess("bulk_attribute_modification");
             for (Modifier<Double> modifier : modifiers.getValue().flat()) {
                 attribute.addFlatModifier(modifier);
@@ -135,7 +138,10 @@ public record SimpleTraitDefinition(Component name,
         ZenithAttributeHolder attributeHolder = mob.getData(ZenithAttachments.ATTRIBUTE_HOLDER);
         attributeHolder.startProcess("bulk_attribute_removal");
         for (Map.Entry<Identifier, ModifierHolder<Double>> modifiers : attributeModifiers.entrySet()) {
-            ZenithAttribute attribute = attributeHolder.getAttribute(SuppressedAttributeHelper.getAttribute(modifiers.getKey()));
+            var attributeKey = SuppressedAttributeHelper.getAttribute(modifiers.getKey());
+            if (attributeKey == null || !attributeHolder.hasAttribute(attributeKey)) continue;
+            ZenithAttribute attribute = attributeHolder.getAttribute(attributeKey);
+            if (attribute == null) continue;
             attribute.startProcess("bulk_attribute_removal");
             for (Modifier<Double> modifier : modifiers.getValue().flat()) {
                 attribute.removeModifier(modifier.id());
