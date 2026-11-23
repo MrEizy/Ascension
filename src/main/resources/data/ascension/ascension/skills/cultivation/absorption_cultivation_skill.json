@@ -1,0 +1,51 @@
+{
+  "type": "ascension:absorption_cultivation",
+  "name": {
+    "translate": "ascension.skill.example_absorption.name"
+  },
+  "description": {
+    "translate": "ascension.skill.example_absorption.desc"
+  },
+  "path": "ascension:foundation/body",
+  "cooldown": {
+    "base": 200
+  },
+  "environment_absorption_type": [
+    {
+      "radius": 3,
+      "shape": "sphere",
+      "breaking_animation": true,
+      "evolution_type": true
+    },
+    {
+      "time_needed": 15
+    },
+    {
+      "blocks": [
+        "minecraft:stone, 5",
+        "minecraft:amethyst_block, 25"
+      ],
+      "block_tags": [
+        "minecraft:base_stone_overworld, 10"
+      ]
+    }
+  ],
+  "item_absorption_type": [
+    {
+      "evolution_type": true,
+      "cultivation_type": true
+    },
+    {
+      "time_needed": 20
+    },
+    {
+      "items": [
+        "minecraft:diamond, 40",
+        "minecraft:nether_star, 500"
+      ],
+      "item_tags": [
+        "minecraft:swords, 100"
+      ]
+    }
+  ]
+}

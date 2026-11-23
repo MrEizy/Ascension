@@ -16,6 +16,8 @@ The intended workflow is:
 - [Path bonuses](#path-bonuses)
 - [Requirements](#requirements)
 - [Physique essences](#physique-essences)
+- [Connected physiques](#connected-physiques)
+- [Evolution physiques](#evolution-physiques)
 - [Complete example](#complete-example)
 - [Compact reference](#compact-reference)
 
@@ -43,6 +45,8 @@ Normal physiques use:
 ```json
 "type": "ascension:simple"
 ```
+
+Two more types add requirements and evolution on top of the normal fields: `ascension:connected_physique` and `ascension:evolution_physique`, see [Connected physiques](#connected-physiques) and [Evolution physiques](#evolution-physiques).
 
 # Minimal physique
 `paths` is required, but it may be an empty list if the physique should not unlock a path.
@@ -215,6 +219,75 @@ ascension:heavens_path
 
 `theme_overrides` may customize a specific essence while keeping the standard template.
 
+# Connected physiques
+`ascension:connected_physique` is a normal physique that can only be gained while the player already has something else. It has every field of `ascension:simple`, plus the connection fields below. At least one connection is required.
+
+| Field | Meaning |
+|---|---|
+| `technique_connection` | The technique(s) the player must have |
+| `bloodline_connection` | The bloodline(s) the player must have |
+| `path_connection` | The path(s) the player must have |
+
+A connection is one ID, or a list of IDs. With a list the player needs at least one of the listed IDs. When several connections are set, every one of them has to be met. IDs are full registry IDs including any folder, for example `example:body/ember_body_art`.
+
+A connected definition cannot require its own kind, so it has no connection field for it. It also fails to load if it has none of its connection fields.
+
+The connections are checked when the essence or manual is used. If one is missing the player is told what it is, for example `Requires the technique: Ember Body Art`, and nothing changes.
+
+```json
+{
+  "type": "ascension:connected_physique",
+  "name": "Ember Marrow Physique",
+  "description": "A body that only awakens for those who already walk the ember path.",
+  "paths": [],
+  "skills": [],
+  "technique_connection": "example:body/ember_body_art",
+  "path_connection": "ascension:foundation/body"
+}
+```
+
+# Evolution physiques
+`ascension:evolution_physique` is a normal physique that can evolve into another physique. It has every field of `ascension:simple`, plus an `evolution` object. It is usually written at the top of the file.
+
+```json
+{
+  "type": "ascension:evolution_physique",
+  "evolution": {
+    "into": "example:heaven/great_sun_body",
+    "catalyst": "example:profound/golden_sun_heart",
+    "absorb_catalyst": ["minecraft:diamond"],
+    "realm": {
+      "path": "ascension:foundation/soul",
+      "major_realm": 2,
+      "minor_realm": 1
+    },
+    "path": "ascension:elemental/yang"
+  },
+  "name": "Fire Spirit Body",
+  "description": "A fire spirit that can still be fed into something greater.",
+  "paths": [],
+  "skills": []
+}
+```
+| `evolution` field | Default | Meaning |
+|---|---|---|
+| `into` | Required | The physique it evolves into |
+| `catalyst` | None | Physique(s) whose essence triggers the evolution when used |
+| `absorb_catalyst` | None | Item or block ID(s) that trigger the evolution when absorbed |
+| `realm` | None | The path realm the player must be at least |
+| `path` | None | The path(s) the player must have, at least one of them |
+
+At least one of `catalyst` and `absorb_catalyst` is required, and either one can trigger the evolution. `catalyst`, `absorb_catalyst` and `path` take one ID or a list. Every requirement that is set has to be met.
+
+`realm` is written as `path`, `major_realm` and `minor_realm` (default `0`), using the same zero-based numbers as the path file. The player must be at least that realm on that path.
+
+An evolution only happens to a player who currently has this physique.
+
+| Trigger | What happens |
+|---|---|
+| Use a physique essence listed in `catalyst` | If every requirement is met the player evolves into `into` and the essence is used up. Otherwise the essence works as normal and swaps the player to its own physique |
+| Absorb an ID listed in `absorb_catalyst` | An `ascension:absorption_cultivation` skill with `evolution_type` on that block or item absorbs it, and if every requirement is met the player evolves into `into`. See `ASCENSION_SKILLS.md` |
+
 # Complete example
 ```json
 {
@@ -268,7 +341,7 @@ ascension:heavens_path
 
 # Compact reference
 ```text
-Type: ascension:simple
+Types: ascension:simple, ascension:connected_physique, ascension:evolution_physique
 Path: data/<namespace>/ascension/physiques/
 
 Fields:
@@ -280,6 +353,14 @@ base_path_bonuses
 path_bonus_modifiers
 requirements
 item_tooltip
+
+Connected physique fields (at least one):
+technique_connection
+bloodline_connection
+path_connection
+
+Evolution physique:
+evolution: into, catalyst, absorb_catalyst, realm, path
 
 Modifier operations:
 ADD_BASE

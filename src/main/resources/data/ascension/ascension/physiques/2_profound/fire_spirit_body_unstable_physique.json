@@ -3,19 +3,16 @@
   "evolution": {
     "into": "ascension:4_saint/great_sun_sacred_body_physique",
     "catalyst": "ascension:2_profound/golden_sun_heart_physique",
+    "absorb_catalyst": ["minecraft:diamond"],
     "realm": {
       "path": "ascension:foundation/soul",
-      "major_realm": 4,
-      "minor_realm": 2
+      "major_realm": 2,
+      "minor_realm": 1
     },
     "path": "ascension:elemental/yang"
   },
-  "name": {
-    "translate": "ascension.physique.fire_spirit_body_unstable_physique.name"
-  },
-  "description": {
-    "translate": "ascension.physique.fire_spirit_body_unstable_physique.desc"
-  },
+  "name": {"translate": "ascension.physique.fire_spirit_body_unstable_physique.name"},
+  "description": {"translate": "ascension.physique.fire_spirit_body_unstable_physique.desc"},
   "paths": [
     "ascension:foundation/soul",
     "ascension:elemental/fire",
@@ -30,75 +27,22 @@
   },
   "stats": {
     "ascension:vitality": {
-      "flat": [
-        {
-          "id": "ascension:2_profound_fire_spirit_body_unstable_physique_vitality_base",
-          "value": 1
-        }
-      ],
+      "flat": [{"id": "ascension:2_profound_fire_spirit_body_unstable_physique_vitality_base", "value": 1}],
       "multiplier": []
     },
     "ascension:strength": {
-      "flat": [
-        {
-          "id": "ascension:2_profound_fire_spirit_body_unstable_physique_strength_base",
-          "value": 1
-        }
-      ],
-      "multiplier": [
-        {
-          "id": "ascension:fire_spirit_body_unstable_physique_strength_modifier",
-          "operation_group": 0,
-          "value": 0.1
-        }
-      ]
+      "flat": [{"id": "ascension:2_profound_fire_spirit_body_unstable_physique_strength_base", "value": 1}],
+      "multiplier": [{"id": "ascension:fire_spirit_body_unstable_physique_strength_modifier", "operation_group": 0, "value": 0.1}]
     }
   },
   "path_bonus": {
     "ascension:affinity": {
-      "ascension:foundation/soul": {
-        "flat": [
-          {
-            "id": "ascension:2_profound_fire_spirit_body_unstable_physique_affinity_foundation_soul_base",
-            "value": 3
-          }
-        ],
-        "multiplier": []
-      },
       "ascension:elemental/fire": {
-        "flat": [
-          {
-            "id": "ascension:2_profound_fire_spirit_body_unstable_physique_affinity_elemental_fire_base",
-            "value": 2
-          }
-        ],
+        "flat": [{"id": "ascension:2_profound_fire_spirit_body_unstable_physique_affinity_elemental_fire_base", "value": 2}],
         "multiplier": []
       },
       "ascension:elemental/yang": {
-        "flat": [
-          {
-            "id": "ascension:2_profound_fire_spirit_body_unstable_physique_affinity_elemental_yang_base",
-            "value": 2.5
-          }
-        ],
-        "multiplier": []
-      },
-      "ascension:weapon/fist": {
-        "flat": [
-          {
-            "id": "ascension:2_profound_fire_spirit_body_unstable_physique_affinity_weapon_fist_base",
-            "value": 2
-          }
-        ],
-        "multiplier": []
-      },
-      "ascension:elemental/blood": {
-        "flat": [
-          {
-            "id": "ascension:fire_spirit_body_unstable_physique_yang_modifier",
-            "value": 0.15
-          }
-        ],
+        "flat": [{"id": "ascension:2_profound_fire_spirit_body_unstable_physique_affinity_elemental_yang_base", "value": 2.5}],
         "multiplier": []
       }
     }

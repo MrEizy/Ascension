@@ -16,6 +16,7 @@ Most normal content should require no Java. Active skills are assembled from tar
 - [Scheduled actions and variables](#scheduled-actions-and-variables)
 - [State and form passives](#state-and-form-passives)
 - [Golden core forming skills](#golden-core-forming-skills)
+- [Absorption cultivation skills](#absorption-cultivation-skills)
 - [Techniques](#techniques)
 - [Scaled values](#scaled-values)
 - [Targeting](#targeting)
@@ -61,6 +62,7 @@ Normal workflow:
 |---|---|
 | `ascension:active` | Instant, charge, channel, combat, movement, projectile, and cultivation skills |
 | `ascension:passive` | Always-on, levelled, toggleable, defensive, resource, projectile, and attack-triggered passives |
+| `ascension:absorption_cultivation` | Hold-to-absorb skills that take in blocks and items to cultivate a path, or to evolve a physique or bloodline |
 
 # Active skills
 Minimal active skill:
@@ -581,6 +583,99 @@ A castable skill that forms a golden core by triggering a path's manual golden c
 
 The cast fails unless the path is held, at exactly `realm`, and that realm's tribulation is ready to be triggered (progress is full and no tribulation is running). The tribulation only starts once the cast completes, and readiness is checked again at that point. Taking damage does not interrupt the cast.
 
+# Absorption cultivation skills
+A castable skill that absorbs blocks around the player and/or the item in their hand. Everything absorbed either gives progress on a path, or evolves a physique or bloodline (see `ASCENSION_PHYSIQUES.md` and `ASCENSION_BLOODLINES.md`). It is cast like an active skill: equip it and hold the cast input to absorb, releasing the input ends the cast.
+```json
+{
+  "type": "ascension:absorption_cultivation",
+  "name": "Earth Absorption",
+  "description": "Draw the strength of stone and treasure into the body.",
+  "path": "ascension:foundation/body",
+  "cooldown": { "base": 200 },
+  "environment_absorption_type": [
+    {
+      "radius": 3,
+      "shape": "sphere",
+      "breaking_animation": true,
+      "evolution_type": true
+    },
+    {
+      "time_needed": 15
+    },
+    {
+      "blocks": ["minecraft:stone, 5", "minecraft:amethyst_block, 25"],
+      "block_tags": ["minecraft:base_stone_overworld, 10"]
+    }
+  ],
+  "item_absorption_type": [
+    {
+      "evolution_type": true,
+      "cultivation_type": true
+    },
+    {
+      "time_needed": 20
+    },
+    {
+      "items": ["minecraft:diamond, 40", "minecraft:nether_star, 500"],
+      "item_tags": ["minecraft:swords, 100"]
+    }
+  ]
+}
+```
+| Field | Default | Meaning |
+|---|---|---|
+| `name`, `description` | Required | Display Components |
+| `path` | Required | The path the absorbed progress goes to. The cast fails if the player does not have it |
+| `cooldown` | `0` | Ticks before the skill can be cast again, a ScaledValue. Starts when a cast ends by releasing the input |
+| `environment_absorption_type` | None | Blocks around the player that are absorbed |
+| `item_absorption_type` | None | The item in the main hand that is absorbed |
+
+At least one of `environment_absorption_type` and `item_absorption_type` is required.
+
+Both sections are written as a list of objects. The fields of all the objects are merged, so they can be spread over several objects or put in one, and a single object instead of a list works too. Later objects override earlier ones for single values, and `blocks`, `block_tags`, `items` and `item_tags` add up. `enviroment_absorption_type` (the old spelling) is accepted as well.
+
+## Blocks
+| Field | Default | Meaning |
+|---|---|---|
+| `radius` | `2` | How far from the player a block can be, `1` to `8` |
+| `shape` | `sphere` | `sphere` or `cube`, the player is in the middle of it |
+| `breaking_animation` | `true` | Shows the vanilla block breaking animation while the block is absorbed |
+| `time_needed` | `20` | Ticks one block takes to absorb |
+| `evolution_type` | `false` | Lets an absorbed block act as an `absorb_catalyst` of an evolution |
+| `blocks` | `[]` | Block IDs and the progress each gives |
+| `block_tags` | `[]` | Block tag IDs and the progress each gives. A direct `blocks` entry wins over a tag |
+
+`sphere` takes every block whose distance from the player is at most `radius`. `cube` takes every block no further than `radius` on each axis, which is a cube with sides of `radius * 2 + 1` blocks. The block the player is standing on is never absorbed with either shape. Blocks beneath and around it are fine.
+
+The nearest absorbable block is taken first, one at a time. Air, unbreakable blocks and blocks with a block entity (chests, furnaces and so on) are skipped. The block is removed without dropping anything once it has been absorbed. If the player moves too far away, or onto the block, the absorption starts again.
+
+## Items
+| Field | Default | Meaning |
+|---|---|---|
+| `cultivation_type` | Required | `true` makes an absorbed item give its progress on the path, `false` does not allow cultivating with items |
+| `evolution_type` | `false` | Lets an absorbed item act as an `absorb_catalyst` of an evolution |
+| `time_needed` | `20` | Ticks one item takes to absorb |
+| `items` | `[]` | Item IDs and the progress each gives |
+| `item_tags` | `[]` | Item tag IDs and the progress each gives. A direct `items` entry wins over a tag |
+
+The item has to be in the main hand while the skill is held. One item is used up per absorption (creative players keep it).
+
+## Entries
+`blocks`, `block_tags`, `items` and `item_tags` are lists of strings written as an ID and the progress it gives, separated by a comma. The progress can be left out and is then `1`.
+
+```json
+"blocks": ["minecraft:stone, 5", "ascension:frost_silver_block, 10"],
+"item_tags": ["minecraft:swords, 100"]
+```
+
+## Cultivate or evolve
+An absorbed item or block does one of two things, never both at once:
+
+1. If it can evolve something the player has right now, it evolves it. That needs `evolution_type`, the ID listed in the `absorb_catalyst` of the player's evolution physique or bloodline, and every requirement of that evolution met.
+2. Otherwise it gives its progress on `path` (always for blocks, only with `cultivation_type` for items), as long as the path can still progress.
+
+If it can do neither, it is not absorbed and the item or block is left alone.
+
 # Techniques
 A technique is a generic source that grants skills (and stats or path bonuses) through its `on_added` actions. It is not tied to a path.
 ```json
@@ -609,7 +704,7 @@ Every skill is granted when the technique is learned, owned by the technique's I
 | `requirements` | Acquisition requirements |
 | `item_tooltip` | Technique manual presentation |
 
-See `ASCENSION_TECHNIQUES.md` for the full technique format.
+See `ASCENSION_TECHNIQUES.md` for the full technique format, including `ascension:connected_technique` for techniques that need a physique, bloodline or path first.
 
 # Scaled values
 Many numeric fields accept a `ScaledValue`.
@@ -1189,6 +1284,8 @@ This miniature technique uses two skill files and one technique file.
 Result: learning the manual grants Ember Meridian Breathing and Falling Mountain Cut; forgetting the technique removes both.
 
 # Glossary
+**Absorption** — Taking in blocks around the player or the item in their hand with an `ascension:absorption_cultivation` skill, to cultivate a path or to evolve a physique or bloodline.
+
 **Action** — One ordered unit of active behaviour: damage, movement, projectile, visual, resource change, etc.
 
 **Active skill** — A castable `ascension:active` skill. Instant, charge, channel, combat, movement, and cultivation all use this type.
@@ -1236,4 +1333,5 @@ Targets: ascension:self, ascension:ray, ascension:cone, ascension:radial, ascens
 Subjects: caster, target, origin, position
 Relations: self, ally, neutral, hostile
 Particle fields: rising, inward_flow, spiral, meridian_flow, gathering_ring, breath_flow
+Absorption shapes: sphere, cube
 ```
