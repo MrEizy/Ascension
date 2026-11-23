@@ -1,6 +1,7 @@
 package net.zic.ascension.impl.core.evolution;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
@@ -18,37 +19,50 @@ import java.util.Optional;
  * Everything an evolution needs. The "evolution" object of an evolution_bloodline / evolution_physique:
  * <ul>
  *   <li>into: the definition it evolves into (required)</li>
- *   <li>catalyst: the bloodline / physique item that has to be used to trigger it, one id or a list (required)</li>
+ *   <li>catalyst: the bloodline / physique item that has to be right clicked to trigger it, one id or a list</li>
+ *   <li>absorb_catalyst: an item or block id that has to be absorbed with an absorption_cultivation skill that lists it with
+ *       evolution_type, one id or a list</li>
+ *   <li>at least one of catalyst and absorb_catalyst is required, both can be set and either one triggers the evolution</li>
  *   <li>purity (bloodline only, 1-100): the purity of the bloodline the player already has. The purity of the catalyst item does not matter</li>
  *   <li>result_purity (bloodline only, 1-100): the purity the evolved bloodline starts with, default 1</li>
  *   <li>realm: {path, major_realm, minor_realm}, the player must be at least that realm on that path</li>
  *   <li>path: the player must have this path, one id or a list (any of them)</li>
  * </ul>
- * Everything except into and catalyst is optional, and every requirement that is set has to be met.
+ * Every requirement that is set has to be met.
  */
-public record EvolutionRequirements(Identifier into, List<Identifier> catalysts, int minPurity, int resultPurity,
-                                    Optional<RealmRequirement> realm, List<Identifier> paths) {
+public record EvolutionRequirements(Identifier into, List<Identifier> catalysts, List<Identifier> absorbCatalysts, int minPurity,
+                                    int resultPurity, Optional<RealmRequirement> realm, List<Identifier> paths) {
 
-    public static final Codec<EvolutionRequirements> BLOODLINE_CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final Codec<EvolutionRequirements> BLOODLINE_CODEC = RecordCodecBuilder.<EvolutionRequirements>create(instance -> instance.group(
             Identifier.CODEC.fieldOf("into").forGetter(EvolutionRequirements::into),
-            ConnectionRequirements.IDS.fieldOf("catalyst").forGetter(EvolutionRequirements::catalysts),
+            ConnectionRequirements.IDS.optionalFieldOf("catalyst", List.of()).forGetter(EvolutionRequirements::catalysts),
+            ConnectionRequirements.IDS.optionalFieldOf("absorb_catalyst", List.of()).forGetter(EvolutionRequirements::absorbCatalysts),
             Codec.intRange(1, 100).optionalFieldOf("purity", 0).forGetter(EvolutionRequirements::minPurity),
             Codec.intRange(1, 100).optionalFieldOf("result_purity", 1).forGetter(EvolutionRequirements::resultPurity),
             RealmRequirement.CODEC.optionalFieldOf("realm").forGetter(EvolutionRequirements::realm),
             ConnectionRequirements.IDS.optionalFieldOf("path", List.of()).forGetter(EvolutionRequirements::paths)
-    ).apply(instance, EvolutionRequirements::new));
+    ).apply(instance, EvolutionRequirements::new)).flatXmap(EvolutionRequirements::needsCatalyst, DataResult::success);
 
-    public static final Codec<EvolutionRequirements> PHYSIQUE_CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final Codec<EvolutionRequirements> PHYSIQUE_CODEC = RecordCodecBuilder.<EvolutionRequirements>create(instance -> instance.group(
             Identifier.CODEC.fieldOf("into").forGetter(EvolutionRequirements::into),
-            ConnectionRequirements.IDS.fieldOf("catalyst").forGetter(EvolutionRequirements::catalysts),
+            ConnectionRequirements.IDS.optionalFieldOf("catalyst", List.of()).forGetter(EvolutionRequirements::catalysts),
+            ConnectionRequirements.IDS.optionalFieldOf("absorb_catalyst", List.of()).forGetter(EvolutionRequirements::absorbCatalysts),
             RealmRequirement.CODEC.optionalFieldOf("realm").forGetter(EvolutionRequirements::realm),
             ConnectionRequirements.IDS.optionalFieldOf("path", List.of()).forGetter(EvolutionRequirements::paths)
-    ).apply(instance, (into, catalysts, realm, paths) -> new EvolutionRequirements(into, catalysts, 0, 1, realm, paths)));
+    ).apply(instance, (into, catalysts, absorbCatalysts, realm, paths) ->
+            new EvolutionRequirements(into, catalysts, absorbCatalysts, 0, 1, realm, paths))).flatXmap(EvolutionRequirements::needsCatalyst, DataResult::success);
 
     public EvolutionRequirements {
         catalysts = catalysts == null ? List.of() : List.copyOf(catalysts);
+        absorbCatalysts = absorbCatalysts == null ? List.of() : List.copyOf(absorbCatalysts);
         realm = realm == null ? Optional.empty() : realm;
         paths = paths == null ? List.of() : List.copyOf(paths);
+    }
+
+    private static DataResult<EvolutionRequirements> needsCatalyst(EvolutionRequirements evolution) {
+        return evolution.catalysts().isEmpty() && evolution.absorbCatalysts().isEmpty()
+                ? DataResult.error(() -> "An evolution needs a catalyst or an absorb_catalyst")
+                : DataResult.success(evolution);
     }
 
     /**

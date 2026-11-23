@@ -15,6 +15,8 @@ The intended workflow is:
 - [Purity handlers](#purity-handlers)
 - [Progress actions](#progress-actions)
 - [Bloodline essences](#bloodline-essences)
+- [Connected bloodlines](#connected-bloodlines)
+- [Evolution bloodlines](#evolution-bloodlines)
 - [Complete example](#complete-example)
 - [Compact reference](#compact-reference)
 
@@ -42,6 +44,8 @@ Current bloodlines use:
 ```json
 "type": "ascension:simple"
 ```
+
+Two more types add requirements and evolution on top of the normal fields: `ascension:connected_bloodline` and `ascension:evolution_bloodline`, see [Connected bloodlines](#connected-bloodlines) and [Evolution bloodlines](#evolution-bloodlines).
 
 # Minimal bloodline
 ```json
@@ -248,6 +252,76 @@ ascension:heavens_path
 
 `theme_overrides` may customize a specific essence while keeping the default template.
 
+# Connected bloodlines
+`ascension:connected_bloodline` is a normal bloodline that can only be gained while the player already has something else. It has every field of `ascension:simple`, plus the connection fields below. At least one connection is required.
+
+| Field | Meaning |
+|---|---|
+| `physique_connection` | The physique(s) the player must have |
+| `technique_connection` | The technique(s) the player must have |
+| `path_connection` | The path(s) the player must have |
+
+A connection is one ID, or a list of IDs. With a list the player needs at least one of the listed IDs. When several connections are set, every one of them has to be met. IDs are full registry IDs including any folder, for example `example:body/ember_body_art`.
+
+A connected definition cannot require its own kind, so it has no connection field for it. It also fails to load if it has none of its connection fields.
+
+The connections are checked when the essence or manual is used. If one is missing the player is told what it is, for example `Requires the technique: Ember Body Art`, and nothing changes.
+
+```json
+{
+  "type": "ascension:connected_bloodline",
+  "name": "Awakened Ember Blood",
+  "description": "Only stirs in a body that already holds the right physique.",
+  "physique_connection": "example:body/iron_bloom",
+  "purity_handler": []
+}
+```
+
+# Evolution bloodlines
+`ascension:evolution_bloodline` is a normal bloodline that can evolve into another bloodline. It has every field of `ascension:simple`, plus an `evolution` object. It is usually written at the top of the file.
+
+```json
+{
+  "type": "ascension:evolution_bloodline",
+  "evolution": {
+    "into": "example:saint/celestial_war_tiger",
+    "catalyst": "example:profound/crane_bloodline",
+    "absorb_catalyst": ["minecraft:nether_star", "minecraft:amethyst_block"],
+    "purity": 80,
+    "result_purity": 10,
+    "realm": {
+      "path": "ascension:foundation/body",
+      "major_realm": 2,
+      "minor_realm": 1
+    },
+    "path": "ascension:foundation/body"
+  },
+  "name": "Barbarian Bloodline",
+  "description": "A thin bloodline that can still awaken into something greater.",
+  "purity_handler": []
+}
+```
+| `evolution` field | Default | Meaning |
+|---|---|---|
+| `into` | Required | The bloodline it evolves into |
+| `catalyst` | None | Bloodline(s) whose essence triggers the evolution when used |
+| `absorb_catalyst` | None | Item or block ID(s) that trigger the evolution when absorbed |
+| `purity` | None | `1` to `100`. The purity the bloodline the player already has must have reached. The purity of the catalyst essence does not matter |
+| `result_purity` | `1` | `1` to `100`. The purity the evolved bloodline starts with |
+| `realm` | None | The path realm the player must be at least |
+| `path` | None | The path(s) the player must have, at least one of them |
+
+At least one of `catalyst` and `absorb_catalyst` is required, and either one can trigger the evolution. `catalyst`, `absorb_catalyst` and `path` take one ID or a list. Every requirement that is set has to be met.
+
+`realm` is written as `path`, `major_realm` and `minor_realm` (default `0`), using the same zero-based numbers as the path file. The player must be at least that realm on that path.
+
+An evolution only happens to a player who currently has this bloodline. The evolved bloodline is added first, with `result_purity`, and then this one is removed.
+
+| Trigger | What happens |
+|---|---|
+| Use a bloodline essence listed in `catalyst` | If every requirement is met the bloodline evolves into `into` and the essence is used up. Otherwise the player is told what is missing and nothing changes |
+| Absorb an ID listed in `absorb_catalyst` | An `ascension:absorption_cultivation` skill with `evolution_type` on that block or item absorbs it, and if every requirement is met the bloodline evolves into `into`. See `ASCENSION_SKILLS.md` |
+
 # Complete example
 ```json
 {
@@ -326,9 +400,17 @@ ascension:heavens_path
 
 # Compact reference
 ```text
-Type: ascension:simple
+Types: ascension:simple, ascension:connected_bloodline, ascension:evolution_bloodline
 Path: data/<namespace>/ascension/bloodlines/
 Purity: 1..100
+
+Connected bloodline fields (at least one):
+physique_connection
+technique_connection
+path_connection
+
+Evolution bloodline:
+evolution: into, catalyst, absorb_catalyst, purity, result_purity, realm, path
 
 Condition:
 ascension:on_purity_in_range
