@@ -338,6 +338,21 @@ public class AscRecipeProvider extends RecipeProvider {
         );
 
 
+        smithingTransform(
+                Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE,
+                ModItems.DIAMOND_SCYTHE.get(),
+                Ingredient.of(Items.NETHERITE_INGOT),
+                RecipeCategory.COMBAT,
+                ModItems.NETHERITE_SCYTHE.get()
+        );
+        smithingTransform(
+                ModItems.SPIRITUAL_STONE_UPGRADE_SMITHING_TEMPLATE.asItem(),
+                ModItems.NETHERITE_SCYTHE.get(),
+                Ingredient.of(ModItems.SPIRITUAL_STONE),
+                RecipeCategory.COMBAT,
+                ModItems.SPIRITUAL_STONE_SCYTHE.get()
+        );
+
         shaped(RecipeCategory.MISC, ModItems.SPIRITUAL_STONE_UPGRADE_SMITHING_TEMPLATE.get(), 2)
                 .pattern("STS")
                 .pattern("SES")
@@ -561,6 +576,70 @@ public class AscRecipeProvider extends RecipeProvider {
                 .unlockedBy(getHasName(Items.DIAMOND), has(Items.DIAMOND))
                 .group("blade")
                 .save(output, "ascension:shaped/diamond_blade");
+
+        shaped(RecipeCategory.COMBAT, ModItems.COPPER_SCYTHE.get())
+                .pattern("TTT")
+                .pattern("T S")
+                .pattern("  S")
+                .define('T', Items.COPPER_INGOT)
+                .define('S', Items.STICK)
+                .unlockedBy(getHasName(Items.COPPER_INGOT), has(Items.COPPER_INGOT))
+                .group("scythe")
+                .save(output, "ascension:shaped/copper_scythe");
+        shaped(RecipeCategory.COMBAT, ModItems.IRON_SCYTHE.get())
+                .pattern("TTT")
+                .pattern("T S")
+                .pattern("  S")
+                .define('T', Items.IRON_INGOT)
+                .define('S', Items.STICK)
+                .unlockedBy(getHasName(Items.IRON_INGOT), has(Items.IRON_INGOT))
+                .group("scythe")
+                .save(output, "ascension:shaped/iron_scythe");
+        shaped(RecipeCategory.COMBAT, ModItems.GOLDEN_SCYTHE.get())
+                .pattern("TTT")
+                .pattern("T S")
+                .pattern("  S")
+                .define('T', Items.GOLD_INGOT)
+                .define('S', Items.STICK)
+                .unlockedBy(getHasName(Items.GOLD_INGOT), has(Items.GOLD_INGOT))
+                .group("scythe")
+                .save(output, "ascension:shaped/golden_scythe");
+        shaped(RecipeCategory.COMBAT, ModItems.DIAMOND_SCYTHE.get())
+                .pattern("TTT")
+                .pattern("T S")
+                .pattern("  S")
+                .define('T', Items.DIAMOND)
+                .define('S', Items.STICK)
+                .unlockedBy(getHasName(Items.DIAMOND), has(Items.DIAMOND))
+                .group("scythe")
+                .save(output, "ascension:shaped/diamond_scythe");
+        shaped(RecipeCategory.COMBAT, ModItems.BLACK_IRON_SCYTHE.get())
+                .pattern("TTT")
+                .pattern("T S")
+                .pattern("  S")
+                .define('T', ModItems.BLACK_IRON_INGOT.get())
+                .define('S', Items.STICK)
+                .unlockedBy(getHasName(ModItems.BLACK_IRON_INGOT.get()), has(ModItems.BLACK_IRON_INGOT.get()))
+                .group("scythe")
+                .save(output, "ascension:shaped/black_iron_scythe");
+        shaped(RecipeCategory.COMBAT, ModItems.FROST_SILVER_SCYTHE.get())
+                .pattern("TTT")
+                .pattern("T S")
+                .pattern("  S")
+                .define('T', ModItems.FROST_SILVER_INGOT.get())
+                .define('S', Items.STICK)
+                .unlockedBy(getHasName(ModItems.FROST_SILVER_INGOT.get()), has(ModItems.FROST_SILVER_INGOT.get()))
+                .group("scythe")
+                .save(output, "ascension:shaped/frost_silver_scythe");
+        shaped(RecipeCategory.COMBAT, ModItems.JADE_SCYTHE.get())
+                .pattern("TTT")
+                .pattern("T S")
+                .pattern("  S")
+                .define('T', ModItems.JADE.get())
+                .define('S', Items.STICK)
+                .unlockedBy(getHasName(ModItems.JADE.get()), has(ModItems.JADE.get()))
+                .group("scythe")
+                .save(output, "ascension:shaped/jade_scythe");
 
         shaped(RecipeCategory.COMBAT, ModItems.COPPER_CHAKRAM.get())
                 .pattern("TTT")

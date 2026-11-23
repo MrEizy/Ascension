@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "group": "scythe",
+  "key": {
+    "S": "minecraft:stick",
+    "T": "minecraft:diamond"
+  },
+  "pattern": [
+    "TTT",
+    "T S",
+    "  S"
+  ],
+  "result": {
+    "id": "ascension:diamond_scythe"
+  }
+}

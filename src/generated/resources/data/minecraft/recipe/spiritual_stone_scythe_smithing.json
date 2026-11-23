@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": "ascension:spiritual_stone",
+  "base": "ascension:netherite_scythe",
+  "result": {
+    "id": "ascension:spiritual_stone_scythe"
+  },
+  "template": "ascension:spiritual_stone_upgrade_smithing_template"
+}

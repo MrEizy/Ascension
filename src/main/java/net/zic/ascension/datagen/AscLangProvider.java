@@ -304,6 +304,16 @@ public class AscLangProvider extends LanguageProvider {
         add("item.ascension.diamond_blade", "Diamond Blade");
         add("item.ascension.netherite_blade", "Netherite Blade");
 
+        add("item.ascension.copper_scythe", "Copper Scythe");
+        add("item.ascension.iron_scythe", "Iron Scythe");
+        add("item.ascension.golden_scythe", "Golden Scythe");
+        add("item.ascension.diamond_scythe", "Diamond Scythe");
+        add("item.ascension.netherite_scythe", "Netherite Scythe");
+        add("item.ascension.black_iron_scythe", "Black Iron Scythe");
+        add("item.ascension.frost_silver_scythe", "Frost Silver Scythe");
+        add("item.ascension.jade_scythe", "Jade Scythe");
+        add("item.ascension.spiritual_stone_scythe", "Spiritual Stone Scythe");
+
         add("item.ascension.copper_chakram", "Copper Chakram");
         add("item.ascension.iron_chakram", "Iron Chakram");
         add("item.ascension.golden_chakram", "Golden Chakram");
@@ -854,7 +864,7 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.skill.axe_cultivation.name", "Axe Cultivation");
         add("ascension.skill.axe_cultivation.desc", "Practice with axe weapons to cultivate the Axe Path.");
         add("ascension.skill.scythe_cultivation.name", "Scythe Cultivation");
-        add("ascension.skill.scythe_cultivation.desc", "Practice with scythe weapons to cultivate the Axe Path.");
+        add("ascension.skill.scythe_cultivation.desc", "Practice with scythe weapons to cultivate the Scythe Path.");
         add("ascension.skill.bow_cultivation.name", "Bow Cultivation");
         add("ascension.skill.bow_cultivation.desc", "Practice with bow weapons to cultivate the Bow Path.");
         add("ascension.skill.mace_cultivation.name", "Mace Cultivation");

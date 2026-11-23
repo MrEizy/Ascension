@@ -4,7 +4,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.common.blocks.ModBlocks;
 import net.zic.ascension.common.item.ModItems;
 import net.zic.ascension.common.util.ModTags;
 import net.zic.zenithlib.creative.api.CreativeTabSection;

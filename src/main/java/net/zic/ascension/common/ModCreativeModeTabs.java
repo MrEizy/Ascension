@@ -55,6 +55,7 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.BLACK_IRON_SWORD);
                         output.accept(ModItems.BLACK_IRON_BLADE);
                         output.accept(ModItems.BLACK_IRON_CHAKRAM);
+                        output.accept(ModItems.BLACK_IRON_SCYTHE);
                         output.accept(ModItems.BLACK_IRON_PICKAXE);
                         output.accept(ModItems.BLACK_IRON_SHOVEL);
                         output.accept(ModItems.BLACK_IRON_AXE);
@@ -64,6 +65,7 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.FROST_SILVER_SWORD);
                         output.accept(ModItems.FROST_SILVER_BLADE);
                         output.accept(ModItems.FROST_SILVER_CHAKRAM);
+                        output.accept(ModItems.FROST_SILVER_SCYTHE);
                         output.accept(ModItems.FROST_SILVER_PICKAXE);
                         output.accept(ModItems.FROST_SILVER_SHOVEL);
                         output.accept(ModItems.FROST_SILVER_AXE);
@@ -74,11 +76,14 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.SPIRITUAL_STONE_SWORD);
                         output.accept(ModItems.SPIRITUAL_STONE_BLADE);
                         output.accept(ModItems.SPIRITUAL_STONE_CHAKRAM);
+                        output.accept(ModItems.SPIRITUAL_STONE_SCYTHE);
                         output.accept(ModItems.SPIRITUAL_STONE_PICKAXE);
                         output.accept(ModItems.SPIRITUAL_STONE_SHOVEL);
                         output.accept(ModItems.SPIRITUAL_STONE_AXE);
                         output.accept(ModItems.SPIRITUAL_STONE_HOE);
                         output.accept(ModItems.SPIRITUAL_STONE_SPEAR);
+
+                        output.accept(ModItems.JADE_SCYTHE);
 
 
 
@@ -219,6 +224,22 @@ public class ModCreativeModeTabs {
                     CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.insertAfter(ModItems.NETHERITE_BLADE.get().asItem().getDefaultInstance(),
                     ModItems.NETHERITE_CHAKRAM.get().asItem().getDefaultInstance(),
+                    CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+
+            event.insertAfter(ModItems.COPPER_CHAKRAM.get().asItem().getDefaultInstance(),
+                    ModItems.COPPER_SCYTHE.get().asItem().getDefaultInstance(),
+                    CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            event.insertAfter(ModItems.IRON_CHAKRAM.get().asItem().getDefaultInstance(),
+                    ModItems.IRON_SCYTHE.get().asItem().getDefaultInstance(),
+                    CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            event.insertAfter(ModItems.GOLDEN_CHAKRAM.get().asItem().getDefaultInstance(),
+                    ModItems.GOLDEN_SCYTHE.get().asItem().getDefaultInstance(),
+                    CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            event.insertAfter(ModItems.DIAMOND_CHAKRAM.get().asItem().getDefaultInstance(),
+                    ModItems.DIAMOND_SCYTHE.get().asItem().getDefaultInstance(),
+                    CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            event.insertAfter(ModItems.NETHERITE_CHAKRAM.get().asItem().getDefaultInstance(),
+                    ModItems.NETHERITE_SCYTHE.get().asItem().getDefaultInstance(),
                     CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
         }
 

@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": "minecraft:netherite_ingot",
+  "base": "ascension:diamond_scythe",
+  "result": {
+    "id": "ascension:netherite_scythe"
+  },
+  "template": "minecraft:netherite_upgrade_smithing_template"
+}

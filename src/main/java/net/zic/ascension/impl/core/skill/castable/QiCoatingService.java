@@ -76,7 +76,7 @@ public final class QiCoatingService {
         return itemStack.is(ItemTags.SWORDS) || itemStack.is(ItemTags.AXES) || itemStack.is(ItemTags.SPEARS)
                 || itemStack.is(ItemTags.PICKAXES) || itemStack.is(ItemTags.SHOVELS) || itemStack.is(ItemTags.HOES)
                 || itemStack.is(ModTags.Items.WEAPON_BLADES) || itemStack.is(ModTags.Items.WEAPON_SPEARS)
-                || itemStack.is(ModTags.Items.CHAKRAMS);
+                || itemStack.is(ModTags.Items.CHAKRAMS) || itemStack.is(ModTags.Items.WEAPON_SCYTHES);
     }
 
     /**
