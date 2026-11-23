@@ -20,7 +20,8 @@
 * Techniques now give stats, and have enforced max realms etc
 * Added new Skill; Sword Control and Twin Sword Control
 * Added weapon cultivation passives to the weapon paths (Techniques will be used to grant stronger ones and special effect ones hopefully)
-* Added Scythe Path and related stuff
+* Added Scythe Path and related cultivation skill
+* Added Scythe weapons from copper to spirit stone tier (Sephesta)
 * Added a second furnace tier with a pill prediction feature
 * Server Configs for alchemy to restrict effectiveness of cultivation pills
 
