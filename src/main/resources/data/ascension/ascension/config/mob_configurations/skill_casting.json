@@ -1,7 +1,7 @@
 {
   "enabled": true,
   "interval_ticks": 30,
-  "attempt_chance": 1.0,
+  "attempt_chance": 0.55,
   "skills": {
     "ascension:mob_skill/body_reinforcement": {
       "behavior": "defensive",
