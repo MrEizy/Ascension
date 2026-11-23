@@ -115,6 +115,9 @@
         "min": 0,
         "max": 1
       }
+    },
+    "progression": {
+      "rate_multiplier": 0.7
     }
   },
   "hostile": {
@@ -309,6 +312,9 @@
           ]
         }
       ]
+    },
+    "progression": {
+      "rate_multiplier": 1.0
     }
   },
   "boss": {
@@ -521,6 +527,9 @@
           ]
         }
       ]
+    },
+    "progression": {
+      "rate_multiplier": 1.3
     }
   }
 }

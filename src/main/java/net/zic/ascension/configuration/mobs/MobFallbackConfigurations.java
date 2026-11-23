@@ -21,7 +21,7 @@ import java.nio.charset.StandardCharsets;
 
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
 public final class MobFallbackConfigurations {
-    private static final Identifier RESOURCE = AscensionCraft.prefix("ascension/config/mob_traits/fallback.json");
+    private static final Identifier RESOURCE = AscensionCraft.prefix("ascension/config/mob_configurations/fallback.json");
     private static volatile Profiles profiles = Profiles.DISABLED;
 
     public record Profiles(boolean enabled, MobConfiguration passive, MobConfiguration hostile, MobConfiguration boss) {
