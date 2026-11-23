@@ -1,6 +1,8 @@
 package net.zic.ascension.handler;
 
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -45,12 +47,13 @@ public final class RecoveryTicker {
 
     @SubscribeEvent
     public static void onEntityTick(EntityTickEvent.Pre event) {
-        if (!(event.getEntity() instanceof ServerPlayer player)) {
-            return;
+        if (event.getEntity() instanceof ServerPlayer player) {
+            tickHealth(player);
+            tickQi(player);
+            tickStamina(player);
+        } else if (event.getEntity() instanceof Mob mob && !mob.level().isClientSide() && mob.isAlive()) {
+            tickQi(mob);
         }
-        tickHealth(player);
-        tickQi(player);
-        tickStamina(player);
     }
 
     public static void spendJumpStamina(ServerPlayer player) {
@@ -85,9 +88,9 @@ public final class RecoveryTicker {
         }
     }
 
-    private static void tickQi(ServerPlayer player) {
-        EntityQiProvider provider = player.getCapability(CoreCapabilities.ASCENSION_ENTITY_QI_PROVIDER);
-        if (provider == null || !player.getAttributes().hasAttribute(AscensionAttributes.QI_REGEN_RATE)) {
+    private static void tickQi(LivingEntity entity) {
+        EntityQiProvider provider = entity.getCapability(CoreCapabilities.ASCENSION_ENTITY_QI_PROVIDER);
+        if (provider == null || !entity.getAttributes().hasAttribute(AscensionAttributes.QI_REGEN_RATE)) {
             return;
         }
         double maximum = Math.max(0.0D, provider.getMaxQi());
@@ -99,10 +102,10 @@ public final class RecoveryTicker {
         if (current >= maximum) {
             return;
         }
-        double rate = Math.max(0.0D, player.getAttributeValue(AscensionAttributes.QI_REGEN_RATE));
+        double rate = Math.max(0.0D, entity.getAttributeValue(AscensionAttributes.QI_REGEN_RATE));
         if (rate > 0.0D) {
             ResourceTransactionService.restore(
-                    player,
+                    entity,
                     AscensionResourceTypes.QI.getId(),
                     AscensionResourceSources.NATURAL_REGENERATION,
                     rate / TICKS_PER_SECOND
