@@ -555,11 +555,11 @@ public class AscModelProvider extends ModelProvider {
                 .transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, transform -> transform
                         .rotation(0, -90, -3)
                         .translation(0, 5.71F, 9.61F)
-                        .scale(1.8F, 1.8F, 1))
+                        .scale(1.2F, 1.2F, 1))
                 .transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND, transform -> transform
                         .rotation(0, 90, 3)
                         .translation(0, 5.71F, 9.61F)
-                        .scale(1.8F, 1.8F, 1))
+                        .scale(1.2F, 1.2F, 1))
                 .transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND, transform -> transform
                         .rotation(-8, -65, 30)
                         .translation(1.52F, 3.39F, -3.38F)
