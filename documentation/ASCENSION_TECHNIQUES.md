@@ -16,6 +16,7 @@ The intended workflow is:
 - [On added actions](#on-added-actions)
 - [Requirements](#requirements)
 - [Technique manuals](#technique-manuals)
+- [Connected techniques](#connected-techniques)
 - [Complete example](#complete-example)
 - [Compact reference](#compact-reference)
 
@@ -43,6 +44,8 @@ For normal datapack techniques, use:
 ```json
 "type": "ascension:simple_technique"
 ```
+
+A technique that needs something else first uses `ascension:connected_technique`, see [Connected techniques](#connected-techniques).
 
 # Minimal technique
 ```json
@@ -166,6 +169,38 @@ Use `default_cultivation_technique` when the technique includes a cultivation ac
 
 `theme_overrides` may customize individual manuals without creating a new theme.
 
+# Connected techniques
+`ascension:connected_technique` is a normal technique that can only be learned while the player already has something else. It has every field of `ascension:simple_technique`, plus the connection fields below. At least one connection is required.
+
+| Field | Meaning |
+|---|---|
+| `physique_connection` | The physique(s) the player must have |
+| `bloodline_connection` | The bloodline(s) the player must have |
+| `path_connection` | The path(s) the player must have |
+
+A connection is one ID, or a list of IDs. With a list the player needs at least one of the listed IDs. When several connections are set, every one of them has to be met. IDs are full registry IDs including any folder, for example `example:body/ember_body_art`.
+
+A connected definition cannot require its own kind, so it has no connection field for it. It also fails to load if it has none of its connection fields.
+
+The connections are checked when the essence or manual is used. If one is missing the player is told what it is, for example `Requires the technique: Ember Body Art`, and nothing changes.
+
+```json
+{
+  "type": "ascension:connected_technique",
+  "name": "Boundless Qi Scripture",
+  "description": "A breathing method that only a certain physique can follow.",
+  "physique_connection": "example:profound/god_envied_physique",
+  "on_added": [
+    {
+      "type": "ascension:grant_skills",
+      "skills": ["example:boundless/cultivation"]
+    }
+  ]
+}
+```
+
+Unlike physiques and bloodlines, techniques cannot evolve.
+
 # Complete example
 ```json
 {
@@ -215,7 +250,7 @@ Use `default_cultivation_technique` when the technique includes a cultivation ac
 
 # Compact reference
 ```text
-Type: ascension:simple_technique
+Types: ascension:simple_technique, ascension:connected_technique
 Path: data/<namespace>/ascension/techniques/
 
 Root fields:
@@ -224,6 +259,11 @@ description
 on_added
 requirements
 item_tooltip
+
+Connected technique fields (at least one):
+physique_connection
+bloodline_connection
+path_connection
 
 on_added: list of action IDs or inline actions, no condition
 Learned: actions run upward

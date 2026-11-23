@@ -73,6 +73,9 @@ public class ModItems {
             ));
 
 
+    public static final DeferredItem<Item> DESOLATE_BONES = ITEMS.registerItem("desolate_bones",
+            properties -> new Item(properties.rarity(Rarity.EPIC)));
+
     //Spirit Stone stuff
 
     public static final DeferredItem<Item> SPIRIT_STONE = ITEMS.registerItem("spirit_stone",
