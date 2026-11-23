@@ -25,7 +25,8 @@ public class MobEventHandler {
     @SubscribeEvent
     public static void onEntityJoinLevel(EntityJoinLevelEvent event) {
         if (event.getLevel().isClientSide() || !(event.getEntity() instanceof Mob mob)) return;
-        if (!MobSpawnHelper.hasConfigHolder(mob)) {
+        if (!MobSpawnHelper.hasConfigHolder(mob)
+                && (!event.loadedFromDisk() || MobSpawnHelper.hasExplicitConfig(mob))) {
             MobSpawnHelper.buildConfigurationInstance(mob);
         }
         if (!MobSpawnHelper.hasConfigHolder(mob)) return;
