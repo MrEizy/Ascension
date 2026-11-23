@@ -6,6 +6,9 @@
   "description": {
     "translate": "ascension.technique.astral_essence_technique.desc"
   },
+  "path": "ascension:foundation/essence",
+  "max_realm": 5,
+  "max_minor_realm": 2,
   "on_added": [
     {
       "type": "ascension:grant_skills",
@@ -15,8 +18,28 @@
         "ascension:castable/astral_essence_technique/starfall_burst",
         "ascension:castable/new_techniques/essence_perception"
       ]
+    },
+    {
+      "type": "ascension:give_stats",
+      "stats": {
+        "ascension:spirit": {
+          "flat": [
+            {
+              "id": "ascension:astral_essence_technique_learn_flat_spirit",
+              "value": 2.0
+            }
+          ],
+          "multiplier": []
+        }
+      }
     }
   ],
+  "stats_per_realm": {
+    "ascension:spirit": {
+      "flat": 0.17647,
+      "multiplier": 0.013
+    }
+  },
   "item_tooltip": {
     "theme": "ascension:technique_manual",
     "template": "ascension:default_cultivation_technique",

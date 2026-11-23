@@ -17,6 +17,11 @@
           "path": "ascension:foundation/soul",
           "secondary_path": "ascension:elemental/death",
           "rate": 100.0
+        },
+        {
+          "type": "ascension:cultivate",
+          "path": "ascension:elemental/death",
+          "rate": 40.0
         }
       ]
     }

@@ -1,0 +1,131 @@
+{
+  "type": "ascension:simple",
+  "name": {
+    "translate": "ascension.physique.grim_death.name"
+  },
+  "description": {
+    "translate": "ascension.physique.grim_death.desc"
+  },
+  "paths": [
+    "ascension:foundation/soul",
+    "ascension:elemental/death",
+    "ascension:elemental/reincarnation",
+    "ascension:weapon/scythe"
+  ],
+  "skills": [
+    "ascension:concealment/reapers_veil"
+  ],
+  "stats": {
+    "ascension:vitality": {
+      "flat": [
+        {
+          "id": "ascension:4_saint_grim_death_physique_vitality_base",
+          "value": 6.0
+        }
+      ],
+      "multiplier": [
+        {
+          "id": "ascension:grim_death_vitality_modifier",
+          "operation_group": 0,
+          "value": 0.15
+        }
+      ]
+    },
+    "ascension:strength": {
+      "flat": [
+        {
+          "id": "ascension:4_saint_grim_death_physique_strength_base",
+          "value": 6.0
+        }
+      ],
+      "multiplier": [
+        {
+          "id": "ascension:grim_death_strength_modifier",
+          "operation_group": 0,
+          "value": 0.25
+        }
+      ]
+    },
+    "ascension:spirit": {
+      "flat": [
+        {
+          "id": "ascension:4_saint_grim_death_physique_spirit_base",
+          "value": 17.0
+        }
+      ],
+      "multiplier": [
+        {
+          "id": "ascension:grim_death_spirit_modifier",
+          "operation_group": 0,
+          "value": 0.35
+        }
+      ]
+    },
+    "ascension:agility": {
+      "flat": [
+        {
+          "id": "ascension:4_saint_grim_death_physique_agility_base",
+          "value": 7.0
+        }
+      ],
+      "multiplier": []
+    }
+  },
+  "path_bonus": {
+    "ascension:affinity": {
+      "ascension:foundation/soul": {
+        "flat": [
+          {
+            "id": "ascension:4_saint_grim_death_physique_affinity_foundation_soul_base",
+            "value": 3.0
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/death": { 
+        "flat": [
+          {
+            "id": "ascension:4_saint_grim_death_physique_affinity_elemental_death_base",
+            "value": 5.0
+          },
+          {
+            "id": "ascension:grim_death_death_affinity_modifier",
+            "value": 0.3
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/reincarnation": {
+        "flat": [
+          {
+            "id": "ascension:4_saint_grim_death_physique_affinity_elemental_reincarnation_base",
+            "value": 4.0
+          },
+          {
+            "id": "ascension:grim_death_reincarnation_affinity_modifier",
+            "value": 0.25
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:weapon/scythe": {
+        "flat": [
+          {
+            "id": "ascension:4_saint_grim_death_physique_affinity_weapon_scythe_base",
+            "value": 2.0
+          },
+          {
+            "id": "ascension:grim_death_scythe_affinity_modifier",
+            "value": 0.15
+          }
+        ],
+        "multiplier": []
+      }
+    }
+  },
+  "item_tooltip": {
+    "theme": "ascension:physique_essence",
+    "template": "ascension:default_physique_essence",
+    "rank": "ascension:saint"
+  }
+}

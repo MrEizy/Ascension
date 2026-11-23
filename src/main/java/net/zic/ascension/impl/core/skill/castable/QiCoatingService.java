@@ -69,13 +69,25 @@ public final class QiCoatingService {
     }
 
     /**
-     * Whether External Qi Coating shows on this item: bladed weapons and polearms (swords, blades, axes and spears) and the
-     * other tools (pickaxes, shovels and hoes).
+     * Whether External Qi Coating shows on this item: bladed weapons and polearms (swords, blades, axes and spears), chakrams
+     * and the other tools (pickaxes, shovels and hoes).
      */
     public static boolean coatsWeapon(ItemStack itemStack) {
         return itemStack.is(ItemTags.SWORDS) || itemStack.is(ItemTags.AXES) || itemStack.is(ItemTags.SPEARS)
                 || itemStack.is(ItemTags.PICKAXES) || itemStack.is(ItemTags.SHOVELS) || itemStack.is(ItemTags.HOES)
-                || itemStack.is(ModTags.Items.WEAPON_BLADES) || itemStack.is(ModTags.Items.WEAPON_SPEARS);
+                || itemStack.is(ModTags.Items.WEAPON_BLADES) || itemStack.is(ModTags.Items.WEAPON_SPEARS)
+                || itemStack.is(ModTags.Items.CHAKRAMS) || itemStack.is(ModTags.Items.WEAPON_SCYTHES);
+    }
+
+    /**
+     * A thrown weapon carrying a coating (ChakramEntity) hit something: fires external_on_hit for its thrower with the element
+     * the coating showed when it was thrown, even if the thrower has since turned it off. Shares the melee hook's cooldown.
+     */
+    public static void onThrownHit(ServerPlayer thrower, QiCoatingSelectionService.Shown shown, LivingEntity target, double damage) {
+        if (runningHook || damage <= 0.0D || target == thrower) {
+            return;
+        }
+        runHook(thrower, Hook.EXTERNAL_ON_HIT, shown, target, Map.of(PassiveTriggerService.DAMAGE, damage));
     }
 
     /**
@@ -120,7 +132,17 @@ public final class QiCoatingService {
      */
     private static void fireHook(ServerPlayer player, Hook hook, LivingEntity target, Map<Identifier, Double> variables) {
         QiCoatingSelectionService.Shown shown = QiCoatingSelectionService.shown(player.getUUID(), hook.channel).orElse(null);
-        QiCoatingElement element = shown == null ? null : shown.definition(player.registryAccess());
+        if (shown != null) {
+            runHook(player, hook, shown, target, variables);
+        }
+    }
+
+    /**
+     * Runs the hook of a given shown element, if it has one and it's off cooldown, under the passive skill that showed it.
+     */
+    private static void runHook(ServerPlayer player, Hook hook, QiCoatingSelectionService.Shown shown, LivingEntity target,
+                                Map<Identifier, Double> variables) {
+        QiCoatingElement element = shown.definition(player.registryAccess());
         QiCoatingElement.Hook definition = element == null ? null : hook.definition.apply(element).orElse(null);
         if (definition == null) {
             return;

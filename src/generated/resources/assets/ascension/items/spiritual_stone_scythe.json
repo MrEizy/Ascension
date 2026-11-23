@@ -1,0 +1,7 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "ascension:item/spiritual_stone_scythe"
+  },
+  "swap_animation_scale": 1.95
+}

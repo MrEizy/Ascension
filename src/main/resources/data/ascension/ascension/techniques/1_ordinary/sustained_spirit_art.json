@@ -6,6 +6,9 @@
   "description": {
     "translate": "ascension.technique.sustained_spirit_art.desc"
   },
+  "path": "ascension:foundation/soul",
+  "max_realm": 2,
+  "max_minor_realm": 2,
   "on_added": [
     {
       "type": "ascension:grant_skills",
@@ -14,8 +17,28 @@
         "ascension:passive/sustained_spirit",
         "ascension:castable/frostbound_stillness"
       ]
+    },
+    {
+      "type": "ascension:give_stats",
+      "stats": {
+        "ascension:spirit": {
+          "flat": [
+            {
+              "id": "ascension:sustained_spirit_art_learn_flat_spirit",
+              "value": 1.0
+            }
+          ],
+          "multiplier": []
+        }
+      }
     }
   ],
+  "stats_per_realm": {
+    "ascension:spirit": {
+      "flat": 0.25,
+      "multiplier": 0.025
+    }
+  },
   "item_tooltip": {
     "theme": "ascension:technique_manual",
     "theme_overrides": {

@@ -6,6 +6,9 @@
   "description": {
     "translate": "ascension.technique.white_lightning_ten_stage_technique.desc"
   },
+  "path": "ascension:foundation/body",
+  "max_realm": 5,
+  "max_minor_realm": 2,
   "on_added": [
     {
       "type": "ascension:grant_skills",
@@ -16,8 +19,41 @@
         "ascension:castable/white_lightning_ten_stage_technique/lightning_flash_step",
         "ascension:castable/new_techniques/lifeforce_perception"
       ]
+    },
+    {
+      "type": "ascension:give_stats",
+      "stats": {
+        "ascension:agility": {
+          "flat": [
+            {
+              "id": "ascension:white_lightning_ten_stage_technique_learn_flat_agility",
+              "value": 2.0
+            }
+          ],
+          "multiplier": []
+        },
+        "ascension:strength": {
+          "flat": [
+            {
+              "id": "ascension:white_lightning_ten_stage_technique_learn_flat_strength",
+              "value": 1.0
+            }
+          ],
+          "multiplier": []
+        }
+      }
     }
   ],
+  "stats_per_realm": {
+    "ascension:agility": {
+      "flat": 0.17647,
+      "multiplier": 0.013
+    },
+    "ascension:strength": {
+      "flat": 0.05882,
+      "multiplier": 0.0045
+    }
+  },
   "item_tooltip": {
     "theme": "ascension:technique_manual",
     "template": "ascension:default_cultivation_technique",

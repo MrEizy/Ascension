@@ -21,7 +21,7 @@ public class AscBlockEntities {
 
     public static final Supplier<BlockEntityType<AlchemyFurnaceBlockEntity>> ALCHEMY_FURNACE_BE =
             BLOCK_ENTITIES.register("alchemy_furnace_be", () -> new BlockEntityType<>(
-                    AlchemyFurnaceBlockEntity::new, ModBlocks.ALCHEMY_FURNACE.get()));
+                    AlchemyFurnaceBlockEntity::new, ModBlocks.ALCHEMY_FURNACE.get(), ModBlocks.INSIGHT_ALCHEMY_FURNACE.get()));
 
 
 

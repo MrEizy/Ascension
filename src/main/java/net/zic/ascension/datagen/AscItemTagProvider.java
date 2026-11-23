@@ -44,6 +44,9 @@ public class AscItemTagProvider extends ItemTagsProvider {
         tag(ModTags.Items.BLACK_IRON_REPAIRABLE)
                 .add(ModItems.BLACK_IRON_INGOT.get());
 
+        tag(ModTags.Items.JADE_REPAIRABLE)
+                .add(ModItems.JADE.get());
+
         tag(ModTags.Items.FROST_SILVER_REPAIRABLE)
                 .add(ModItems.FROST_SILVER_INGOT.get());
 
@@ -65,14 +68,69 @@ public class AscItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.IRON_CHAKRAM.get())
                 .add(ModItems.GOLDEN_CHAKRAM.get())
                 .add(ModItems.DIAMOND_CHAKRAM.get())
-                .add(ModItems.NETHERITE_CHAKRAM.get());
+                .add(ModItems.NETHERITE_CHAKRAM.get())
+                .add(ModItems.COPPER_SCYTHE.get())
+                .add(ModItems.IRON_SCYTHE.get())
+                .add(ModItems.GOLDEN_SCYTHE.get())
+                .add(ModItems.DIAMOND_SCYTHE.get())
+                .add(ModItems.NETHERITE_SCYTHE.get())
+                .add(ModItems.BLACK_IRON_SCYTHE.get())
+                .add(ModItems.FROST_SILVER_SCYTHE.get())
+                .add(ModItems.JADE_SCYTHE.get())
+                .add(ModItems.SPIRITUAL_STONE_SCYTHE.get())
+                .addTag(ModTags.Items.WEAPON_FISTS);
+
+        tag(ItemTags.MELEE_WEAPON_ENCHANTABLE)
+                .add(ModItems.COPPER_SCYTHE.get())
+                .add(ModItems.IRON_SCYTHE.get())
+                .add(ModItems.GOLDEN_SCYTHE.get())
+                .add(ModItems.DIAMOND_SCYTHE.get())
+                .add(ModItems.NETHERITE_SCYTHE.get())
+                .add(ModItems.BLACK_IRON_SCYTHE.get())
+                .add(ModItems.FROST_SILVER_SCYTHE.get())
+                .add(ModItems.JADE_SCYTHE.get())
+                .add(ModItems.SPIRITUAL_STONE_SCYTHE.get());
+
+        tag(ItemTags.SHARP_WEAPON_ENCHANTABLE)
+                .add(ModItems.COPPER_SCYTHE.get())
+                .add(ModItems.IRON_SCYTHE.get())
+                .add(ModItems.GOLDEN_SCYTHE.get())
+                .add(ModItems.DIAMOND_SCYTHE.get())
+                .add(ModItems.NETHERITE_SCYTHE.get())
+                .add(ModItems.BLACK_IRON_SCYTHE.get())
+                .add(ModItems.FROST_SILVER_SCYTHE.get())
+                .add(ModItems.JADE_SCYTHE.get())
+                .add(ModItems.SPIRITUAL_STONE_SCYTHE.get());
+
+        tag(ItemTags.SWEEPING_ENCHANTABLE)
+                .add(ModItems.COPPER_SCYTHE.get())
+                .add(ModItems.IRON_SCYTHE.get())
+                .add(ModItems.GOLDEN_SCYTHE.get())
+                .add(ModItems.DIAMOND_SCYTHE.get())
+                .add(ModItems.NETHERITE_SCYTHE.get())
+                .add(ModItems.BLACK_IRON_SCYTHE.get())
+                .add(ModItems.FROST_SILVER_SCYTHE.get())
+                .add(ModItems.JADE_SCYTHE.get())
+                .add(ModItems.SPIRITUAL_STONE_SCYTHE.get());
+
+        tag(ItemTags.CAULDRON_CAN_REMOVE_DYE)
+                .add(ModItems.CLOTH_FIST_WRAPS.get());
 
         tag(ItemTags.VANISHING_ENCHANTABLE)
                 .add(ModItems.COPPER_CHAKRAM.get())
                 .add(ModItems.IRON_CHAKRAM.get())
                 .add(ModItems.GOLDEN_CHAKRAM.get())
                 .add(ModItems.DIAMOND_CHAKRAM.get())
-                .add(ModItems.NETHERITE_CHAKRAM.get());
+                .add(ModItems.NETHERITE_CHAKRAM.get())
+                .add(ModItems.COPPER_SCYTHE.get())
+                .add(ModItems.IRON_SCYTHE.get())
+                .add(ModItems.GOLDEN_SCYTHE.get())
+                .add(ModItems.DIAMOND_SCYTHE.get())
+                .add(ModItems.NETHERITE_SCYTHE.get())
+                .add(ModItems.BLACK_IRON_SCYTHE.get())
+                .add(ModItems.FROST_SILVER_SCYTHE.get())
+                .add(ModItems.JADE_SCYTHE.get())
+                .add(ModItems.SPIRITUAL_STONE_SCYTHE.get());
 
 
         tag(ItemTags.SWORDS)
@@ -178,6 +236,7 @@ public class AscItemTagProvider extends ItemTagsProvider {
                 .add(Items.BOW, Items.CROSSBOW);
 
         tag(ModTags.Items.WEAPON_FISTS)
+                .add(ModItems.CLOTH_FIST_WRAPS.get())
                 .addOptionalTag(ModTags.Items.C_TOOLS_GAUNTLET)
                 .addOptionalTag(ModTags.Items.C_WEAPONS_GAUNTLET);
 
@@ -189,6 +248,26 @@ public class AscItemTagProvider extends ItemTagsProvider {
                 .addOptionalTag(ModTags.Items.C_TOOLS_SPEAR)
                 .addOptionalTag(ModTags.Items.C_WEAPONS_SPEAR);
 
-        
+        tag(ModTags.Items.WEAPON_SCYTHES)
+                .add(ModItems.COPPER_SCYTHE.get())
+                .add(ModItems.IRON_SCYTHE.get())
+                .add(ModItems.GOLDEN_SCYTHE.get())
+                .add(ModItems.DIAMOND_SCYTHE.get())
+                .add(ModItems.NETHERITE_SCYTHE.get())
+                .add(ModItems.BLACK_IRON_SCYTHE.get())
+                .add(ModItems.FROST_SILVER_SCYTHE.get())
+                .add(ModItems.JADE_SCYTHE.get())
+                .add(ModItems.SPIRITUAL_STONE_SCYTHE.get())
+                .addOptionalTag(ModTags.Items.C_TOOLS_SCYTHE)
+                .addOptionalTag(ModTags.Items.C_WEAPONS_SCYTHE);
+
+        tag(ModTags.Items.CONTROLLABLE_SWORDS)
+                .addOptionalTag(ItemTags.SWORDS)
+                .addOptionalTag(ModTags.Items.C_TOOLS_SWORD)
+                .addOptionalTag(ModTags.Items.C_WEAPONS_SWORD)
+                .addOptionalTag(ModTags.Items.C_TOOLS_SWORDS)
+                .addOptionalTag(ModTags.Items.C_WEAPONS_SWORDS);
+
+
     }
 }

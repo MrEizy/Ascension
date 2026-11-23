@@ -1,0 +1,6 @@
+{
+  "parent": "ascension:item/handheld_scythe",
+  "textures": {
+    "layer0": "ascension:item/scythes/frost_silver_scythe"
+  }
+}

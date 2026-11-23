@@ -215,6 +215,7 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.pill.tooltip.effect", "Effect");
         add("ascension.alchemy.pill.vitality", "Medicinal vitality: %s%% | Time remaining: %s");
         add("ascension.alchemy.pill.expired", "Expired · medicinal essence dissipated");
+        add("ascension.alchemy.pill.realm_adjusted", " (base %s%% before realm penalty)");
         add("ascension.alchemy.pill.preserved", "preserved indefinitely");
         add("ascension.pill.grade.low", "Low-grade");
         add("ascension.pill.grade.mid", "Mid-grade");
@@ -225,6 +226,7 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.alchemy_material.tooltip.note", "Usable as a material in alchemy.");
 
         add("block.ascension.alchemy_furnace", "Alchemy Furnace");
+        add("block.ascension.insight_alchemy_furnace", "Insight Alchemy Furnace");
 
         add("block.ascension.cushion_white", "White Cushion");
         add("block.ascension.cushion_light_gray", "Light Gray Cushion");
@@ -297,9 +299,20 @@ public class AscLangProvider extends LanguageProvider {
         add("item.ascension.stone_blade", "Stone Blade");
         add("item.ascension.copper_blade", "Copper Blade");
         add("item.ascension.iron_blade", "Iron Blade");
+        add("item.ascension.cloth_fist_wraps", "Wraps");
         add("item.ascension.gold_blade", "Gold Blade");
         add("item.ascension.diamond_blade", "Diamond Blade");
         add("item.ascension.netherite_blade", "Netherite Blade");
+
+        add("item.ascension.copper_scythe", "Copper Scythe");
+        add("item.ascension.iron_scythe", "Iron Scythe");
+        add("item.ascension.golden_scythe", "Golden Scythe");
+        add("item.ascension.diamond_scythe", "Diamond Scythe");
+        add("item.ascension.netherite_scythe", "Netherite Scythe");
+        add("item.ascension.black_iron_scythe", "Black Iron Scythe");
+        add("item.ascension.frost_silver_scythe", "Frost Silver Scythe");
+        add("item.ascension.jade_scythe", "Jade Scythe");
+        add("item.ascension.spiritual_stone_scythe", "Spiritual Stone Scythe");
 
         add("item.ascension.copper_chakram", "Copper Chakram");
         add("item.ascension.iron_chakram", "Iron Chakram");
@@ -317,6 +330,8 @@ public class AscLangProvider extends LanguageProvider {
         add("enchantment.ascension.razor_edge", "Razor Edge");
         add("enchantment.ascension.swift_return", "Swift Return");
         add("enchantment.ascension.phasing_recall", "Phasing Recall");
+        add("enchantment.ascension.penetrating_strike", "Penetrating Strike");
+        add("enchantment.ascension.impact", "Impact");
 
 
 
@@ -682,6 +697,10 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.tooltip.physique.stats", "Stats");
         add("ascension.tooltip.physique.affinities", "Affinities");
         add("ascension.tooltip.technique.gains", "Gains");
+        add("ascension.tooltip.technique.paths", "Cultivates");
+        add("ascension.tooltip.technique.maximum_realm", "Maximum Realm");
+        add("ascension.tooltip.technique.realm_limit", "Major %s, Minor %s");
+        add("ascension.tooltip.technique.stat_path", "%s (%s)");
 
         // Progression Descriptions
         add("ascension.tooltip.progression.affinity", "%s Affinity");
@@ -697,6 +716,7 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.tooltip.progression.condition.each_minor_realm", "Each Minor Realm");
         add("ascension.tooltip.progression.condition.each_major_realm", "Each Major Realm");
         add("ascension.tooltip.progression.condition.on_learn", "On Learning");
+        add("ascension.tooltip.progression.condition.technique_realm", "%s: Major Realm %s, Minor Realm %s");
         add("ascension.tooltip.progression.condition.major_realm", "Major Realm %s");
         add("ascension.tooltip.progression.condition.major_realms", "Major Realms %s");
         add("ascension.tooltip.progression.condition.minor_realm", "Minor Realm %s");
@@ -844,6 +864,23 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.path.weapon.fan.desc", "cultivate the elegant, deceptive art of the folding fan");
         add("ascension.path.weapon.umbrella.name", "Umbrella");
         add("ascension.path.weapon.umbrella.desc", "cultivate the deceptive grace of the warding canopy, sheltering blow and blade alike");
+
+        add("ascension.skill.sword_cultivation.name", "Sword Cultivation");
+        add("ascension.skill.sword_cultivation.desc", "Practice with sword weapons to cultivate the Sword Path.");
+        add("ascension.skill.blade_cultivation.name", "Blade Cultivation");
+        add("ascension.skill.blade_cultivation.desc", "Practice with blade weapons to cultivate the Blade Path.");
+        add("ascension.skill.spear_cultivation.name", "Spear Cultivation");
+        add("ascension.skill.spear_cultivation.desc", "Practice with spear weapons to cultivate the Spear Path.");
+        add("ascension.skill.axe_cultivation.name", "Axe Cultivation");
+        add("ascension.skill.axe_cultivation.desc", "Practice with axe weapons to cultivate the Axe Path.");
+        add("ascension.skill.scythe_cultivation.name", "Scythe Cultivation");
+        add("ascension.skill.scythe_cultivation.desc", "Practice with scythe weapons to cultivate the Scythe Path.");
+        add("ascension.skill.bow_cultivation.name", "Bow Cultivation");
+        add("ascension.skill.bow_cultivation.desc", "Practice with bow weapons to cultivate the Bow Path.");
+        add("ascension.skill.mace_cultivation.name", "Mace Cultivation");
+        add("ascension.skill.mace_cultivation.desc", "Practice with mace weapons to cultivate the Mace Path.");
+        add("ascension.skill.fist_cultivation.name", "Fist Cultivation");
+        add("ascension.skill.fist_cultivation.desc", "Practice unarmed strikes or fist weapons to cultivate the Fist Path.");
 
         //Golden Cores
         add("ascension.golden_core.test_core.name", "Test Golden Core");
@@ -1052,6 +1089,8 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.technique.shadowless_art.desc", "A qigong essence art that threads qi through each step until motion seems to outrun its own shadow.");
         add("ascension.technique.sword_draw_manual.name", "Sword Draw Manual");
         add("ascension.technique.sword_draw_manual.desc", "A plain sword manual devoted to the instant between stillness and steel, cultivating the sword through a single decisive draw.");
+        add("ascension.technique.twin_sword_manual.name", "Twin Sword Manual");
+        add("ascension.technique.twin_sword_manual.desc", "A sword art that divides the practitioner's attention between two blades, refining coordinated control through disciplined practice.");
         add("ascension.technique.burning_bones_technique.name", "Burning Bones Technique");
         add("ascension.technique.burning_bones_technique.desc", "A profound body technique that kindles fire within the marrow and uses the heat to temper bone from the inside out.");
         add("ascension.technique.martial_transcendence_vol_2.name", "Martial Transcendence, Volume II");
@@ -1259,6 +1298,13 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.skill.blood_frenzy.desc", "W.I.P");
         add("ascension.skill.abyssal_culling.name", "Abyssal Culling");
         add("ascension.skill.abyssal_culling.desc", "Charge the abyss behind a single blade and release it as one culling stroke, paid for in the cultivator's own held-back blood.");
+        add("ascension.skill.sword_control.name", "Sword Control");
+        add("ascension.skill.sword_control.desc", "Hold to guide your sword through the air, striking foes as it flies. Release to recall it.");
+        add("ascension.skill.sword_control.requires_sword", "Hold a sword to use Sword Control");
+        add("ascension.skill.sword_control.returning", "Your sword is still returning");
+        add("ascension.skill.twin_sword_control.name", "Twin Sword Control");
+        add("ascension.skill.twin_sword_control.desc", "Hold to guide a sword from each hand in parallel. Release to recall both.");
+        add("ascension.skill.twin_sword_control.requires_swords", "Hold a controllable sword in each hand to use Twin Sword Control");
         add("ascension.skill.sword_flight.name", "Sword Flight");
         add("ascension.skill.sword_flight.desc", "Bind spirit to steel and ride the blade itself through the sky, steering with nothing but where the eyes fall.");
         add("ascension.skill.spherical_devastation.name", "Spherical Devastation");
@@ -1812,6 +1858,13 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.path.weapon.axe.realm.3.name", "Reaping Swing");
         add("ascension.path.weapon.axe.realm.4.name", "Felling Strike");
         add("ascension.path.weapon.axe.realm.5.name", "Unyielding Axe");
+
+        add("ascension.path.weapon.scythe.realm.0.name", "");
+        add("ascension.path.weapon.scythe.realm.1.name", "");
+        add("ascension.path.weapon.scythe.realm.2.name", "");
+        add("ascension.path.weapon.scythe.realm.3.name", "");
+        add("ascension.path.weapon.scythe.realm.4.name", "");
+        add("ascension.path.weapon.scythe.realm.5.name", "");
 
         add("ascension.path.weapon.blade.realm.0.name", "First Edge");
         add("ascension.path.weapon.blade.realm.1.name", "Honed Edge");

@@ -1,0 +1,153 @@
+{
+  "type": "ascension:simple_path",
+  "name": {
+    "translate": "ascension.path.weapon.scythe.name"
+  },
+  "description": {
+    "translate": "ascension.path.weapon.scythe.desc"
+  },
+  "realms": [
+    {
+      "name": {"translate": "ascension.path.weapon.scythe.realm.0.name"},
+      "minor_realms": [
+        {
+          "name": {"translate": "ascension.realm.minor.low"},
+          "progress": 1000
+        },
+        {
+          "name": {"translate": "ascension.realm.minor.mid"},
+          "progress": 10000
+        },
+        {
+          "name": {"translate": "ascension.realm.minor.high"},
+          "progress": 100000
+        }
+      ]
+    },
+    {
+      "name": {"translate": "ascension.path.weapon.scythe.realm.1.name"},
+      "minor_realms": [
+        {
+          "name": {"translate": "ascension.realm.minor.low"},
+          "progress": 100000
+        },
+        {
+          "name": {"translate": "ascension.realm.minor.mid"},
+          "progress": 1000000
+        },
+        {
+          "name": {"translate": "ascension.realm.minor.high"},
+          "progress": 10000000
+        }
+      ]
+    },
+    {
+      "name": {"translate": "ascension.path.weapon.scythe.realm.2.name"},
+      "minor_realms": [
+        {
+          "name": {"translate": "ascension.realm.minor.low"},
+          "progress": 10000000
+        },
+        {
+          "name": {"translate": "ascension.realm.minor.mid"},
+          "progress": 100000000
+        },
+        {
+          "name": {"translate": "ascension.realm.minor.high"},
+          "progress": 1000000000
+        }
+      ]
+    },
+    {
+      "name": {"translate": "ascension.path.weapon.scythe.realm.3.name"},
+      "minor_realms": [
+        {
+          "name": {"translate": "ascension.realm.minor.low"},
+          "progress": 1000000000
+        },
+        {
+          "name": {"translate": "ascension.realm.minor.mid"},
+          "progress": 10000000000
+        },
+        {
+          "name": {"translate": "ascension.realm.minor.high"},
+          "progress": 100000000000
+        }
+      ]
+    },
+    {
+      "name": {"translate": "ascension.path.weapon.scythe.realm.4.name"},
+      "minor_realms": [
+        {
+          "name": {"translate": "ascension.realm.minor.low"},
+          "progress": 100000000000
+        },
+        {
+          "name": {"translate": "ascension.realm.minor.mid"},
+          "progress": 1000000000000
+        },
+        {
+          "name": {"translate": "ascension.realm.minor.high"},
+          "progress": 10000000000000
+        }
+      ]
+    },
+    {
+      "name": {"translate": "ascension.path.weapon.scythe.realm.5.name"},
+      "minor_realms": [
+        {
+          "name": {"translate": "ascension.realm.minor.low"},
+          "progress": 10000000000000
+        },
+        {
+          "name": {"translate": "ascension.realm.minor.mid"},
+          "progress": 100000000000000
+        },
+        {
+          "name": {"translate": "ascension.realm.minor.high"},
+          "progress": 1000000000000000
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "condition": "ascension:realm_change/on_gained",
+      "actions": [
+        {
+          "type": "ascension:grant_skills",
+          "skills": [
+            "ascension:passive/scythe_cultivation"
+          ]
+        }
+      ]
+    },
+    {
+      "condition": "ascension:realm_change/second_major_realm",
+      "actions": [
+        {
+          "type": "ascension:grant_skills",
+          "skills": [
+            "ascension:castable/qi_step/qi_step",
+            "ascension:passive/qi_step/qi_step"
+          ]
+        }
+      ]
+    },
+    {
+      "condition": "ascension:realm_change/third_major_realm",
+      "actions": [
+        {
+          "type": "ascension:grant_skills",
+          "skills": [
+            "ascension:castable/qi_coating/qi_coating",
+            "ascension:passive/qi_coating/qi_coating",
+            "ascension:castable/qi_coating/external_qi_coating",
+            "ascension:passive/qi_coating/external_qi_coating",
+            "ascension:castable/inner_world"
+          ]
+        }
+      ]
+    }
+  ]
+}

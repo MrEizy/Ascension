@@ -20,6 +20,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.common.entities.weapons.ChakramEntity;
+import net.zic.ascension.common.entities.weapons.ControlledSwordEntity;
 import net.zic.ascension.impl.core.innerworld.InnerWorldGhost;
 
 public class AscEntities {
@@ -42,7 +43,8 @@ public class AscEntities {
             ENTITY_TYPES.register("cushion_entity", id -> EntityType.Builder
                     .of(CushionEntity::new, MobCategory.MISC)
                     .sized(0.5F, 0.5F)
-                    .passengerAttachments(7.0F / 16.0F)
+                    //+0.6 cancels vanilla's rider offset; the sitting animation lowers the player
+                    .passengerAttachments(7.0F / 16.0F + 0.6F)
                     .build(ResourceKey.create(Registries.ENTITY_TYPE, id)));
 
     public static final DeferredHolder<EntityType<?>, EntityType<TreasureRatEntity>> TREASURE_RAT =
@@ -56,6 +58,14 @@ public class AscEntities {
 
 
     //Weapons
+
+    public static final DeferredHolder<EntityType<?>, EntityType<ControlledSwordEntity>> CONTROLLED_SWORD =
+            ENTITY_TYPES.register("controlled_sword", id -> EntityType.Builder
+                    .<ControlledSwordEntity>of(ControlledSwordEntity::new, MobCategory.MISC)
+                    .sized(0.4F, 0.4F)
+                    .clientTrackingRange(12)
+                    .updateInterval(1)
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, id)));
 
     public static final DeferredHolder<EntityType<?>, EntityType<ChakramEntity>> CHAKRAM =
             ENTITY_TYPES.register("chakram", id -> EntityType.Builder

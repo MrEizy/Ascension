@@ -15,10 +15,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.ProjectileUtil;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.Vec3;
 import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
 import net.zic.ascension.common.command.CommandInspectionTarget;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
@@ -30,6 +27,8 @@ import net.zic.ascension.api.ascension.core.path.PathInstance;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.configuration.mob_traits.MobTraitReference;
+import net.zic.ascension.configuration.mob_traits.MobTraitRoll;
+import net.zic.ascension.mob_cultivation.oliver_rewrite.ResolvedMobTrait;
 
 import net.zic.ascension.mob_cultivation.oliver_rewrite.MobConfigurationInstance;
 
@@ -150,14 +149,35 @@ public class MobCommands {
     }
 
     public static Component buildMobDetails(MobConfigurationInstance configurationInstance, RegistryAccess access){
-        MutableComponent tier = Component.literal("==="+configurationInstance.getTier()+"===");
-        MutableComponent traits = Component.empty();
-        for(MobTraitReference reference : configurationInstance.getTraits()){
-            if(!reference.isValid(access)) continue;
-            traits.append(
-                    Component.literal("\n"+reference.id()+"(").append(reference.getTrait(access).name()).append(")")
-            );
+        MutableComponent result = Component.literal("=== MOB CONFIGURATION ===");
+        for (MobConfigurationInstance.PoolSelection selection : configurationInstance.getSelections()) {
+            result.append("\n" + selection.pool() + ": " + selection.entry());
         }
-        return tier.append(traits);
+        for (MobTraitReference reference : configurationInstance.getTraits()) {
+            if (!reference.isValid(access)) continue;
+            result.append(Component.literal("\n" + reference.id() + " (")
+                    .append(reference.getTrait(access).name()).append(")"));
+        }
+        for (ResolvedMobTrait rolled : configurationInstance.getRolledTraits()) {
+            result.append("\n" + rolled.trait().id() + " selections:");
+            for (MobTraitRoll.PathRoll path : rolled.roll().paths()) {
+                result.append("\n  " + path.path() + " (" + path.majorRealm() + "." + path.minorRealm() + ")");
+            }
+            for (Identifier skill : rolled.roll().skills()) {
+                result.append("\n  Skill: " + skill);
+            }
+        }
+        MobTraitRoll cultivation = configurationInstance.getCultivation();
+        if (!cultivation.isEmpty()) {
+            result.append("\nSpecies cultivation:");
+            for (MobTraitRoll.PathRoll path : cultivation.paths()) {
+                result.append("\n  " + path.path() + " (" + path.majorRealm() + "." + path.minorRealm() + ")");
+            }
+            for (Identifier skill : cultivation.skills()) {
+                result.append("\n  Skill: " + skill);
+            }
+        }
+        return result;
     }
+
 }

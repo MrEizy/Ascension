@@ -6,6 +6,9 @@
   "description": {
     "translate": "ascension.technique.open_sky_breathing_scripture.desc"
   },
+  "path": "ascension:foundation/essence",
+  "max_realm": 2,
+  "max_minor_realm": 2,
   "on_added": [
     {
       "type": "ascension:grant_skills",
@@ -15,8 +18,28 @@
         "ascension:castable/open_sky_breathing_scripture/skyward_pulse",
         "ascension:castable/new_techniques/essence_perception"
       ]
+    },
+    {
+      "type": "ascension:give_stats",
+      "stats": {
+        "ascension:spirit": {
+          "flat": [
+            {
+              "id": "ascension:open_sky_breathing_scripture_learn_flat_spirit",
+              "value": 1.0
+            }
+          ],
+          "multiplier": []
+        }
+      }
     }
   ],
+  "stats_per_realm": {
+    "ascension:spirit": {
+      "flat": 0.25,
+      "multiplier": 0.025
+    }
+  },
   "item_tooltip": {
     "theme": "ascension:technique_manual",
     "template": "ascension:default_cultivation_technique",

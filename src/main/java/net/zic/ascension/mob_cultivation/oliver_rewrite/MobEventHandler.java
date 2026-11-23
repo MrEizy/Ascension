@@ -15,59 +15,58 @@ import net.zic.ascension.common.data_attachements.AscensionAttachments;
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
 public class MobEventHandler {
     private static final ThreadLocal<Mob> INITIALIZING_MOB = new ThreadLocal<>();
-    /*
-        TODO:
-            remove initialize on entity, then handle everything in on join.
-            everything should be as deterministic as possible
-            so for a path, if they have a path. do nothing, if not generate fresh path
-     */
 
     @SubscribeEvent
-    public static void onEntitySpawn(FinalizeSpawnEvent event){
+    public static void onEntitySpawn(FinalizeSpawnEvent event) {
+        if (event.getEntity().level().isClientSide()) return;
         MobSpawnHelper.buildConfigurationInstance(event.getEntity());
     }
+
     @SubscribeEvent
-    public static void onEntityJoinLevel(EntityJoinLevelEvent event){
+    public static void onEntityJoinLevel(EntityJoinLevelEvent event) {
+        if (event.getLevel().isClientSide() || !(event.getEntity() instanceof Mob mob)) return;
+        if (!MobSpawnHelper.hasConfigHolder(mob)) {
+            MobSpawnHelper.buildConfigurationInstance(mob);
+        }
+        if (!MobSpawnHelper.hasConfigHolder(mob)) return;
 
-        if(!(event.getEntity() instanceof Mob mob)) return;
-        MobSpawnHelper.applyConfigurationInstance(mob);
-
-        if(event.getLevel().isClientSide() || !MobSpawnHelper.hasConfigHolder(mob)) return;
+        MobConfigurationHolder configuration = MobSpawnHelper.getConfigHolder(mob);
+        configuration.applyConfigurationToEntity();
 
         AscensionEntityDataProvider provider = mob.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
-        if(provider == null) return;
-
-        var data = provider.getData();
-        if(data == null || data.getSource() == null || data.getSource().isAttachedTo(mob)) return;
-
-        Mob previous = INITIALIZING_MOB.get();
-        INITIALIZING_MOB.set(mob);
-        try {
-            data.initialize();
-        } finally {
-            if(previous == null) INITIALIZING_MOB.remove();
-            else INITIALIZING_MOB.set(previous);
+        if (provider != null) {
+            var data = provider.getData();
+            if (data != null && data.getSource() != null) {
+                if (data.getSource().isAttachedTo(mob)) {
+                    configuration.applyConfigurationToSource();
+                } else {
+                    Mob previous = INITIALIZING_MOB.get();
+                    INITIALIZING_MOB.set(mob);
+                    try {
+                        data.initialize();
+                    } finally {
+                        if (previous == null) INITIALIZING_MOB.remove();
+                        else INITIALIZING_MOB.set(previous);
+                    }
+                }
+            }
         }
+        configuration.finishSpawnInitialization();
     }
 
     @SubscribeEvent
-    public static void onSourceLoad(OriginSourceEvent.OriginSourceFinishedLoadingEvent event){
+    public static void onSourceLoad(OriginSourceEvent.OriginSourceFinishedLoadingEvent event) {
         Mob initializing = INITIALIZING_MOB.get();
-        if(initializing != null && MobSpawnHelper.hasConfigHolder(initializing)) {
+        if (initializing != null && MobSpawnHelper.hasConfigHolder(initializing)) {
             AscensionEntityDataProvider provider = initializing.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
-            if(provider != null && provider.getData() != null && provider.getData().getSource() == event.getSource()) {
+            if (provider != null && provider.getData() != null && provider.getData().getSource() == event.getSource()) {
                 MobSpawnHelper.getConfigHolder(initializing).applyConfigurationToSource();
             }
         }
-        for(LivingEntity attachedEntity : event.getSource().getAttachedEntities()){
-            if(!attachedEntity.hasData(AscensionAttachments.MOB_CONFIG_HOLDER)) continue;
-
-            MobConfigurationHolder holder = attachedEntity.getData(AscensionAttachments.MOB_CONFIG_HOLDER);
-
-            AscensionEntityDataProvider provider = attachedEntity.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
-
-            if(provider == null) continue;
-            holder.applyConfigurationToSource();
+        for (LivingEntity entity : event.getSource().getAttachedEntities()) {
+            if (!(entity instanceof Mob mob) || !mob.hasData(AscensionAttachments.MOB_CONFIG_HOLDER)) continue;
+            MobConfigurationHolder configuration = mob.getData(AscensionAttachments.MOB_CONFIG_HOLDER);
+            if (configuration.getSource() == event.getSource()) configuration.applyConfigurationToSource();
         }
     }
 }

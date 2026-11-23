@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "group": "scythe",
+  "key": {
+    "S": "minecraft:stick",
+    "T": "minecraft:gold_ingot"
+  },
+  "pattern": [
+    "TTT",
+    "T S",
+    "  S"
+  ],
+  "result": {
+    "id": "ascension:golden_scythe"
+  }
+}

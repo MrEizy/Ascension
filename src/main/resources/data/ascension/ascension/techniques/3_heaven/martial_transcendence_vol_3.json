@@ -6,6 +6,9 @@
   "description": {
     "translate": "ascension.technique.martial_transcendence_vol_3.desc"
   },
+  "path": "ascension:foundation/body",
+  "max_realm": 8,
+  "max_minor_realm": 2,
   "on_added": [
     {
       "type": "ascension:grant_skills",
@@ -15,8 +18,41 @@
         "ascension:castable/martial_transcendence_vol_3/transcendent_body_shockwave",
         "ascension:castable/martial_transcendence_vol_3/heaven_breaking_fist"
       ]
+    },
+    {
+      "type": "ascension:give_stats",
+      "stats": {
+        "ascension:strength": {
+          "flat": [
+            {
+              "id": "ascension:martial_transcendence_vol_3_learn_flat_strength",
+              "value": 3.0
+            }
+          ],
+          "multiplier": []
+        },
+        "ascension:vitality": {
+          "flat": [
+            {
+              "id": "ascension:martial_transcendence_vol_3_learn_flat_vitality",
+              "value": 1.0
+            }
+          ],
+          "multiplier": []
+        }
+      }
     }
   ],
+  "stats_per_realm": {
+    "ascension:strength": {
+      "flat": 0.19231,
+      "multiplier": 0.01125
+    },
+    "ascension:vitality": {
+      "flat": 0.05769,
+      "multiplier": 0.00375
+    }
+  },
   "item_tooltip": {
     "theme": "ascension:technique_manual",
     "template": "ascension:default_cultivation_technique",

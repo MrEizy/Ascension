@@ -458,6 +458,14 @@ public class ModBlocks {
                 properties -> new AlchemyFurnaceItem(ALCHEMY_FURNACE.get(), properties.useBlockDescriptionPrefix()));
     }
 
+    public static final DeferredBlock<AlchemyFurnaceBlock> INSIGHT_ALCHEMY_FURNACE = BLOCKS.registerBlock("insight_alchemy_furnace",
+            properties -> new AlchemyFurnaceBlock(properties.strength(3.5F).explosionResistance(7.0F)
+                    .sound(SoundType.STONE).noOcclusion()));
+    static {
+        ModItems.ITEMS.registerItem("insight_alchemy_furnace",
+                properties -> new AlchemyFurnaceItem(INSIGHT_ALCHEMY_FURNACE.get(), properties.useBlockDescriptionPrefix()));
+    }
+
     //Cushions
     public static final DeferredBlock<CushionBlockBase> CUSHION_WHITE = registerCushion("cushion_white");
     public static final DeferredBlock<CushionBlockBase> CUSHION_LIGHT_GRAY = registerCushion("cushion_light_gray");

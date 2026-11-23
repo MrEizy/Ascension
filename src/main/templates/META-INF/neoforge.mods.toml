@@ -82,3 +82,18 @@ config="${mod_id}.mixins.json"
     versionRange="${minecraft_version_range}"
     ordering="NONE"
     side="BOTH"
+
+# Player animations, client only
+[[dependencies.${mod_id}]]
+    modId="player_animation_library"
+    type="required"
+    versionRange="[${player_animation_library_version_range},)"
+    ordering="NONE"
+    side="CLIENT"
+
+[[dependencies.${mod_id}]]
+    modId="bendable_cuboids"
+    type="required"
+    versionRange="[${bendable_cuboids_version_range},)"
+    ordering="NONE"
+    side="CLIENT"

@@ -8,6 +8,14 @@ public final class AlchemyServerConfig {
     public final ModConfigSpec.DoubleValue JADE_BOTTLE_RATE;
     public final ModConfigSpec.DoubleValue IMPURITY_DECAY_PER_DAY;
     public final ModConfigSpec.DoubleValue IMPURITY_GAIN_MULTIPLIER;
+    public final ModConfigSpec.IntValue ORDINARY_PILL_MAX_REALM;
+    public final ModConfigSpec.IntValue PROFOUND_PILL_MAX_REALM;
+    public final ModConfigSpec.IntValue HEAVEN_PILL_MAX_REALM;
+    public final ModConfigSpec.IntValue SAINT_PILL_MAX_REALM;
+    public final ModConfigSpec.IntValue GOD_PILL_MAX_REALM;
+    public final ModConfigSpec.IntValue HEAVENS_PATH_PILL_MAX_REALM;
+    public final ModConfigSpec.DoubleValue CULTIVATION_PILL_REALM_MULTIPLIER;
+    public final ModConfigSpec.DoubleValue CULTIVATION_PILL_MINIMUM_EFFECTIVENESS;
 
     public AlchemyServerConfig(ModConfigSpec.Builder builder) {
         builder.push("medicinal_decay");
@@ -23,6 +31,24 @@ public final class AlchemyServerConfig {
                 .defineInRange("decay_per_day", 2.0D, 0.0D, 100.0D);
         IMPURITY_GAIN_MULTIPLIER = builder.comment("Multiplier applied to impurities absorbed from herbs and pills.")
                 .defineInRange("gain_multiplier", 1.0D, 0.0D, 20.0D);
+        builder.pop();
+        builder.push("cultivation_pills");
+        ORDINARY_PILL_MAX_REALM = builder.comment("Highest zero-indexed major realm where an Ordinary Rank pill gives its full cultivation bonus.")
+                .defineInRange("ordinary_max_realm", 1, 0, 1000);
+        PROFOUND_PILL_MAX_REALM = builder.comment("Highest zero-indexed major realm where a Profound Rank pill gives its full cultivation bonus.")
+                .defineInRange("profound_max_realm", 3, 0, 1000);
+        HEAVEN_PILL_MAX_REALM = builder.comment("Highest zero-indexed major realm where a Heaven Rank pill gives its full cultivation bonus.")
+                .defineInRange("heaven_max_realm", 5, 0, 1000);
+        SAINT_PILL_MAX_REALM = builder.comment("Highest zero-indexed major realm where a Saint Rank pill gives its full cultivation bonus.")
+                .defineInRange("saint_max_realm", 7, 0, 1000);
+        GOD_PILL_MAX_REALM = builder.comment("Highest zero-indexed major realm where a God Rank pill gives its full cultivation bonus.")
+                .defineInRange("god_max_realm", 9, 0, 1000);
+        HEAVENS_PATH_PILL_MAX_REALM = builder.comment("Highest zero-indexed major realm where a Heaven's Path Rank pill gives its full cultivation bonus.")
+                .defineInRange("heavens_path_max_realm", 11, 0, 1000);
+        CULTIVATION_PILL_REALM_MULTIPLIER = builder.comment("Multiplies cultivation gains once for each major realm above the pill's maximum effective realm.")
+                .defineInRange("realm_multiplier", 0.15D, 0.0D, 1.0D);
+        CULTIVATION_PILL_MINIMUM_EFFECTIVENESS = builder.comment("Minimum fraction of cultivation progress retained after realm penalties.")
+                .defineInRange("minimum_effectiveness", 0.0D, 0.0D, 1.0D);
         builder.pop();
     }
 }

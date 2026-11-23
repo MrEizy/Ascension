@@ -50,6 +50,7 @@ public class AscBlockLootTableProvider extends BlockLootSubProvider {
         dropSelf(ModBlocks.BLACK_IRON_BLOCK.get());
         dropSelf(ModBlocks.FERMENTING_BARREL.get());
         dropSelf(ModBlocks.ALCHEMY_FURNACE.get());
+        dropSelf(ModBlocks.INSIGHT_ALCHEMY_FURNACE.get()); // new alchemy furnace
         dropSelf(ModBlocks.AUCTION_HOUSE_CORE.get());
         dropSelf(ModBlocks.AUCTION_BIDDER.get());
         ModBlocks.CUSHIONS.forEach(cushion -> dropSelf(cushion.get()));

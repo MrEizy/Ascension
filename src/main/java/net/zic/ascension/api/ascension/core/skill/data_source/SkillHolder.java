@@ -78,6 +78,10 @@ public class SkillHolder implements DataSourceInstance<SkillDataSource> {
 
     public Collection<Identifier> getSkills() {return skills.keySet();}
 
+    public Set<Identifier> getOwners(Identifier skill) {
+        return Set.copyOf(skillOwners.getOrDefault(skill, Set.of()));
+    }
+
     public Collection<SkillInstance<?>> getSkillInstances() {return skills.values();}
 
     public boolean hasSkill(Identifier skill) {

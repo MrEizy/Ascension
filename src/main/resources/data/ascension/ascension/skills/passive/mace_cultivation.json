@@ -1,0 +1,39 @@
+{
+  "type": "ascension:passive",
+  "name": {
+    "translate": "ascension.skill.mace_cultivation.name"
+  },
+  "description": {
+    "translate": "ascension.skill.mace_cultivation.desc"
+  },
+  "toggleable": true,
+  "enabled_by_default": false,
+  "triggers": [
+    {
+      "event": "damage_dealt",
+      "weapon_tag": "ascension:weapon/maces",
+      "cooldown": 10,
+      "actions": [
+        {
+          "type": "ascension:cultivate",
+          "path": "ascension:weapon/mace",
+          "rate": {
+            "base": 1.0,
+            "terms": [
+              {
+                "source": {
+                  "type": "ascension:context",
+                  "key": "ascension:trigger/damage"
+                },
+                "operation": "multiply",
+                "scale": 0.2
+              }
+            ],
+            "minimum": 0.0,
+            "maximum": 5.0
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -3,12 +3,14 @@ package net.zic.ascension.datagen;
 import com.geckolib.renderer.internal.GeckolibItemSpecialRenderer;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
+import net.minecraft.client.color.item.Dye;
 import net.minecraft.client.data.models.ModelProvider;
 import net.minecraft.client.data.models.MultiVariant;
 import net.minecraft.client.data.models.blockstates.MultiPartGenerator;
 import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
 import net.minecraft.client.data.models.blockstates.PropertyDispatch;
 import net.minecraft.client.data.models.model.*;
+import net.minecraft.client.renderer.item.ClientItem;
 import net.minecraft.client.renderer.item.ItemModel;
 import net.minecraft.client.renderer.item.RangeSelectItemModel;
 import net.minecraft.client.renderer.item.SpecialModelWrapper;
@@ -23,6 +25,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DirectionalBlock;
 import net.neoforged.neoforge.client.model.generators.template.ExtendedModelTemplateBuilder;
@@ -97,6 +100,24 @@ public class AscModelProvider extends ModelProvider {
         itemModels.generateFlatItem(ModItems.GOLD_BLADE.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
         itemModels.generateFlatItem(ModItems.DIAMOND_BLADE.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
         itemModels.generateFlatItem(ModItems.NETHERITE_BLADE.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
+
+        itemModels.itemModelOutput.accept(ModItems.CLOTH_FIST_WRAPS.get(), ItemModelUtils.tintedModel(
+                Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "item/cloth_fist_wraps"), new Dye(-1)));
+
+        scytheHandheldModel(itemModels);
+        for (Item scythe : new Item[] {
+                ModItems.COPPER_SCYTHE.get(),
+                ModItems.IRON_SCYTHE.get(),
+                ModItems.GOLDEN_SCYTHE.get(),
+                ModItems.DIAMOND_SCYTHE.get(),
+                ModItems.NETHERITE_SCYTHE.get(),
+                ModItems.BLACK_IRON_SCYTHE.get(),
+                ModItems.FROST_SILVER_SCYTHE.get(),
+                ModItems.JADE_SCYTHE.get(),
+                ModItems.SPIRITUAL_STONE_SCYTHE.get()
+        }) {
+            scytheModel(itemModels, scythe);
+        }
 
         // Chakrams
         itemModels.generateFlatItem(ModItems.COPPER_CHAKRAM.get(), ModelTemplates.FLAT_ITEM);
@@ -228,12 +249,23 @@ public class AscModelProvider extends ModelProvider {
                 ));
 
 
+        itemModels.itemModelOutput.accept(ModBlocks.INSIGHT_ALCHEMY_FURNACE.get().asItem(),
+                new SpecialModelWrapper.Unbaked(
+                        AscensionCraft.prefix("item/alchemy_furnace"),
+                        Optional.empty(),
+                        new GeckolibItemSpecialRenderer.Unbaked<AlchemyFurnaceItem>()
+                ));
+
         //Block Entities
         fermentingBarrelModel(blockModels);
         spiritualStoneClusterModel(blockModels);
         spiritualStoneClusterModel2(blockModels);
         blockModels.blockStateOutput.accept(
                 MultiVariantGenerator.dispatch(ModBlocks.ALCHEMY_FURNACE.get(),
+                        BlockModelGenerators.plainVariant(AscensionCraft.prefix("block/alchemy_furnace")))
+                        .with(BlockModelGenerators.ROTATION_HORIZONTAL_FACING));
+        blockModels.blockStateOutput.accept(
+                MultiVariantGenerator.dispatch(ModBlocks.INSIGHT_ALCHEMY_FURNACE.get(),
                         BlockModelGenerators.plainVariant(AscensionCraft.prefix("block/alchemy_furnace")))
                         .with(BlockModelGenerators.ROTATION_HORIZONTAL_FACING));
 
@@ -518,6 +550,44 @@ public class AscModelProvider extends ModelProvider {
         blockModels.blockStateOutput.accept(blockState);
     }
 
+
+    private void scytheHandheldModel(ItemModelGenerators itemModels) {
+        ExtendedModelTemplateBuilder.builder()
+                .parent(Identifier.fromNamespaceAndPath("minecraft", "item/generated"))
+                .transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, transform -> transform
+                        .rotation(0, -90, -3)
+                        .translation(0, 5.71F, 9.61F)
+                        .scale(1.2F, 1.2F, 1))
+                .transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND, transform -> transform
+                        .rotation(0, 90, 3)
+                        .translation(0, 5.71F, 9.61F)
+                        .scale(1.2F, 1.2F, 1))
+                .transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND, transform -> transform
+                        .rotation(-8, -65, 30)
+                        .translation(1.52F, 3.39F, -3.38F)
+                        .scale(1.1F, 1.1F, 0.68F))
+                .transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND, transform -> transform
+                        .rotation(-8, 115, -30)
+                        .translation(1.52F, 3.39F, -3.38F)
+                        .scale(1.1F, 1.1F, 0.68F))
+                .build()
+                .create(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "item/handheld_scythe"),
+                        new TextureMapping(), itemModels.modelOutput);
+    }
+
+    private void scytheModel(ItemModelGenerators itemModels, Item item) {
+        String name = BuiltInRegistries.ITEM.getKey(item).getPath();
+        Identifier model = Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "item/" + name);
+        ModelTemplate template = ExtendedModelTemplateBuilder.builder()
+                .parent(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "item/handheld_scythe"))
+                .requiredTextureSlot(TextureSlot.LAYER0)
+                .build();
+        template.create(model, new TextureMapping().put(TextureSlot.LAYER0,
+                new Material(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "item/scythes/" + name))),
+                itemModels.modelOutput);
+        itemModels.itemModelOutput.accept(item, ItemModelUtils.plainModel(model),
+                new ClientItem.Properties(true, false, 1.95F));
+    }
 
     private void chakram3dModel(ItemModelGenerators itemModels, ChakramTier tier) {
         String itemPath = tier.itemName();          // e.g. "copper_chakram"

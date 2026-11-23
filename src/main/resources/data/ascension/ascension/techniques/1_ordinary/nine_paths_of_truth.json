@@ -6,6 +6,9 @@
   "description": {
     "translate": "ascension.technique.nine_paths_of_truth.desc"
   },
+  "path": "ascension:foundation/essence",
+  "max_realm": 2,
+  "max_minor_realm": 2,
   "on_added": [
     {
       "type": "ascension:grant_skills",
@@ -13,8 +16,41 @@
         "ascension:castable/cultivation/nine_paths_of_truth",
         "ascension:passive/nine_paths_of_truth/truth_seeking_channels"
       ]
+    },
+    {
+      "type": "ascension:give_stats",
+      "stats": {
+        "ascension:spirit": {
+          "flat": [
+            {
+              "id": "ascension:nine_paths_of_truth_learn_flat_spirit",
+              "value": 1.0
+            }
+          ],
+          "multiplier": []
+        },
+        "ascension:vitality": {
+          "flat": [
+            {
+              "id": "ascension:nine_paths_of_truth_learn_flat_vitality",
+              "value": 0.5
+            }
+          ],
+          "multiplier": []
+        }
+      }
     }
   ],
+  "stats_per_realm": {
+    "ascension:spirit": {
+      "flat": 0.25,
+      "multiplier": 0.025
+    },
+    "ascension:vitality": {
+      "flat": 0.0625,
+      "multiplier": 0.00875
+    }
+  },
   "item_tooltip": {
     "theme": "ascension:technique_manual",
     "template": "ascension:default_cultivation_technique",

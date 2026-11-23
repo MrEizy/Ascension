@@ -48,7 +48,8 @@ public final class BodyCultivationSkillService {
         Identifier skillId = entry.skillId();
 
         PathInstance<?> path = AscensionOriginSourceHelper.getPathInstance(source, bodySkill.path());
-        if (path == null || !path.canProgress()) {
+        if (path == null || !path.canProgress() || !net.zic.ascension.impl.core.technique.TechniqueCultivationLimits.canCultivate(
+                source, skillId, bodySkill.path(), path)) {
             return;
         }
 
@@ -121,7 +122,8 @@ public final class BodyCultivationSkillService {
             return;
         }
         PathInstance<?> path = AscensionOriginSourceHelper.getPathInstance(source, skill.path());
-        if (path == null || !path.canProgress()) {
+        if (path == null || !path.canProgress() || !net.zic.ascension.impl.core.technique.TechniqueCultivationLimits.canCultivate(
+                source, skillId, skill.path(), path)) {
             return;
         }
 
@@ -222,6 +224,8 @@ public final class BodyCultivationSkillService {
                 continue;
             }
             Entry candidate = new Entry(skillId, (BodyCultivationSkill) instance.getSkill(), instance.getData());
+            PathInstance<?> path = AscensionOriginSourceHelper.getPathInstance(source, candidate.skill().path());
+            if (path == null || !canCultivateWithEntry(source, candidate, path)) continue;
             if (selected == null
                     || candidate.skill().priority() > selected.skill().priority()
                     || (candidate.skill().priority() == selected.skill().priority()
@@ -230,6 +234,11 @@ public final class BodyCultivationSkillService {
             }
         }
         return selected;
+    }
+
+    private static boolean canCultivateWithEntry(OriginSource source, Entry candidate, PathInstance<?> path) {
+        return net.zic.ascension.impl.core.technique.TechniqueCultivationLimits.canCultivate(
+                source, candidate.skillId(), candidate.skill().path(), path);
     }
 
     private record Entry(Identifier skillId, BodyCultivationSkill skill, BodyCultivationSkill.Data data) {

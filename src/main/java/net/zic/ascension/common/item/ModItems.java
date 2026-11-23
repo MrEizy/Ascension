@@ -1,8 +1,11 @@
 package net.zic.ascension.common.item;
 
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -153,6 +156,39 @@ public class ModItems {
             properties -> new Item(properties.sword(ToolMaterial.DIAMOND, 2f, -2f)));
     public static final DeferredItem<Item> NETHERITE_BLADE = ITEMS.registerItem("netherite_blade",
             properties -> new Item(properties.sword(ToolMaterial.NETHERITE, 2f, -2f)));
+
+
+    public static final DeferredItem<Item> COPPER_SCYTHE = ITEMS.registerItem("copper_scythe",
+            properties -> new Item(properties.sword(ToolMaterial.COPPER, 3.5f, -2.9f)));
+    public static final DeferredItem<Item> IRON_SCYTHE = ITEMS.registerItem("iron_scythe",
+            properties -> new Item(properties.sword(ToolMaterial.IRON, 4.0f, -2.9f)));
+    public static final DeferredItem<Item> GOLDEN_SCYTHE = ITEMS.registerItem("golden_scythe",
+            properties -> new Item(properties.sword(ToolMaterial.GOLD, 3.5f, -2.65f)));
+    public static final DeferredItem<Item> DIAMOND_SCYTHE = ITEMS.registerItem("diamond_scythe",
+            properties -> new Item(properties.sword(ToolMaterial.DIAMOND, 4.5f, -2.9f)));
+    public static final DeferredItem<Item> NETHERITE_SCYTHE = ITEMS.registerItem("netherite_scythe",
+            properties -> new Item(properties.fireResistant().sword(ToolMaterial.NETHERITE, 5.0f, -2.9f)));
+    public static final DeferredItem<Item> BLACK_IRON_SCYTHE = ITEMS.registerItem("black_iron_scythe",
+            properties -> new Item(properties.sword(AscToolTiers.BLACK_IRON, 4.3f, -3.0f)));
+    public static final DeferredItem<Item> FROST_SILVER_SCYTHE = ITEMS.registerItem("frost_silver_scythe",
+            properties -> new Item(properties.sword(AscToolTiers.FROST_SILVER, 4.1f, -2.6f)));
+    public static final DeferredItem<Item> JADE_SCYTHE = ITEMS.registerItem("jade_scythe",
+            properties -> new Item(properties.sword(AscToolTiers.JADE, 4.3f, -2.7f)));
+    public static final DeferredItem<Item> SPIRITUAL_STONE_SCYTHE = ITEMS.registerItem("spiritual_stone_scythe",
+            properties -> new Item(properties.sword(AscToolTiers.SPIRITUAL_STONE, 6.6f, -2.7f)));
+
+    public static final DeferredItem<Item> CLOTH_FIST_WRAPS = ITEMS.registerItem("cloth_fist_wraps",
+            properties -> new Item(properties.sword(ToolMaterial.WOOD, 2f, -1f)) {
+                @Override
+                public boolean supportsEnchantment(ItemStack stack, Holder<Enchantment> enchantment) {
+                    return enchantment.is(Enchantments.KNOCKBACK) || super.supportsEnchantment(stack, enchantment);
+                }
+
+                @Override
+                public boolean isPrimaryItemFor(ItemStack stack, Holder<Enchantment> enchantment) {
+                    return enchantment.is(Enchantments.KNOCKBACK) || super.isPrimaryItemFor(stack, enchantment);
+                }
+            });
 
 
     //Chakrams

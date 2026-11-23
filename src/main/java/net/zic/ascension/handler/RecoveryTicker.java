@@ -184,21 +184,7 @@ public final class RecoveryTicker {
         }
         double distanceSqr = current.distanceToSqr(previous);
         // Teleports, pearls and dimension changes aren't movement the player made.
-        boolean moved = distanceSqr > MIN_MOVEMENT_SQR && distanceSqr < MAX_MOVEMENT_SQR;
-        // TEMP DEBUG: checks the position-based movement check. Remove once confirmed.
-        if (player.tickCount % 20 == 0) {
-            MovementCost cost = moved ? movementCost(player) : null;
-            AscensionCraft.LOGGER.info(
-                    "[MovementDebug] {} distance={} moved={} source={} cost={} stamina={}",
-                    player.getName().getString(),
-                    String.format("%.4f", Math.sqrt(distanceSqr)),
-                    moved,
-                    AscensionResourceSources.movementSource(player).id(),
-                    cost == null ? "none" : cost.source().id() + "@" + cost.amount(),
-                    String.format("%.2f", StaminaService.getStamina(player))
-            );
-        }
-        return moved;
+        return distanceSqr > MIN_MOVEMENT_SQR && distanceSqr < MAX_MOVEMENT_SQR;
     }
 
     @SubscribeEvent

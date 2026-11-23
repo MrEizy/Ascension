@@ -12,6 +12,19 @@
 * Added a new Skill Type
 * Mastery related changes to many skills
 * Added cultivation path assignment and management commands
+* Added Cloth Fist Wraps, the first fist weapon. They're crafted from wool and string and can be dyed.
+* Added 2 new fist weapon enchantments:
+  * Impact adds bonus melee damage (up to level 5).
+  * Penetrating Strike ignores part of the target's armor, 15% per level (up to level 3).
+* Chakrams can now carry External Qi Coating. Thrown chakrams show the sword qi look in flight and apply the element's on-hit effect to whatever they hit.
+* Added an animation for sitting on cushions and cultivating on cushions
+* Techniques now give stats, and have enforced max realms etc
+* Added new Skill; Sword Control and Twin Sword Control
+* Added weapon cultivation passives to the weapon paths (Techniques will be used to grant stronger ones and special effect ones hopefully)
+* Added Scythe Path and related cultivation skill
+* Added Scythe weapons from copper to spirit stone tier (Sephesta)
+* Added a second furnace tier with a pill prediction feature
+* Server Configs for alchemy to restrict effectiveness of cultivation pills
 
 ### Removed
 * Removed all divine senses
@@ -24,12 +37,17 @@
 * Turned all Divine senses into 3 different types. Soul, Essence and Body only.
 * Skills can actually gain Mastery now
 * Passive Skills have Levels, Active Skills have Ranks for master
+* Buffed the effect of focus steering 
+* Cultivation Pill Tooltips now show percentage of gain
+* Mob Cultivation expanded
+  * randomized cultivation paths, skills, rarity traits, and species-specific configurations for 26 mobs
 
 ### Fixes
 * Projection Skills actually project, deal some damage and break blocks
 * Claiming Button in Auction Inbox actually functions now
 * Fixed so Phasing Recall can spawn on the top of pagoda
-* 
+* Fixed premature stat-sync dirty flag clearing by separating entity stat updates from network patch tracking in OriginSource
+* Plum Blossom Sword Technique now cultivates sword and essence
 
 ### Technical Changes
 * Unified RGB and ARGB colour handling across most skill visuals, particles, and Qi Coatings

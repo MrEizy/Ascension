@@ -6,6 +6,13 @@
   "description": {
     "translate": "ascension.technique.sanguine_abyss_technique.desc"
   },
+  "path": [
+    "ascension:foundation/essence",
+    "ascension:elemental/blood",
+    "ascension:elemental/dark"
+  ],
+  "max_realm": 5,
+  "max_minor_realm": 2,
   "on_added": [
     {
       "type": "ascension:grant_skills",
@@ -17,8 +24,43 @@
         "ascension:passive/sanguine_abyss_technique/blood_frenzy",
         "ascension:castable/sanguine_abyss_technique/abyssal_culling"
       ]
+    },
+    {
+      "type": "ascension:give_stats",
+      "stats": {
+        "ascension:spirit": {
+          "flat": [
+            {
+              "id": "ascension:sanguine_abyss_technique_learn_flat_spirit",
+              "value": 2.0
+            }
+          ],
+          "multiplier": []
+        },
+        "ascension:vitality": {
+          "flat": [
+            {
+              "id": "ascension:sanguine_abyss_technique_learn_flat_vitality",
+              "value": 1.0
+            }
+          ],
+          "multiplier": []
+        }
+      }
     }
   ],
+  "stats_per_realm": {
+    "ascension:spirit": {
+      "path": "ascension:foundation/essence",
+      "flat": 0.17647,
+      "multiplier": 0.013
+    },
+    "ascension:vitality": {
+      "path": "ascension:elemental/blood",
+      "flat": 0.05882,
+      "multiplier": 0.0045
+    }
+  },
   "item_tooltip": {
     "theme": "ascension:technique_manual",
     "template": "ascension:default_cultivation_technique",

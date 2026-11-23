@@ -77,6 +77,7 @@ public class ModTags {
 
 
         public static final TagKey<Item> BLACK_IRON_REPAIRABLE = createItemTag("black_iron_repairable");
+        public static final TagKey<Item> JADE_REPAIRABLE = createItemTag("jade_repairable");
         public static final TagKey<Item> FROST_SILVER_REPAIRABLE = createItemTag("frost_silver_repairable");
         public static final TagKey<Item> SPIRITUAL_STONE_REPAIRABLE = createItemTag("spiritual_stone_repairable");
 
@@ -85,8 +86,10 @@ public class ModTags {
         public static final TagKey<Item> WEAPON_FISTS = createItemTag("weapon/fists");
         public static final TagKey<Item> WEAPON_MACES = createItemTag("weapon/maces");
         public static final TagKey<Item> WEAPON_SPEARS = createItemTag("weapon/spears");
+        public static final TagKey<Item> WEAPON_SCYTHES = createItemTag("weapon/scythes");
 
         public static final TagKey<Item> CHAKRAMS = createItemTag("weapon/chakrams");
+        public static final TagKey<Item> CONTROLLABLE_SWORDS = createItemTag("weapon/controllable_swords");
 
         public static final TagKey<Item> C_TOOLS_BLADE = createCommonItemTag("tools/blade");
         public static final TagKey<Item> C_WEAPONS_BLADE = createCommonItemTag("weapons/blade");
@@ -94,6 +97,12 @@ public class ModTags {
         public static final TagKey<Item> C_WEAPONS_GAUNTLET = createCommonItemTag("weapons/gauntlet");
         public static final TagKey<Item> C_TOOLS_SPEAR = createCommonItemTag("tools/spear");
         public static final TagKey<Item> C_WEAPONS_SPEAR = createCommonItemTag("weapons/spear");
+        public static final TagKey<Item> C_TOOLS_SWORD = createCommonItemTag("tools/sword");
+        public static final TagKey<Item> C_WEAPONS_SWORD = createCommonItemTag("weapons/sword");
+        public static final TagKey<Item> C_TOOLS_SWORDS = createCommonItemTag("tools/swords");
+        public static final TagKey<Item> C_WEAPONS_SWORDS = createCommonItemTag("weapons/swords");
+        public static final TagKey<Item> C_TOOLS_SCYTHE = createCommonItemTag("tools/scythe");
+        public static final TagKey<Item> C_WEAPONS_SCYTHE = createCommonItemTag("weapons/scythe");
 
         public static final TagKey<Item> ORDINARY_ITEMS = createItemTag("ordinary_items");
         public static final TagKey<Item> PROFOUND_ITEMS = createItemTag("profound_items");

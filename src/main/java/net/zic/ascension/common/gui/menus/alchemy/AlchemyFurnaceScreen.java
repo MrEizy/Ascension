@@ -6,12 +6,18 @@ import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.entity.player.Inventory;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.common.blocks.entity.AlchemyFurnaceBlockEntity;
 
+import java.util.List;
+
 public class AlchemyFurnaceScreen extends AbstractContainerScreen<AlchemyFurnaceMenu> {
     private static final Identifier TEXTURE = AscensionCraft.prefix("textures/gui/pill_cauldron_low_human/pill_cauldron_low_human_menu.png");
+    private static final int PREVIEW_SLOT_X = 62;
+    private static final int PREVIEW_SLOT_Y = 59;
+    private int previewPage;
     private static final int TEXTURE_WIDTH = 256;
     private static final int TEXTURE_HEIGHT = 256;
     private static final int PANEL_WIDTH = 142;
@@ -39,6 +45,15 @@ public class AlchemyFurnaceScreen extends AbstractContainerScreen<AlchemyFurnace
 
     @Override
     public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+        if (menu.hasPillPrediction() && menu.phase() == AlchemyFurnaceBlockEntity.Phase.IDLE.ordinal()
+                && (event.button() == 0 || event.button() == 1)
+                && event.x() >= leftPos + PREVIEW_SLOT_X - 1 && event.x() < leftPos + PREVIEW_SLOT_X + 17
+                && event.y() >= topPos + PREVIEW_SLOT_Y - 1 && event.y() < topPos + PREVIEW_SLOT_Y + 17
+                && minecraft != null) {
+            List<ItemStack> predictions = menu.predictedPills(minecraft.player);
+            if (!predictions.isEmpty()) previewPage = Math.floorMod(previewPage + (event.button() == 0 ? 1 : -1), predictions.size());
+            return true;
+        }
         if ((event.button() == 0 || event.button() == 1) && minecraft != null && minecraft.gameMode != null
                 && menu.phase() == AlchemyFurnaceBlockEntity.Phase.IDLE.ordinal()) {
             int x = panelX();
@@ -58,6 +73,34 @@ public class AlchemyFurnaceScreen extends AbstractContainerScreen<AlchemyFurnace
     public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
         graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, leftPos, topPos,
                 0, 0, imageWidth, imageHeight, TEXTURE_WIDTH, TEXTURE_HEIGHT);
+
+        if (menu.hasPillPrediction() && menu.phase() == AlchemyFurnaceBlockEntity.Phase.IDLE.ordinal()
+                && minecraft != null && minecraft.player != null) {
+            List<ItemStack> predictions = menu.predictedPills(minecraft.player);
+            if (!predictions.isEmpty()) {
+                previewPage = Math.floorMod(previewPage, predictions.size());
+                ItemStack ghost = predictions.get(previewPage);
+                int px = leftPos + PREVIEW_SLOT_X;
+                int py = topPos + PREVIEW_SLOT_Y;
+                graphics.item(ghost, px, py);
+                graphics.fill(px, py, px + 16, py + 16, 0x50B1E8FF);
+                graphics.text(font, Component.literal(previewPage == 0 ? "Predicted" : "Alternate"),
+                        leftPos + 7, topPos + 63, 0xFF49788D, false);
+                if (mouseX >= leftPos + 7 && mouseX <= leftPos + 55
+                        && mouseY >= topPos + 62 && mouseY <= topPos + 74) {
+                    graphics.setTooltipForNextFrame(Component.literal(
+                            "A best-case prediction: assumes sufficient reaction Qi and successful stabilization. "
+                            + "Other outcomes require different focus or refinement conditions. "
+                            + "Click the ghost pill to switch predictions."), mouseX, mouseY);
+                }
+                if (predictions.size() > 1) {
+                    graphics.text(font, (previewPage + 1) + "/" + predictions.size(), px - 1, py + 15, 0xFF6AD9ED, true);
+                }
+                if (mouseX >= px - 1 && mouseX < px + 17 && mouseY >= py - 1 && mouseY < py + 17) {
+                    graphics.setTooltipForNextFrame(font, ghost, mouseX, mouseY);
+                }
+            }
+        }
 
         int ordinal = Math.max(0, Math.min(AlchemyFurnaceBlockEntity.Phase.values().length - 1, menu.phase()));
         AlchemyFurnaceBlockEntity.Phase phase = AlchemyFurnaceBlockEntity.Phase.values()[ordinal];

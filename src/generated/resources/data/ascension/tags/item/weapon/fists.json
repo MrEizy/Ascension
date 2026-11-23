@@ -1,5 +1,6 @@
 {
   "values": [
+    "ascension:cloth_fist_wraps",
     {
       "id": "#c:tools/gauntlet",
       "required": false

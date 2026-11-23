@@ -11,19 +11,25 @@ import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.zic.ascension.api.ascension.core.alchemy.AlchemyMaterials;
+import net.zic.ascension.api.ascension.core.alchemy.AlchemyContext;
+import net.zic.ascension.api.ascension.core.alchemy.AlchemyPrediction;
+import net.zic.ascension.impl.core.technique.AlchemyTechnique.Stage;
 import net.zic.ascension.api.ascension.core.alchemy.AlchemyRefinementPlan;
 import net.zic.ascension.impl.core.technique.AlchemyTechnique;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.technique.Technique;
 import net.minecraft.resources.Identifier;
-import java.util.List;
 import net.zic.ascension.common.blocks.entity.AlchemyFurnaceBlockEntity;
 import net.zic.ascension.common.gui.menus.AscMenuTypes;
+
+import java.util.List;
 
 public class AlchemyFurnaceMenu extends AbstractContainerMenu {
     private final AlchemyFurnaceBlockEntity furnace;
     private final Container container;
     private final ContainerData progress;
+    private long previewTick = Long.MIN_VALUE;
+    private List<ItemStack> preview = List.of();
 
     public AlchemyFurnaceMenu(int id, Inventory playerInventory, RegistryFriendlyByteBuf buf) {
         this(id, playerInventory, playerInventory.player.level().getBlockEntity(buf.readBlockPos()) instanceof AlchemyFurnaceBlockEntity entity ? entity : null);
@@ -61,6 +67,24 @@ public class AlchemyFurnaceMenu extends AbstractContainerMenu {
     }
 
     private boolean editable() { return furnace == null || furnace.phase() == AlchemyFurnaceBlockEntity.Phase.IDLE; }
+    public boolean hasPillPrediction() { return furnace != null && furnace.hasPillPrediction(); }
+
+    public List<ItemStack> predictedPills(Player player) {
+        if (!hasPillPrediction() || player == null || !editable() || !container.getItem(3).isEmpty()) return List.of();
+        long tick = player.level().getGameTime();
+        if (tick != previewTick) {
+            AlchemyRefinementPlan plan = AlchemyRefinementPlan.DEFAULT;
+            for (int i = 0; i < Stage.values().length; i++) {
+                plan = plan.indexed(player.level().registryAccess(), Stage.values()[i], progress.get(i + 2));
+            }
+            plan = plan.indexedFocus(player.level().registryAccess(), progress.get(6));
+            preview = AlchemyPrediction.predict(container, AlchemyContext.of(player.level(), furnace.getBlockPos(), null),
+                    plan, player.level().registryAccess(), player.level());
+            previewTick = tick;
+        }
+        return preview;
+    }
+
     public int phase() { return progress.get(0); }
     public int phaseTicks() { return progress.get(1); }
     public int phaseDuration(AlchemyFurnaceBlockEntity.Phase phase) {
@@ -89,7 +113,7 @@ public class AlchemyFurnaceMenu extends AbstractContainerMenu {
 
     public String selectionDetails(int index, Player player) {
         if (player == null) return "";
-        if (index == 4) return "Only steers toward effects this medicine can already express; steering may reduce potency.";
+        if (index == 4) return "Strongly steers toward effects this medicine can already express (2.75x influence). Steering may reduce potency.";
         if (index < 0 || index > 3) return "";
         AlchemyTechnique.Stage stage = AlchemyTechnique.Stage.values()[index];
         List<Identifier> options = AlchemyRefinementPlan.choices(player.level().registryAccess(), stage);

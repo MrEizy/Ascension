@@ -2,7 +2,14 @@ package net.zic.ascension.impl.core.skill.passive;
 
 import net.zic.ascension.api.ascension.core.skill.SkillInstance;
 import net.zic.ascension.api.ascension.core.skill.SkillProgressionService;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
@@ -72,10 +79,15 @@ public final class PassiveTriggerService {
     }
 
     public static void trigger(LivingEntity owner, PassiveTrigger.Event event, LivingEntity target, Map<Identifier, Double> variables) {
+        trigger(owner, event, target, variables, null);
+    }
+
+    public static void trigger(LivingEntity owner, PassiveTrigger.Event event, LivingEntity target,
+                               Map<Identifier, Double> variables, DamageSource damageSource) {
         if (!valid(owner) || event == null || event == PassiveTrigger.Event.ATTACK) {
             return;
         }
-        List<Candidate> candidates = new ArrayList<>(candidates(owner, event));
+        List<Candidate> candidates = new ArrayList<>(candidates(owner, event, damageSource));
         candidates.sort(ORDER.reversed());
         for (Candidate candidate : candidates) {
             execute(owner, target, candidate, variables == null ? Map.of() : variables);
@@ -83,6 +95,10 @@ public final class PassiveTriggerService {
     }
 
     private static List<Candidate> candidates(LivingEntity owner, PassiveTrigger.Event event) {
+        return candidates(owner, event, null);
+    }
+
+    private static List<Candidate> candidates(LivingEntity owner, PassiveTrigger.Event event, DamageSource damageSource) {
         OriginSource source = AscensionOriginSourceHelper.getEntitySource(owner);
         if (source == null) {
             return List.of();
@@ -105,6 +121,10 @@ public final class PassiveTriggerService {
                 }
                 if (event == PassiveTrigger.Event.ATTACK
                         && !WeaponVfxUtils.matchesWeapon(owner, trigger.weaponTag(), trigger.allowEmptyHand())) {
+                    continue;
+                }
+                if (event == PassiveTrigger.Event.DAMAGE_DEALT && trigger.weaponTag().isPresent()
+                        && !matchesDamageWeapon(owner, damageSource, trigger)) {
                     continue;
                 }
                 TriggerKey key = new TriggerKey(owner.getUUID(), skillId, index);
@@ -202,6 +222,25 @@ public final class PassiveTriggerService {
                 && SkillProgressionService.addExperience(source, skillId, amount)) {
             data.markExperienceAwardedAt(gameTime);
         }
+    }
+
+    private static boolean matchesDamageWeapon(LivingEntity owner, DamageSource damageSource, PassiveTrigger trigger) {
+        if (damageSource == null || damageSource.getEntity() != owner || trigger.weaponTag().isEmpty()) {
+            return false;
+        }
+        Entity direct = damageSource.getDirectEntity();
+        ItemStack weapon;
+        if (direct == owner) {
+            weapon = owner.getMainHandItem();
+        } else if (direct instanceof AbstractArrow arrow && arrow.getOwner() == owner) {
+            weapon = arrow.getWeaponItem();
+        } else {
+            return false;
+        }
+        if (weapon == null || weapon.isEmpty()) {
+            return direct == owner && trigger.allowEmptyHand();
+        }
+        return weapon.is(TagKey.<Item>create(Registries.ITEM, trigger.weaponTag().get()));
     }
 
     private static boolean valid(LivingEntity entity) {

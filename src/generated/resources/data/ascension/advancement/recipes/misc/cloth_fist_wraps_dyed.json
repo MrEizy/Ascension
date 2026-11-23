@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_cloth_fist_wraps": {
+      "conditions": {
+        "items": [
+          {
+            "items": "ascension:cloth_fist_wraps"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "ascension:cloth_fist_wraps_dyed"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_cloth_fist_wraps"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "ascension:cloth_fist_wraps_dyed"
+    ]
+  }
+}

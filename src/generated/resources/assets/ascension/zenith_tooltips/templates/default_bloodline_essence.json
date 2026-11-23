@@ -21,6 +21,10 @@
           "style": "badge"
         },
         {
+          "type": "zenithlib:dynamic",
+          "source": "ascension:technique_metadata"
+        },
+        {
           "type": "zenithlib:divider"
         },
         {
