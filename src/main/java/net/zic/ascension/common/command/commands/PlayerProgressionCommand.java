@@ -20,6 +20,7 @@ import net.zic.ascension.common.starter.PlayerProgressionReset;
 
 import java.util.Collection;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
@@ -37,24 +38,36 @@ public final class PlayerProgressionCommand {
 
     private static LiteralArgumentBuilder<CommandSourceStack> build(Kind kind) {
         return Commands.literal(kind.command)
-                .then(Commands.literal("remove").requires(AscensionCommand::isAdmin)
-                        .then(Commands.argument("target", EntityArgument.players())
+                .then(Commands.literal("remove")
+                        .then(Commands.literal("@s").requires(AscensionCommand::isPlayer)
                                 .then(Commands.argument(kind.command + "s", StringArgumentType.greedyString())
-                                        .suggests((context, builder) -> suggestHeld(context, builder, kind))
-                                        .executes(context -> remove(context, kind)))));
+                                        .suggests((context, builder) -> suggestHeld(context, builder, kind, true))
+                                        .executes(context -> remove(context, kind, targets(context, true)))))
+                        .then(Commands.argument("target", EntityArgument.players()).requires(AscensionCommand::isAdmin)
+                                .then(Commands.argument(kind.command + "s", StringArgumentType.greedyString())
+                                        .suggests((context, builder) -> suggestHeld(context, builder, kind, false))
+                                        .executes(context -> remove(context, kind, targets(context, false))))));
     }
 
     public static LiteralArgumentBuilder<CommandSourceStack> buildReset() {
-        return Commands.literal("reset").requires(AscensionCommand::isAdmin)
-                .then(Commands.argument("target", EntityArgument.players())
-                        .executes(PlayerProgressionCommand::reset));
+        return Commands.literal("reset")
+                .executes(context -> reset(context, targets(context, true)))
+                .then(Commands.literal("@s").requires(AscensionCommand::isPlayer)
+                        .executes(context -> reset(context, targets(context, true))))
+                .then(Commands.argument("target", EntityArgument.players()).requires(AscensionCommand::isAdmin)
+                        .executes(context -> reset(context, targets(context, false))));
     }
 
-    private static CompletableFuture<Suggestions> suggestHeld(CommandContext<CommandSourceStack> context, SuggestionsBuilder builder, Kind kind) {
-        if (!AscensionCommand.isAdmin(context.getSource())) return builder.buildFuture();
+    private static Collection<ServerPlayer> targets(CommandContext<CommandSourceStack> context, boolean self) throws CommandSyntaxException {
+        if (self) return List.of(context.getSource().getPlayerOrException());
+        if (!AscensionCommand.isAdmin(context.getSource())) return List.of();
+        return EntityArgument.getPlayers(context, "target");
+    }
+
+    private static CompletableFuture<Suggestions> suggestHeld(CommandContext<CommandSourceStack> context, SuggestionsBuilder builder, Kind kind, boolean self) {
         Set<Identifier> ids = new LinkedHashSet<>();
         try {
-            for (ServerPlayer player : EntityArgument.getPlayers(context, "target")) {
+            for (ServerPlayer player : targets(context, self)) {
                 ids.addAll(kind.held(AscensionOriginSourceHelper.getEntitySource(player)));
             }
         } catch (CommandSyntaxException exception) {
@@ -73,8 +86,7 @@ public final class PlayerProgressionCommand {
         return SharedSuggestionProvider.suggestResource(ids, builder.createOffset(builder.getStart() + offset));
     }
 
-    private static int remove(CommandContext<CommandSourceStack> context, Kind kind) throws CommandSyntaxException {
-        if (!AscensionCommand.isAdmin(context.getSource())) return 0;
+    private static int remove(CommandContext<CommandSourceStack> context, Kind kind, Collection<ServerPlayer> players) {
         String input = StringArgumentType.getString(context, kind.command + "s").trim();
         Set<Identifier> ids = new LinkedHashSet<>();
         for (String token : input.split("[,\\s]+")) {
@@ -88,7 +100,7 @@ public final class PlayerProgressionCommand {
         }
         if (ids.isEmpty()) return 0;
         int removed = 0;
-        for (ServerPlayer player : EntityArgument.getPlayers(context, "target")) {
+        for (ServerPlayer player : players) {
             OriginSource source = AscensionOriginSourceHelper.getEntitySource(player);
             for (Identifier id : ids) {
                 if (kind.remove(source, id)) {
@@ -102,10 +114,9 @@ public final class PlayerProgressionCommand {
         return removed;
     }
 
-    private static int reset(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
-        if (!AscensionCommand.isAdmin(context.getSource())) return 0;
+    private static int reset(CommandContext<CommandSourceStack> context, Collection<ServerPlayer> players) {
         int count = 0;
-        for (ServerPlayer player : EntityArgument.getPlayers(context, "target")) {
+        for (ServerPlayer player : players) {
             if (!PlayerProgressionReset.reset(player)) {
                 context.getSource().sendFailure(Component.literal("Cannot reset " + player.getName().getString() + " while dead or inside an inner world"));
                 continue;
