@@ -7,7 +7,8 @@
 ## Ascension Version 0.2.3 Snapshot 26.1.2
 
 ### Added
-* 
+* Command to remove Bloodline, Technique and Total Reset for admins
+* Command to remove Bloodline, Technique and Total Rest for players selves
 
 ### Removed
 * 
