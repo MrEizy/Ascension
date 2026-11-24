@@ -12,9 +12,16 @@ public final class AscensionCommand {
     private AscensionCommand() {
     }
 
+    public static boolean isAdmin(CommandSourceStack source) {
+        return source.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER);
+    }
+
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("ascension")
-                .requires(source -> source.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER))
+                .requires(AscensionCommand::isAdmin)
+                .then(PlayerProgressionCommand.buildBloodline())
+                .then(PlayerProgressionCommand.buildTechnique())
+                .then(PlayerProgressionCommand.buildReset())
                 .then(CultivationCommand.build())
                 .then(Commands.literal("skill")
                         .then(SlotSkillCommand.buildSlot())

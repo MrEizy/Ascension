@@ -15,9 +15,6 @@ import net.neoforged.neoforge.attachment.IAttachmentSerializer;
 import net.zic.ascension.api.ascension.core.CoreAttachments;
 import net.zic.ascension.api.ascension.core.entity.AscensionEntityData;
 import net.zic.ascension.api.ascension.core.path.bonus.EntityPathBonusHolder;
-import net.zic.ascension.api.ascension.core.path.bonus.PathBonus;
-import net.zic.ascension.api.ascension.core.path.bonus.MultiSourcePathBonusHolder;
-import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.api.rpg_engine.source.OriginSourcePatch;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
@@ -36,7 +33,7 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
 
 
 
-    private final OriginSource source;
+    private OriginSource source;
     private final LivingEntity attachedEntity;
 
     private float cachedHealth;
@@ -112,6 +109,24 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
 
 
 
+
+    public void resetProgression() {
+        source.detachFromEntity(attachedEntity);
+        source = new OriginSource();
+        cultivationSuppressed = false;
+        starterSelectionStage = StarterSelectionStage.BLOODLINE;
+        offeredStarterBloodlines.clear();
+        offeredStarterPhysiques.clear();
+        selectedStarterBloodline = null;
+        selectedStarterPhysique = null;
+        starterSelectionComplete = false;
+        process = null;
+        patch = null;
+        fullPatch = false;
+        cachedHealth = attachedEntity.getHealth();
+        initialize();
+        markDirty(source.resolveFullPatch(), true);
+    }
 
     @Override
     public void markDirty(OriginSourcePatch patch, boolean fullPatch) {
@@ -344,6 +359,10 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
             data.setSelectedStarterPhysique(decodeOptionalIdentifier(buf));
 
             if (buf.readBoolean()) {
+                if (buf.getBoolean(buf.readerIndex())) {
+                    data.source.detachFromEntity(entity);
+                    data.source = new OriginSource();
+                }
                 data.source.applyPatch(buf);
             }
 
