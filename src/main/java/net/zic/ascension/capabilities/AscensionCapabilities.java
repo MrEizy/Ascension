@@ -3,6 +3,7 @@ package net.zic.ascension.capabilities;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.Items;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -13,8 +14,6 @@ import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.capabilities.damage_provider.AscensionDamageSourceProvider;
 import net.zic.ascension.capabilities.entity_holder.SimpleEntityDataProvider;
 import net.zic.ascension.capabilities.qi_provider.SimpleEntityQiProvider;
-import net.zic.ascension.common.blocks.ModBlocks;
-import net.zic.ascension.common.blocks.spirit_stone.SpiritStoneClusterQiHandler;
 import net.zic.ascension.common.item.ModItems;
 import net.zic.ascension.impl.core.qi.TieredItemQiHandler;
 
@@ -31,6 +30,13 @@ public class AscensionCapabilities {
                     type,
                     (entity,nul)->(entity instanceof Mob mob) ? new SimpleEntityDataProvider(mob) :null
             );
+            if (type != EntityType.PLAYER) {
+                event.registerEntity(
+                        CoreCapabilities.ASCENSION_ENTITY_QI_PROVIDER,
+                        type,
+                        (entity, context) -> entity instanceof LivingEntity living ? new SimpleEntityQiProvider(living) : null
+                );
+            }
 
         }
         event.registerEntity(

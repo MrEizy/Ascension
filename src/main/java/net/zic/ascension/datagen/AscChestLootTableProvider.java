@@ -204,6 +204,7 @@ public class AscChestLootTableProvider implements LootTableSubProvider {
                 .withPool(AscAddedLootTableProvider.bloodlinePool(AscensionCraft.prefix("3_heaven/golden_silkworm_bloodline"), 28, 63)
                         .when(LootItemRandomChanceCondition.randomChance(0.065f)))
                 .withPool(chancePhysique("3_heaven/tyrant_body", 0.065f))
+                .withPool(chancePhysique("2_profound/god_envied_physique", 0.11f))
                 .withPool(LootPool.lootPool()
                         .setRolls(ConstantValue.exactly(1))
                         .when(LootItemRandomChanceCondition.randomChance(0.25f))

@@ -137,6 +137,58 @@
           ]
         }
       }
+    },
+    "#ascension:stat_scaling/mobs": {
+      "minecraft:max_health": {
+        "ascension:vitality": {
+          "multiplier": [
+            {
+              "id": "ascension:mob_base_scaling",
+              "value": 2
+            }
+          ]
+        }
+      },
+      "minecraft:attack_damage": {
+        "ascension:strength": {
+          "multiplier": [
+            {
+              "id": "ascension:mob_strength_damage_scaling",
+              "value": 0.0
+            }
+          ]
+        }
+      },
+      "minecraft:movement_speed": {
+        "ascension:agility": {
+          "multiplier": [
+            {
+              "id": "ascension:mob_agility_movement_scaling",
+              "value": -0.998
+            }
+          ]
+        }
+      },
+      "ascension:max_qi": {
+        "ascension:spirit": {
+          "multiplier": [
+            {
+              "id": "ascension:mob_spirit_max_qi_scaling",
+              "value": 9.0
+            }
+          ]
+        }
+      },
+      "ascension:qi_regen_rate": {
+        "ascension:spirit": {
+          "multiplier": [
+            {
+              "id": "ascension:mob_spirit_qi_regen_scaling",
+              "value": -0.75
+            }
+          ]
+        }
+      }
     }
   }
 }

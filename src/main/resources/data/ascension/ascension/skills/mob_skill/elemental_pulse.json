@@ -1,7 +1,11 @@
 {
   "type": "ascension:active",
-  "name": {"translate": "ascension.skill.elemental_pulse.name"},
-  "description": {"translate": "ascension.skill.elemental_pulse.desc"},
+  "name": {
+    "translate": "ascension.skill.elemental_pulse.name"
+  },
+  "description": {
+    "translate": "ascension.skill.elemental_pulse.desc"
+  },
   "target": {
     "type": "ascension:radial",
     "radius": 5,
@@ -18,17 +22,32 @@
       ],
       "path": "ascension:foundation/essence",
       "subject": "target",
-      "base": 3.0,
+      "base": {
+        "base": 3.0,
+        "per_mastery": 0.27,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:path_realm_multiplier",
+              "path": "ascension:foundation/essence",
+              "bonus_per_major_realm": 0.08,
+              "bonus_per_minor_realm": 0.012,
+              "maximum_bonus": 1.5
+            },
+            "operation": "multiply"
+          }
+        ]
+      },
       "stats": {
         "ascension:spirit": 0.18
       },
       "minimum": 0.0,
-      "maximum": 14.0
+      "maximum": 20.3
     },
     {
       "type": "ascension:particles",
       "particle": "minecraft:electric_spark",
-      "count": 3,
+      "count": 6,
       "spread": 0.35,
       "speed": 0.04,
       "subject": "target"
@@ -41,5 +60,14 @@
       "subject": "caster"
     }
   ],
-  "cooldown": 130
+  "cooldown": {
+    "base": 130,
+    "per_mastery": -4,
+    "minimum": 98
+  },
+  "cost": {
+    "resource": "ascension:qi",
+    "amount": 9
+  },
+  "mastery_xp_per_use": 1.0
 }

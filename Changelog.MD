@@ -4,6 +4,28 @@
 
 ---
 
+## Ascension Version 0.2.3 Snapshot 26.1.2
+
+### Added
+* 
+
+### Removed
+* 
+
+### Changes
+* 
+
+
+### Fixes
+* Fixed **Boundless Qi Scripture** not spawning in End Cities (Missing ```consumer.accept``` call in the loot table registration).
+
+
+### Technical Changes
+* 
+
+---
+
+
 ## Ascension Version 0.2.2 Snapshot 26.1.2
 
 ### Added
@@ -25,6 +47,8 @@
 * Added Scythe weapons from copper to spirit stone tier (Sephesta)
 * Added a second furnace tier with a pill prediction feature
 * Server Configs for alchemy to restrict effectiveness of cultivation pills
+* Mobs can naturally cultivate over time
+* Mobs can cast skills very rarely
 
 ### Removed
 * Removed all divine senses

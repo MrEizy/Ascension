@@ -77,9 +77,9 @@ public class ModTags {
 
 
         public static final TagKey<Item> BLACK_IRON_REPAIRABLE = createItemTag("black_iron_repairable");
-        public static final TagKey<Item> JADE_REPAIRABLE = createItemTag("jade_repairable");
         public static final TagKey<Item> FROST_SILVER_REPAIRABLE = createItemTag("frost_silver_repairable");
         public static final TagKey<Item> SPIRITUAL_STONE_REPAIRABLE = createItemTag("spiritual_stone_repairable");
+        public static final TagKey<Item> JADE_REPAIRABLE = createItemTag("jade_repairable");
 
         public static final TagKey<Item> WEAPON_BLADES = createItemTag("weapon/blades");
         public static final TagKey<Item> WEAPON_BOWS = createItemTag("weapon/bows");
@@ -168,6 +168,7 @@ public class ModTags {
         public static final TagKey<EntityType<?>> MOB_CULTIVATION_PASSIVE = createTag("mob_cultivation/passive");
         public static final TagKey<EntityType<?>> MOB_CULTIVATION_HOSTILE = createTag("mob_cultivation/hostile");
         public static final TagKey<EntityType<?>> MOB_CULTIVATION_BOSSES = createTag("mob_cultivation/bosses");
+        public static final TagKey<EntityType<?>> MOB_CULTIVATION_EXCLUDED = createTag("mob_cultivation/excluded");
 
 
         private static TagKey<EntityType<?>> createTag(String name) {

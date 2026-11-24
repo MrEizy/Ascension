@@ -1,0 +1,127 @@
+{
+  "enabled": true,
+  "interval_ticks": 30,
+  "attempt_chance": 0.55,
+  "skills": {
+    "ascension:mob_skill/body_reinforcement": {
+      "behavior": "defensive",
+      "minimum_distance": 0,
+      "maximum_distance": 12,
+      "health_below": 0.75,
+      "weight": 4,
+      "require_line_of_sight": false
+    },
+    "ascension:mob_skill/charging_strike": {
+      "behavior": "melee",
+      "minimum_distance": 1,
+      "maximum_distance": 6.5,
+      "health_below": 1.0,
+      "weight": 6,
+      "require_line_of_sight": true
+    },
+    "ascension:mob_skill/corpse_resilience": {
+      "behavior": "defensive",
+      "minimum_distance": 0,
+      "maximum_distance": 12,
+      "health_below": 0.7,
+      "weight": 5,
+      "require_line_of_sight": false
+    },
+    "ascension:mob_skill/crushing_blow": {
+      "behavior": "melee",
+      "minimum_distance": 0,
+      "maximum_distance": 4,
+      "health_below": 1.0,
+      "weight": 8,
+      "require_line_of_sight": true
+    },
+    "ascension:mob_skill/elemental_pulse": {
+      "behavior": "area",
+      "minimum_distance": 0,
+      "maximum_distance": 5,
+      "health_below": 1.0,
+      "weight": 9,
+      "require_line_of_sight": true
+    },
+    "ascension:mob_skill/essence_guard": {
+      "behavior": "defensive",
+      "minimum_distance": 0,
+      "maximum_distance": 12,
+      "health_below": 0.78,
+      "weight": 4,
+      "require_line_of_sight": false
+    },
+    "ascension:mob_skill/fang_leap": {
+      "behavior": "melee",
+      "minimum_distance": 1.5,
+      "maximum_distance": 7,
+      "health_below": 1.0,
+      "weight": 9,
+      "require_line_of_sight": true
+    },
+    "ascension:mob_skill/fear_pulse": {
+      "behavior": "area",
+      "minimum_distance": 0,
+      "maximum_distance": 5,
+      "health_below": 0.85,
+      "weight": 5,
+      "require_line_of_sight": true
+    },
+    "ascension:mob_skill/flame_body_transformation": {
+      "behavior": "defensive",
+      "minimum_distance": 0,
+      "maximum_distance": 12,
+      "health_below": 0.82,
+      "weight": 5,
+      "require_line_of_sight": false
+    },
+    "ascension:mob_skill/pack_howl": {
+      "behavior": "support",
+      "minimum_distance": 0,
+      "maximum_distance": 10,
+      "health_below": 1.0,
+      "weight": 5,
+      "require_line_of_sight": false
+    },
+    "ascension:mob_skill/qi_infused_shot": {
+      "behavior": "ranged",
+      "minimum_distance": 4,
+      "maximum_distance": 23,
+      "health_below": 1.0,
+      "weight": 10,
+      "require_line_of_sight": true
+    },
+    "ascension:mob_skill/qi_projectile": {
+      "behavior": "ranged",
+      "minimum_distance": 3,
+      "maximum_distance": 15,
+      "health_below": 1.0,
+      "weight": 9,
+      "require_line_of_sight": true
+    },
+    "ascension:mob_skill/spatial_crossing": {
+      "behavior": "melee",
+      "minimum_distance": 4,
+      "maximum_distance": 11,
+      "health_below": 1.0,
+      "weight": 4,
+      "require_line_of_sight": true
+    },
+    "ascension:mob_skill/spirit_barrier": {
+      "behavior": "defensive",
+      "minimum_distance": 0,
+      "maximum_distance": 12,
+      "health_below": 0.75,
+      "weight": 6,
+      "require_line_of_sight": false
+    },
+    "ascension:mob_skill/target_disruption": {
+      "behavior": "utility",
+      "minimum_distance": 0,
+      "maximum_distance": 8,
+      "health_below": 1.0,
+      "weight": 4,
+      "require_line_of_sight": true
+    }
+  }
+}

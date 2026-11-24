@@ -5,6 +5,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
@@ -192,6 +193,7 @@ public class AscensionCraft {
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.CULTIVATION_SPEC, "ascension/Ascension-Cultivation.toml");
         modContainer.registerConfig(ModConfig.Type.CLIENT, Config.CLIENT_SPEC, "ascension/Ascension-Client.toml");
         modContainer.registerConfig(ModConfig.Type.SERVER, Config.ALCHEMY_SERVER_SPEC, "ascension/Ascension-Alchemy.toml");
+        modContainer.registerConfig(ModConfig.Type.SERVER, Config.MOB_CULTIVATION_SERVER_SPEC, "ascension/Ascension-Mob-Cultivation.toml");
 
     }
 
@@ -249,6 +251,15 @@ public class AscensionCraft {
 
         @SubscribeEvent
         public static void onEntityAttributeModificationEvent(final EntityAttributeModificationEvent event) {
+            for (EntityType<? extends LivingEntity> type : event.getTypes()) {
+                if (type == EntityType.PLAYER) continue;
+                if (!event.has(type, AscensionAttributes.MAX_QI)) {
+                    event.add(type, AscensionAttributes.MAX_QI);
+                }
+                if (!event.has(type, AscensionAttributes.QI_REGEN_RATE)) {
+                    event.add(type, AscensionAttributes.QI_REGEN_RATE);
+                }
+            }
 
             event.add(
                     EntityType.PLAYER,

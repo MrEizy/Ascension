@@ -3,13 +3,12 @@
   "evolution": {
     "into": "ascension:4_saint/celestial_war_tiger_bloodline",
     "catalyst": "ascension:2_profound/crane_bloodline",
-    "absorb_catalyst": ["minecraft:nether_star", "minecraft:amethyst_block"],
     "purity": 80,
     "result_purity": 10,
     "realm": {
       "path": "ascension:foundation/body",
-      "major_realm": 2,
-      "minor_realm": 1
+      "major_realm": 3,
+      "minor_realm": 2
     },
     "path": "ascension:foundation/body"
   },

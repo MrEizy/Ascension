@@ -1,7 +1,11 @@
 {
   "type": "ascension:active",
-  "name": {"translate": "ascension.skill.crushing_blow.name"},
-  "description": {"translate": "ascension.skill.crushing_blow.desc"},
+  "name": {
+    "translate": "ascension.skill.crushing_blow.name"
+  },
+  "description": {
+    "translate": "ascension.skill.crushing_blow.desc"
+  },
   "definitions": {
     "stagger": {
       "impact": {
@@ -33,12 +37,27 @@
       ],
       "path": "ascension:foundation/body",
       "subject": "target",
-      "base": 6.0,
+      "base": {
+        "base": 6.0,
+        "per_mastery": 0.54,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:path_realm_multiplier",
+              "path": "ascension:foundation/body",
+              "bonus_per_major_realm": 0.08,
+              "bonus_per_minor_realm": 0.012,
+              "maximum_bonus": 1.5
+            },
+            "operation": "multiply"
+          }
+        ]
+      },
       "stats": {
         "ascension:strength": 0.35
       },
       "minimum": 0.0,
-      "maximum": 24.0
+      "maximum": 34.8
     },
     {
       "type": "ascension:stagger",
@@ -50,7 +69,7 @@
     {
       "type": "ascension:particles",
       "particle": "minecraft:crit",
-      "count": 5,
+      "count": 10,
       "spread": 0.4,
       "speed": 0.1,
       "subject": "target"
@@ -63,5 +82,14 @@
       "subject": "target"
     }
   ],
-  "cooldown": 110
+  "cooldown": {
+    "base": 110,
+    "per_mastery": -3,
+    "minimum": 82
+  },
+  "cost": {
+    "resource": "ascension:qi",
+    "amount": 7
+  },
+  "mastery_xp_per_use": 1.0
 }

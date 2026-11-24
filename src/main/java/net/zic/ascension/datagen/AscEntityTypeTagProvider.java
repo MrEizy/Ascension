@@ -39,6 +39,7 @@ public class AscEntityTypeTagProvider extends EntityTypeTagsProvider {
         // Mob Cultivation Stuff
         tag(ModTags.EntityTypes.MOB_CULTIVATION_PASSIVE);
         tag(ModTags.EntityTypes.MOB_CULTIVATION_HOSTILE);
+        tag(ModTags.EntityTypes.MOB_CULTIVATION_EXCLUDED);
 
 
         tag(ModTags.EntityTypes.MOB_CULTIVATION_BOSSES)
