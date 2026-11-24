@@ -108,6 +108,7 @@ public class AscAddedLootTableProvider implements LootTableSubProvider {
     public static final ResourceKey<LootTable> PROFOUND_WHITE_LIGHTNING = key("added_loot/techniques/profound/white_lightning_ten_stage_technique");
     public static final ResourceKey<LootTable> PROFOUND_RIGID_STANCE = key("added_loot/techniques/profound/rigid_stance_summation_technique");
     public static final ResourceKey<LootTable> PROFOUND_MOUNTAIN_SPLITTING = key("added_loot/techniques/profound/mountain_splitting_axe_art");
+    public static final ResourceKey<LootTable> PROFOUND_BOUNDLESS_QI_SCRIPTURE = key("added_loot/techniques/profound/boundless_qi_scripture");
 
 
     /** Physiques don't use purity yet, so every physique essence is generated at full purity. */
@@ -253,6 +254,7 @@ public class AscAddedLootTableProvider implements LootTableSubProvider {
         consumer.accept(PROFOUND_WHITE_LIGHTNING, LootTable.lootTable().withPool(techniquePool("2_profound/white_lightning_ten_stage_technique")));
         consumer.accept(PROFOUND_RIGID_STANCE, LootTable.lootTable().withPool(techniquePool("2_profound/rigid_stance_summation_technique")));
         consumer.accept(PROFOUND_MOUNTAIN_SPLITTING, LootTable.lootTable().withPool(techniquePool("2_profound/mountain_splitting_axe_art")));
+        consumer.accept(PROFOUND_BOUNDLESS_QI_SCRIPTURE, LootTable.lootTable().withPool(techniquePool("2_profound/boundless_qi_scripture")));
     }
 
     /**

@@ -3,11 +3,10 @@
   "evolution": {
     "into": "ascension:4_saint/great_sun_sacred_body_physique",
     "catalyst": "ascension:2_profound/golden_sun_heart_physique",
-    "absorb_catalyst": ["minecraft:diamond"],
     "realm": {
       "path": "ascension:foundation/soul",
-      "major_realm": 2,
-      "minor_realm": 1
+      "major_realm": 3,
+      "minor_realm": 2
     },
     "path": "ascension:elemental/yang"
   },

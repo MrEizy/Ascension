@@ -543,6 +543,7 @@ public class AscGlobalLootModifierProvider extends GlobalLootModifierProvider {
         // End City
         addTechnique("profound/astral_essence_technique_from_end_city", "chests/end_city_treasure", AscAddedLootTableProvider.PROFOUND_ASTRAL_ESSENCE, 0.15f);
         addTechnique("profound/scholarly_soul_technique_from_end_city", "chests/end_city_treasure", AscAddedLootTableProvider.PROFOUND_SCHOLARLY_SOUL, 0.16f);
+        addTechnique("profound/boundless_qi_scriptures_from_end_city", "chests/end_city_treasure", AscAddedLootTableProvider.PROFOUND_BOUNDLESS_QI_SCRIPTURE, 0.11f);
 
         // Bastion Remnant
         addTechnique("profound/emberblood_dragon_sutra_from_bastion", "chests/bastion_treasure", AscAddedLootTableProvider.PROFOUND_EMBERBLOOD_DRAGON, 0.17f);
@@ -555,7 +556,6 @@ public class AscGlobalLootModifierProvider extends GlobalLootModifierProvider {
 
         // Mob Drops
         addTechniqueMob("profound/burning_bones_technique_from_blaze", "entities/blaze", AscAddedLootTableProvider.PROFOUND_BURNING_BONES, 0.17f);
-        addTechniqueMob("profound/white_lightning_ten_stage_technique_from_charged_creeper", "entities/creeper", AscAddedLootTableProvider.PROFOUND_WHITE_LIGHTNING, 0.19f);
         addTechniqueMob("profound/rigid_stance_summation_technique_from_iron_golem", "entities/iron_golem", AscAddedLootTableProvider.PROFOUND_RIGID_STANCE, 0.15f);
         addTechniqueMob("profound/mountain_splitting_axe_art_from_ravager", "entities/ravager", AscAddedLootTableProvider.PROFOUND_MOUNTAIN_SPLITTING, 0.18f);
     }

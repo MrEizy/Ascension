@@ -4,6 +4,28 @@
 
 ---
 
+## Ascension Version 0.2.3 Snapshot 26.1.2
+
+### Added
+* 
+
+### Removed
+* 
+
+### Changes
+* 
+
+
+### Fixes
+* Fixed **Boundless Qi Scripture** not spawning in End Cities (Missing ```consumer.accept``` call in the loot table registration).
+
+
+### Technical Changes
+* 
+
+---
+
+
 ## Ascension Version 0.2.2 Snapshot 26.1.2
 
 ### Added
