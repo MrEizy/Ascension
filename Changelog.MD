@@ -20,7 +20,7 @@
 * 
 
 ### Changes
-* 
+* Eating Pill Residue now kills the player
 
 
 ### Fixes
