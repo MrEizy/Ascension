@@ -18,7 +18,6 @@ import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalRegistrie
 import net.zic.ascension.common.item.components.AscensionComponents;
 import org.jspecify.annotations.Nullable;
 
-/** Tints only the pill overlay; the paper is rendered with a separate constant white tint. */
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID, value = Dist.CLIENT)
 public record ProceduralPillTint() implements ItemTintSource {
     public static final MapCodec<ProceduralPillTint> CODEC = MapCodec.unit(ProceduralPillTint::new);
@@ -39,8 +38,6 @@ public record ProceduralPillTint() implements ItemTintSource {
         MedicinalProfile profile = stack.get(AscensionComponents.MEDICINAL_PILL.get());
         if (profile == null || profile.effects().isEmpty()) return opaque(FALLBACK_COLOR);
 
-        // Condensation puts the focused beneficial effect first. Do not recolour pills
-        // just because a secondary adverse effect is present.
         MedicinalProfile.Effect primary = profile.effects().getFirst();
         for (MedicinalProfile.Effect effect : profile.effects()) {
             if (!effect.adverse()) {
@@ -49,8 +46,6 @@ public record ProceduralPillTint() implements ItemTintSource {
             }
         }
         Identifier id = primary.id();
-        // Inventory previews sometimes provide no level. The built-in palette also
-        // works without a world, and the current client level can supply datapack overrides.
         ClientLevel context = level != null ? level : Minecraft.getInstance().level;
         if (context != null) {
             var definition = context.registryAccess().lookup(MedicinalRegistries.EFFECTS.key())

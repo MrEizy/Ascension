@@ -21,6 +21,7 @@
 
 ### Changes
 * Eating Pill Residue now kills the player
+* Pill texture changes colour based on effect
 
 
 ### Fixes

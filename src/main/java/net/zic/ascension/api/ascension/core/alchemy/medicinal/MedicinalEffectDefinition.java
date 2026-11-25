@@ -34,7 +34,6 @@ public record MedicinalEffectDefinition(
             Codec.intRange(0, 0xFFFFFF).optionalFieldOf("pill_color").forGetter(MedicinalEffectDefinition::pillColor)
     ).apply(instance, MedicinalEffectDefinition::new));
 
-    // Preserve the original constructor for callers that do not specify an appearance.
     public MedicinalEffectDefinition(MedicinalReaction.Reagents requirements, double minimumPurity,
                                      double maximumInstability, double minimumToxicity, double potencyPerUnit,
                                      int durationTicks, boolean adverse, int priority,
