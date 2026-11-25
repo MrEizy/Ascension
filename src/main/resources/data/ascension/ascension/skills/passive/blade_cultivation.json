@@ -16,6 +16,7 @@
       "actions": [
         {
           "type": "ascension:cultivate",
+          "consume_atmospheric_qi": false,
           "path": "ascension:weapon/blade",
           "rate": {
             "base": 1.0,

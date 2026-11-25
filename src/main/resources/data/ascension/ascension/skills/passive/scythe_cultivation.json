@@ -17,6 +17,7 @@
       "actions": [
         {
           "type": "ascension:cultivate",
+          "consume_atmospheric_qi": false,
           "path": "ascension:weapon/scythe",
           "rate": {
             "base": 11.0,
