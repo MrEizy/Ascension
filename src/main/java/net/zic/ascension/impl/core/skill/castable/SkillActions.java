@@ -519,7 +519,6 @@ public final class SkillActions {
             }
             if (consumeAtmosphericQi) {
                 if (!pathInstance.canProgress()) {
-                    // Preserve the existing automatic breakthrough retry without spending more qi
                     if (pathInstance.canBreakthrough()) {
                         CultivationUtil.cultivate(context.caster(), context.originSource(), path,
                                 pathInstance, secondaryPath.orElse(path), 0.0D);
@@ -529,7 +528,6 @@ public final class SkillActions {
                 resolvedRate = ChunkHelper.extractCultivationQi(context.caster(), resolvedRate);
                 if (resolvedRate <= 0.0D) return;
             }
-            // Springs, affinities and impurities affect conversion efficiency, not ambient qi cost
             resolvedRate *= net.zic.ascension.impl.core.innerworld.InnerWorldSprings.cultivationMultiplier(context.caster());
             CultivationUtil.cultivate(
                     context.caster(),

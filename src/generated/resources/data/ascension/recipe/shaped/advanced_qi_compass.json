@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "C": "ascension:qi_compass",
+    "S": "ascension:spiritual_stone"
+  },
+  "pattern": [
+    "SSS",
+    "SCS",
+    "SSS"
+  ],
+  "result": {
+    "id": "ascension:advanced_qi_compass"
+  }
+}

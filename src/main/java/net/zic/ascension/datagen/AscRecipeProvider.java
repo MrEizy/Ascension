@@ -170,6 +170,25 @@ public class AscRecipeProvider extends RecipeProvider {
                 .save(output, "ascension:shapeless/black_iron_nugget_from_ingot");
 
 
+        shaped(RecipeCategory.TOOLS, ModItems.QI_COMPASS.get())
+                .pattern(" B ")
+                .pattern("JCJ")
+                .pattern(" B ")
+                .define('J', ModItems.JADE.get())
+                .define('C', Items.COMPASS)
+                .define('B', ModBlocks.JADE_BLOCK.get())
+                .unlockedBy(getHasName(ModItems.JADE.get()), has(ModItems.JADE))
+                .save(output, "ascension:shaped/qi_compass");
+
+        shaped(RecipeCategory.TOOLS, ModItems.ADVANCED_QI_COMPASS.get())
+                .pattern("SSS")
+                .pattern("SCS")
+                .pattern("SSS")
+                .define('S', ModItems.SPIRITUAL_STONE.get())
+                .define('C', ModItems.QI_COMPASS.get())
+                .unlockedBy(getHasName(ModItems.QI_COMPASS.get()), has(ModItems.QI_COMPASS))
+                .save(output, "ascension:shaped/advanced_qi_compass");
+
         shaped(RecipeCategory.MISC, ModItems.JADE_BOTTLE.get())
                 .pattern(" J ")
                 .pattern("JBJ")
