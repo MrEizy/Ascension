@@ -1,10 +1,14 @@
 {
-  "type": "ascension:simple_technique",
+  "type": "ascension:lost_technique",
   "name": {
     "translate": "ascension.technique.cinderveil_flame_battle_art.name"
   },
   "description": {
     "translate": "ascension.technique.cinderveil_flame_battle_art.desc"
+  },
+  "pages": {
+    "amount": 4,
+    "translate": "ascension.technique.cinderveil_flame_battle_art.page"
   },
   "on_added": [
     {

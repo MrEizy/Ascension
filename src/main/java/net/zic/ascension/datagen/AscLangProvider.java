@@ -47,11 +47,15 @@ public class AscLangProvider extends LanguageProvider {
         add("creativetab.ascension.physique_transfers", "Physiques");
         add("creativetab.ascension.bloodline_transfers", "Bloodlines");
         add("creativetab.ascension.technique_transfers", "Techniques");
+        add("creativetab.ascension.technique_pages", "Technique Pages");
 
 
         // Creative Tab Sections
         add("creative_section.ascension.artifacts", "Ascension Artifacts");
         add("creative_section.ascension.materials", "Ascension Materials");
+
+
+
 
 
 
@@ -1151,6 +1155,33 @@ public class AscLangProvider extends LanguageProvider {
 
         add("ascension.technique.boundless_qi_scripture.name", "Boundless Qi Scripture");
         add("ascension.technique.boundless_qi_scripture.desc", "A Qingming Sword Sect breathing technique with no limit and no ceiling. Condense the same breath ten thousand times and the qi within grows without end.");
+
+
+
+
+
+        //Technique Items
+        add("ascension.technique.page_number", "Page %s");
+        add("ascension.technique.technique_page", "Technique Page");
+        add("ascension.technique.technique_binder", "Technique Binder");
+        add("ascension.technique.technique_page.named", "%s: %s");
+        add("ascension.binder.empty", "Empty. Hold it in your off hand and use a technique page.");
+        add("ascension.binder.technique", "Technique: %s");
+        add("ascension.binder.progress", "Pages: %s / %s");
+        add("ascension.page.invalid", "This page does not belong to a lost technique");
+        add("ascension.page.mismatch", "This page is from a different technique than the binder");
+        add("ascension.page.duplicate", "The binder already has this page");
+        add("ascension.page.added", "%s added (%s/%s)");
+        add("ascension.page.complete", "%s manual complete");
+
+
+
+        //Pages
+        add("ascension.technique.cinderveil_flame_battle_art.page.0", "Page One: Kindling the Cinder");
+        add("ascension.technique.cinderveil_flame_battle_art.page.1", "Page Two: Veil of Ash");
+        add("ascension.technique.cinderveil_flame_battle_art.page.2", "Page Three: The Burning Touch");
+        add("ascension.technique.cinderveil_flame_battle_art.page.3", "Page Four: Cinderburst");
+
 
 
         //Skills

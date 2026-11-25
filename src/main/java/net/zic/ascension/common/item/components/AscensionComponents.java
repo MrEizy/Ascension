@@ -15,6 +15,7 @@ import net.zic.ascension.api.ascension.core.alchemy.PillGrade;
 import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalProfile;
 import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalDecay;
 
+import java.util.List;
 import java.util.function.Supplier;
 
 public class AscensionComponents {
@@ -53,6 +54,22 @@ public class AscensionComponents {
             ()->DataComponentType.<Integer>builder()
                     .persistent(Codec.INT)
                     .networkSynchronized(ByteBufCodecs.INT)
+                    .build()
+    );
+
+    public static final Supplier<DataComponentType<Integer>> PAGE_INDEX = DATA_COMPONENTS.register(
+            "page_index",
+            ()->DataComponentType.<Integer>builder()
+                    .persistent(Codec.INT)
+                    .networkSynchronized(ByteBufCodecs.INT)
+                    .build()
+    );
+
+    public static final Supplier<DataComponentType<List<Integer>>> COLLECTED_PAGES = DATA_COMPONENTS.register(
+            "collected_pages",
+            ()->DataComponentType.<List<Integer>>builder()
+                    .persistent(Codec.INT.listOf())
+                    .networkSynchronized(ByteBufCodecs.INT.apply(ByteBufCodecs.list()))
                     .build()
     );
 

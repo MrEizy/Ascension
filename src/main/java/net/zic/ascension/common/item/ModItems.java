@@ -22,9 +22,7 @@ import net.zic.ascension.common.item.artifacts.pills.JadeBottleItem;
 import net.zic.ascension.common.item.artifacts.pills.ProceduralPillItem;
 import net.zic.ascension.common.item.herbs.HerbItem;
 import net.zic.ascension.common.item.qi_holder.SpiritStone;
-import net.zic.ascension.common.item.transfer_item.BloodlineTransferItem;
-import net.zic.ascension.common.item.transfer_item.PhysiqueTransferItem;
-import net.zic.ascension.common.item.transfer_item.TechniqueTransferItem;
+import net.zic.ascension.common.item.transfer_item.*;
 import net.zic.ascension.common.item.weapons.ChakramItem;
 import net.zic.ascension.common.item.weapons.ChakramTier;
 import net.zic.ascension.common.item.weapons.Chakrams;
@@ -71,7 +69,15 @@ public class ModItems {
                     .setId(RegistryHelper.key(Registries.ITEM,AscensionCraft.MOD_ID,"technique_manual"))
                     .stacksTo(1)
             ));
-
+    public static final DeferredItem<Item> TECHNIQUE_PAGE = ITEMS.register("technique_page",
+            () -> new TechniquePageItem(new Item.Properties()
+                    .setId(RegistryHelper.key(Registries.ITEM, AscensionCraft.MOD_ID, "technique_page"))
+            ));
+    public static final DeferredItem<Item> TECHNIQUE_BINDER = ITEMS.register("technique_binder",
+            () -> new TechniqueBinderItem(new Item.Properties()
+                    .setId(RegistryHelper.key(Registries.ITEM, AscensionCraft.MOD_ID, "technique_binder"))
+                    .stacksTo(1)
+            ));
 
     public static final DeferredItem<Item> DESOLATE_BONES = ITEMS.registerItem("desolate_bones",
             properties -> new Item(properties.rarity(Rarity.EPIC)));

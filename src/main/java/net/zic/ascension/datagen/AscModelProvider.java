@@ -146,6 +146,9 @@ public class AscModelProvider extends ModelProvider {
         itemModels.generateFlatItem(ModItems.PHYSIQUE_ESSENCE.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.TECHNIQUE_MANUAL.get(), ModelTemplates.FLAT_ITEM);
 
+        itemModels.generateFlatItem(ModItems.TECHNIQUE_BINDER.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.TECHNIQUE_PAGE.get(), ModelTemplates.FLAT_ITEM);
+
 
         //Herb Items
         herbItemModel(itemModels, ModItems.JADE_DEW_GRASS.get());

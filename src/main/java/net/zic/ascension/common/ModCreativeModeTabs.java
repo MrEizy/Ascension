@@ -14,12 +14,14 @@ import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.common.item.transfer_item.TechniquePageItems;
 import net.zic.ascension.impl.core.technique.AlchemyTechnique;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.common.blocks.ModBlocks;
 import net.zic.ascension.common.item.ModItems;
 import net.zic.ascension.common.item.components.AscensionComponents;
 import net.zic.ascension.common.util.ModTags;
+import net.zic.ascension.impl.core.technique.Paged;
 
 import java.util.function.Supplier;
 
@@ -323,6 +325,29 @@ public class ModCreativeModeTabs {
                                                 : Component.translatable("item.ascension.technique_manual.named", holder.value().getName(null)));
                                         output.accept(stack);
                                     }))
+                    .build());
+
+    @SuppressWarnings("unused")
+    public static final Supplier<CreativeModeTab> TECHNIQUE_PAGES_TAB = CREATIVE_MODE_TABS.register("technique_pages_tab",
+            () -> CreativeModeTab.builder()
+                    .icon(() -> new ItemStack(ModItems.TECHNIQUE_PAGE.get()))
+                    .title(Component.translatable("creativetab.ascension.technique_pages"))
+                    .displayItems((itemDisplayParameters, output) -> {
+                        // the binder comes first, then every page of every lost technique
+                        output.accept(ModItems.TECHNIQUE_BINDER);
+                        itemDisplayParameters.holders()
+                                .lookupOrThrow(CoreRegistries.TECHNIQUE_REGISTRY.key())
+                                .listElements()
+                                .filter(holder -> !holder.is(ModTags.Techniques.HIDDEN))
+                                .forEach(holder -> {
+                                    if (holder.value() instanceof Paged paged) {
+                                        Identifier techniqueId = holder.key().identifier();
+                                        for (int index = 0; index < paged.pages().amount(); index++) {
+                                            output.accept(TechniquePageItems.page(techniqueId, holder.value(), index));
+                                        }
+                                    }
+                                });
+                    })
                     .build());
 
     public static void register(IEventBus eventBus) {

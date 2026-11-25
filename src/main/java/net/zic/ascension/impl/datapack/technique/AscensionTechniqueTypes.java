@@ -14,6 +14,10 @@ public class AscensionTechniqueTypes {
             "simple_technique",
             SimpleTechniqueType::new
     );
+    public static final DeferredHolder<TechniqueType,TechniqueType> LOST_TECHNIQUE_TYPE = TECHNIQUE_TYPES.register(
+            "lost_technique",
+            LostTechniqueType::new
+    );
 
 
     public static final DeferredHolder<TechniqueType,TechniqueType> CONNECTED_TECHNIQUE_TYPE = TECHNIQUE_TYPES.register(

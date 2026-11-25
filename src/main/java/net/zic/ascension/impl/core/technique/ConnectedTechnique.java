@@ -1,39 +1,21 @@
 package net.zic.ascension.impl.core.technique;
 
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
-import net.zic.ascension.api.ascension.core.progression.ProgressActionList;
-import net.zic.ascension.api.ascension.core.requirement.RequirementHolder;
 import net.zic.ascension.api.ascension.datapack.technique.TechniqueType;
-import net.zic.ascension.api.tooltip.AscensionItemTooltipDefinition;
 import net.zic.ascension.impl.core.connection.Connected;
 import net.zic.ascension.impl.core.connection.ConnectionRequirements;
 import net.zic.ascension.impl.datapack.technique.AscensionTechniqueTypes;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
 /**
- * A simple technique that can only be learned while its physique and/or bloodline connections are met.
+ * A simple technique that can only be learned while its physique and/or bloodline and/or path connections are met.
+ * Takes everything else from the SimpleTechnique it is built on.
  */
 public class ConnectedTechnique extends SimpleTechnique implements Connected {
     private final ConnectionRequirements connections;
 
-    public ConnectedTechnique(
-            Component name,
-            Component description,
-            ProgressActionList onAddedActions,
-            List<TechniqueRealmStatBonus> realmStatGrowth,
-            Map<Identifier, TechniqueRealmStatRate> statsPerRealm,
-            List<Identifier> cultivationPaths,
-            Optional<Integer> maxRealm,
-            Optional<Integer> maxMinorRealm,
-            Optional<AscensionItemTooltipDefinition> itemTooltip,
-            RequirementHolder requirements,
-            ConnectionRequirements connections
-    ) {
-        super(name, description, onAddedActions, realmStatGrowth, statsPerRealm, cultivationPaths, maxRealm, maxMinorRealm, itemTooltip, requirements);
+    public ConnectedTechnique(SimpleTechnique base, ConnectionRequirements connections) {
+        super(base.getName(null), base.getDescription(null), base.getOnAddedActions(), base.getRealmStatGrowth(),
+                base.getStatsPerRealm(), base.getCultivationPaths(), base.getMaxRealm(), base.getMaxMinorRealm(),
+                base.itemTooltip(), base.requirements());
         this.connections = connections == null ? ConnectionRequirements.EMPTY : connections;
     }
 
