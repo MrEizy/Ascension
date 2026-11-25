@@ -1,10 +1,151 @@
 {
   "values": {
     "#minecraft:is_overworld": {
-      "capacity": 100,
-      "regen_rate": 2,
-      "affinities":{
+      "capacity": 5000,
+      "regen_rate": 10,
+      "affinities": {
         "ascension:elemental/water": 2
+      }
+    },
+    "#minecraft:is_nether": {
+      "capacity": 5000,
+      "regen_rate": 10,
+      "affinities": {
+        "ascension:elemental/fire": 2,
+        "ascension:elemental/yang": 2
+      }
+    },
+    "#minecraft:is_end": {
+      "capacity": 5000,
+      "regen_rate": 10,
+      "affinities": {
+        "ascension:elemental/space": 2,
+        "ascension:elemental/star": 2
+      }
+    },
+    "#ascension:floating_realm": {
+      "capacity": 5000,
+      "regen_rate": 10,
+      "affinities": {
+        "ascension:elemental/wind": 2
+      }
+    },
+    "minecraft:forest": {
+      "capacity": 5000,
+      "regen_rate": 10,
+      "affinities": {
+        "ascension:elemental/wood": 2,
+        "ascension:elemental/life": 2
+      }
+    },
+    "minecraft:birch_forest": {
+      "capacity": 5000,
+      "regen_rate": 10,
+      "affinities": {
+        "ascension:elemental/wood": 2,
+        "ascension:elemental/life": 2
+      }
+    },
+    "minecraft:dark_forest": {
+      "capacity": 5000,
+      "regen_rate": 10,
+      "affinities": {
+        "ascension:elemental/wood": 2,
+        "ascension:elemental/yin": 2
+      }
+    },
+    "minecraft:desert": {
+      "capacity": 5000,
+      "regen_rate": 10,
+      "affinities": {
+        "ascension:elemental/fire": 2,
+        "ascension:elemental/earth": 2
+      }
+    },
+    "minecraft:ocean": {
+      "capacity": 5000,
+      "regen_rate": 10,
+      "affinities": {
+        "ascension:elemental/water": 2
+      }
+    },
+    "minecraft:deep_ocean": {
+      "capacity": 5000,
+      "regen_rate": 10,
+      "affinities": {
+        "ascension:elemental/water": 2
+      }
+    },
+    "minecraft:frozen_ocean": {
+      "capacity": 5000,
+      "regen_rate": 10,
+      "affinities": {
+        "ascension:elemental/water": 2,
+        "ascension:elemental/ice": 2
+      }
+    },
+    "minecraft:snowy_plains": {
+      "capacity": 5000,
+      "regen_rate": 10,
+      "affinities": {
+        "ascension:elemental/ice": 2,
+        "ascension:elemental/yin": 2
+      }
+    },
+    "minecraft:ice_spikes": {
+      "capacity": 5000,
+      "regen_rate": 10,
+      "affinities": {
+        "ascension:elemental/ice": 2,
+        "ascension:elemental/yin": 2
+      }
+    },
+    "minecraft:swamp": {
+      "capacity": 5000,
+      "regen_rate": 10,
+      "affinities": {
+        "ascension:elemental/wood": 2,
+        "ascension:elemental/poison": 2
+      }
+    },
+    "minecraft:mangrove_swamp": {
+      "capacity": 5000,
+      "regen_rate": 10,
+      "affinities": {
+        "ascension:elemental/wood": 2,
+        "ascension:elemental/poison": 2
+      }
+    },
+    "minecraft:stony_peaks": {
+      "capacity": 5000,
+      "regen_rate": 10,
+      "affinities": {
+        "ascension:elemental/earth": 2,
+        "ascension:elemental/wind": 2
+      }
+    },
+    "minecraft:jagged_peaks": {
+      "capacity": 5000,
+      "regen_rate": 10,
+      "affinities": {
+        "ascension:elemental/earth": 2,
+        "ascension:elemental/wind": 2
+      }
+    },
+    "minecraft:basalt_deltas": {
+      "capacity": 5000,
+      "regen_rate": 10,
+      "affinities": {
+        "ascension:elemental/fire": 2,
+        "ascension:elemental/earth": 2
+      }
+    },
+    "minecraft:soul_sand_valley": {
+      "capacity": 5000,
+      "regen_rate": 10,
+      "affinities": {
+        "ascension:elemental/death": 2,
+        "ascension:elemental/yin": 2
       }
     }
   }

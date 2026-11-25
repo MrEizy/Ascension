@@ -49,6 +49,7 @@ import net.zic.ascension.api.ascension.datapack.CodecHelpers;
 import net.zic.ascension.api.ascension.datapack.CodecType;
 import net.zic.ascension.api.ascension.value.HexColorCodec;
 import net.zic.ascension.api.ascension.value.ScaledValue;
+import net.zic.ascension.chunks.atmospheric_qi.ChunkHelper;
 import net.zic.ascension.impl.core.skill.passive.PassiveSkillService;
 import net.zic.ascension.impl.core.control.StaggerService;
 import net.zic.ascension.impl.core.damage.AscensionDamageService;
@@ -476,13 +477,19 @@ public final class SkillActions {
     public record Cultivate(
             Identifier path,
             Optional<Identifier> secondaryPath,
-            ScaledValue rate
+            ScaledValue rate,
+            boolean consumeAtmosphericQi
     ) implements SkillAction {
         public static final MapCodec<Cultivate> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
                 Identifier.CODEC.fieldOf("path").forGetter(Cultivate::path),
                 Identifier.CODEC.optionalFieldOf("secondary_path").forGetter(Cultivate::secondaryPath),
-                ScaledValue.COMPACT_CODEC.fieldOf("rate").forGetter(Cultivate::rate)
+                ScaledValue.COMPACT_CODEC.fieldOf("rate").forGetter(Cultivate::rate),
+                Codec.BOOL.optionalFieldOf("consume_atmospheric_qi", true).forGetter(Cultivate::consumeAtmosphericQi)
         ).apply(instance, Cultivate::new));
+
+        public Cultivate(Identifier path, Optional<Identifier> secondaryPath, ScaledValue rate) {
+            this(path, secondaryPath, rate, true);
+        }
 
         public Cultivate {
             secondaryPath = secondaryPath == null ? Optional.empty() : secondaryPath;
@@ -510,6 +517,19 @@ public final class SkillActions {
             if (!Double.isFinite(resolvedRate) || resolvedRate <= 0.0D) {
                 return;
             }
+            if (consumeAtmosphericQi) {
+                if (!pathInstance.canProgress()) {
+                    // Preserve the existing automatic breakthrough retry without spending more qi
+                    if (pathInstance.canBreakthrough()) {
+                        CultivationUtil.cultivate(context.caster(), context.originSource(), path,
+                                pathInstance, secondaryPath.orElse(path), 0.0D);
+                    }
+                    return;
+                }
+                resolvedRate = ChunkHelper.extractCultivationQi(context.caster(), resolvedRate);
+                if (resolvedRate <= 0.0D) return;
+            }
+            // Springs, affinities and impurities affect conversion efficiency, not ambient qi cost
             resolvedRate *= net.zic.ascension.impl.core.innerworld.InnerWorldSprings.cultivationMultiplier(context.caster());
             CultivationUtil.cultivate(
                     context.caster(),
