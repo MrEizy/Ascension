@@ -1,6 +1,7 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "ascension:item/pills/qi_replenishing_pill"
+    "layer0": "ascension:item/pills/procedural_pill_paper",
+    "layer1": "ascension:item/pills/procedural_pill_overlay"
   }
 }

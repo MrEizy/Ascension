@@ -5,6 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.Mth;
 
 import java.util.List;
+import java.util.Optional;
 
 public record MedicinalEffectDefinition(
         MedicinalReaction.Reagents requirements,
@@ -16,7 +17,8 @@ public record MedicinalEffectDefinition(
         boolean adverse,
         int priority,
         MedicinalEffectAction application,
-        List<String> names
+        List<String> names,
+        Optional<Integer> pillColor
 ) {
     public static final Codec<MedicinalEffectDefinition> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             MedicinalReaction.Reagents.CODEC.optionalFieldOf("requirements", MedicinalReaction.Reagents.EMPTY).forGetter(MedicinalEffectDefinition::requirements),
@@ -28,10 +30,21 @@ public record MedicinalEffectDefinition(
             Codec.BOOL.optionalFieldOf("adverse", false).forGetter(MedicinalEffectDefinition::adverse),
             Codec.INT.optionalFieldOf("priority", 0).forGetter(MedicinalEffectDefinition::priority),
             MedicinalEffectAction.CODEC.fieldOf("application").forGetter(MedicinalEffectDefinition::application),
-            Codec.STRING.listOf().optionalFieldOf("names", List.of()).forGetter(MedicinalEffectDefinition::names)
+            Codec.STRING.listOf().optionalFieldOf("names", List.of()).forGetter(MedicinalEffectDefinition::names),
+            Codec.intRange(0, 0xFFFFFF).optionalFieldOf("pill_color").forGetter(MedicinalEffectDefinition::pillColor)
     ).apply(instance, MedicinalEffectDefinition::new));
 
+    // Preserve the original constructor for callers that do not specify an appearance.
+    public MedicinalEffectDefinition(MedicinalReaction.Reagents requirements, double minimumPurity,
+                                     double maximumInstability, double minimumToxicity, double potencyPerUnit,
+                                     int durationTicks, boolean adverse, int priority,
+                                     MedicinalEffectAction application, List<String> names) {
+        this(requirements, minimumPurity, maximumInstability, minimumToxicity, potencyPerUnit,
+                durationTicks, adverse, priority, application, names, Optional.empty());
+    }
+
     public MedicinalEffectDefinition {
+        pillColor = pillColor == null ? Optional.empty() : pillColor.filter(color -> color >= 0 && color <= 0xFFFFFF);
         requirements = requirements == null ? MedicinalReaction.Reagents.EMPTY : requirements;
         minimumPurity = finiteRange(minimumPurity, 0.0D, 1.0D, 0.0D);
         maximumInstability = finiteRange(maximumInstability, 0.0D, 4096.0D, 4096.0D);

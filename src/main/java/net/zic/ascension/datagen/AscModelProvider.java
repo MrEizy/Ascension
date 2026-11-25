@@ -4,6 +4,7 @@ import com.geckolib.renderer.internal.GeckolibItemSpecialRenderer;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.color.item.Dye;
+import net.minecraft.client.color.item.Constant;
 import net.minecraft.client.data.models.ModelProvider;
 import net.minecraft.client.data.models.MultiVariant;
 import net.minecraft.client.data.models.blockstates.MultiPartGenerator;
@@ -32,6 +33,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DirectionalBlock;
 import net.neoforged.neoforge.client.model.generators.template.ExtendedModelTemplateBuilder;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.client.alchemy.ProceduralPillTint;
 import net.zic.ascension.common.blocks.ModBlocks;
 import net.zic.ascension.common.blocks.crops.herbs.HerbCropBlock;
 import net.zic.ascension.common.blocks.crops.herbs.LilyPadHerbCropBlock;
@@ -142,7 +144,7 @@ public class AscModelProvider extends ModelProvider {
         chakram3dModel(itemModels, ChakramTier.SPIRITUAL_STONE);
 
         // Pills
-        pillItemModel(itemModels, ModItems.PROCEDURAL_PILL.get(), "qi_replenishing_pill");
+        proceduralPillModel(itemModels, ModItems.PROCEDURAL_PILL.get());
         pillItemModel(itemModels, ModItems.PILL_RESIDUE.get(), "pill_residue");
 
         //Key Items
@@ -638,6 +640,17 @@ public class AscModelProvider extends ModelProvider {
                 itemModels.modelOutput);
     }
 
+
+    private void proceduralPillModel(ItemModelGenerators itemModels, Item item) {
+        Identifier model = ModelTemplates.TWO_LAYERED_ITEM.create(
+                ModelLocationUtils.getModelLocation(item),
+                new TextureMapping()
+                        .put(TextureSlot.LAYER0, new Material(AscensionCraft.prefix("item/pills/procedural_pill_paper")))
+                        .put(TextureSlot.LAYER1, new Material(AscensionCraft.prefix("item/pills/procedural_pill_overlay"))),
+                itemModels.modelOutput);
+        itemModels.itemModelOutput.accept(item, ItemModelUtils.tintedModel(model,
+                new Constant(0xFFFFFF), new ProceduralPillTint()));
+    }
 
     private void pillItemModel(ItemModelGenerators itemModels, Item item, String texturePath) {
         Identifier model = ModelTemplates.FLAT_ITEM.create(
