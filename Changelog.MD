@@ -13,6 +13,8 @@
 * Atmospheric Qi affinities to various biomes
 * Cultivation (Weapon excluded) skills drain atmopsheric Qi
 * Raised atmospheric qi count (will be adjusted over future updates)
+* Added A Qi compass to locate chunks with the most available Qi
+* Added an Advanced Qi Compass with a higher range
 
 ### Removed
 * 
