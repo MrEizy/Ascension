@@ -1,29 +1,29 @@
 {
   "values": {
     "minecraft:overworld": {
-      "capacity": 1000,
-      "regen_rate": 2,
+      "capacity": 10000,
+      "regen_rate": 20,
       "affinities": {
         "ascension:foundation/essence": 2
       }
     },
     "minecraft:the_nether": {
-      "capacity": 1000,
-      "regen_rate": 2,
+      "capacity": 10000,
+      "regen_rate": 20,
       "affinities": {
         "ascension:foundation/essence": 2
       }
     },
     "minecraft:the_end": {
-      "capacity": 1000,
-      "regen_rate": 2,
+      "capacity": 10000,
+      "regen_rate": 20,
       "affinities": {
         "ascension:foundation/essence": 2
       }
     },
     "ascension:floating_realm": {
-      "capacity": 1000,
-      "regen_rate": 2,
+      "capacity": 10000,
+      "regen_rate": 20,
       "affinities": {
         "ascension:foundation/essence": 2
       }
