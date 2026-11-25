@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "ascension:item/compass/qi_compass",
+    "layer1": "ascension:item/compass/needle_28"
+  }
+}

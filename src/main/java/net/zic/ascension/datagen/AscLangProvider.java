@@ -117,6 +117,9 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.tablet.drop_mode.on", "On");
         add("ascension.tablet.cycle_mode_info", "Press [V] to cycle drop mode.");
 
+        add("item.ascension.qi_compass", "Qi Compass");
+        add("item.ascension.advanced_qi_compass", "Advanced Qi Compass");
+
 
 
         // Pills and Pill Things

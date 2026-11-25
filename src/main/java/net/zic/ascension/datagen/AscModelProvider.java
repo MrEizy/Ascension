@@ -15,6 +15,8 @@ import net.minecraft.client.renderer.item.ItemModel;
 import net.minecraft.client.renderer.item.RangeSelectItemModel;
 import net.minecraft.client.renderer.item.SpecialModelWrapper;
 import net.minecraft.client.renderer.item.properties.numeric.Count;
+import net.minecraft.client.renderer.item.properties.numeric.CompassAngle;
+import net.minecraft.client.renderer.item.properties.numeric.CompassAngleState;
 import net.minecraft.client.data.models.model.ItemModelUtils;
 import net.minecraft.client.data.models.model.ModelLocationUtils;
 import net.minecraft.client.data.models.model.ModelTemplates;
@@ -63,6 +65,8 @@ public class AscModelProvider extends ModelProvider {
         itemModels.generateFlatItem(ModItems.DESOLATE_BONES.get(), ModelTemplates.FLAT_ITEM);
 
         itemModels.generateFlatItem(ModItems.JADE_BOTTLE.get(), ModelTemplates.FLAT_ITEM);
+        qiCompassModel(itemModels, ModItems.QI_COMPASS.get());
+        qiCompassModel(itemModels, ModItems.ADVANCED_QI_COMPASS.get());
         itemModels.generateFlatItem(ModItems.SPIRITUAL_STONE_UPGRADE_SMITHING_TEMPLATE.get(), ModelTemplates.FLAT_ITEM);
 
 
@@ -281,6 +285,31 @@ public class AscModelProvider extends ModelProvider {
         itemModels.generateFlatItem(ModItems.YOUNG_MASTER_SPAWN_EGG.get(), ModelTemplates.FLAT_ITEM);
     }
 
+
+
+    private void qiCompassModel(ItemModelGenerators itemModels, Item item) {
+        String itemPath = BuiltInRegistries.ITEM.getKey(item).getPath();
+        Material face = new Material(AscensionCraft.prefix("item/compass/" + itemPath));
+        ItemModel.Unbaked[] frames = new ItemModel.Unbaked[32];
+        for (int frame = 0; frame < frames.length; frame++) {
+            String suffix = frame < 10 ? "0" + frame : Integer.toString(frame);
+            Identifier model = ModelTemplates.TWO_LAYERED_ITEM.create(
+                    AscensionCraft.prefix("item/" + itemPath + "_" + suffix),
+                    new TextureMapping().put(TextureSlot.LAYER0, face)
+                            .put(TextureSlot.LAYER1, new Material(AscensionCraft.prefix("item/compass/needle_" + suffix))),
+                    itemModels.modelOutput);
+            frames[frame] = ItemModelUtils.plainModel(model);
+        }
+
+        RangeSelectItemModel.Entry[] entries = new RangeSelectItemModel.Entry[33];
+        entries[0] = ItemModelUtils.override(frames[16], 0.0f);
+        for (int i = 1; i <= 32; i++) {
+            entries[i] = ItemModelUtils.override(frames[(16 + i) % 32], i - 0.5f);
+        }
+        itemModels.itemModelOutput.accept(item, ItemModelUtils.rangeSelect(
+                new CompassAngle(true, CompassAngleState.CompassTarget.LODESTONE),
+                32.0f, frames[16], entries));
+    }
 
     @SuppressWarnings("SameParameterValue")
     private void stackCountItemModel(ItemModelGenerators itemModels, Item item, String fallbackSuffix, StackTier... tiers) {

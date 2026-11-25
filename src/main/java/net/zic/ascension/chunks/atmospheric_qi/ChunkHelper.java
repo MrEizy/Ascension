@@ -11,12 +11,7 @@ public class ChunkHelper {
         return chunkAccess.getData(AscensionAttachments.CHUNK_QI_HANDLER);
     }
 
-    /**
-     * Draws whole units of ambient qi from the caster's currently loaded chunk.
-     * Fractional demand is rounded probabilistically so its long-run cost and
-     * base cultivation gain are unchanged without adding fractional qi storage.
-     * The caller must use the returned amount, not the original requested rate.
-     */
+
     public static int extractCultivationQi(LivingEntity caster, double requested) {
         if (!(caster.level() instanceof ServerLevel level)
                 || !Double.isFinite(requested) || requested <= 0.0D) return 0;
