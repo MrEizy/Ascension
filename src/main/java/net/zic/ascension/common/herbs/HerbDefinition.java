@@ -394,7 +394,9 @@ public final class HerbDefinition {
                 return 0.0D;
             }
 
-            multiplier = Math.min(multiplier, availableFraction.suitability(qi.getRegenRate()));
+            long qiCapacity = qi.getCapacity();
+            double fraction = qiCapacity > 0L ? Math.clamp((double) qi.getQi() / qiCapacity, 0.0D, 1.0D) : 0.0D;
+            multiplier = Math.min(multiplier, availableFraction.suitability(fraction));
             if (multiplier <= 0.0D) {
                 return 0.0D;
             }
