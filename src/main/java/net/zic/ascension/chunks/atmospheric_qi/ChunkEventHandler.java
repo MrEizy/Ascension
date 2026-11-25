@@ -23,8 +23,6 @@ import net.neoforged.neoforge.event.entity.EntityLeaveLevelEvent;
 import net.neoforged.neoforge.event.level.ChunkEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
-import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.core.CoreAttachments;
 
 import net.zic.ascension.api.ascension.core.path.bonus.EntityPathBonusHolder;
@@ -73,7 +71,7 @@ public class ChunkEventHandler {
         if(dimensionConfiguration == null) return;
         Identifier dimensionId = event.getChunk().getLevel().dimension().identifier();
         qiHandler.addCapacityFlatModifier(Modifier.base(dimensionId,dimensionConfiguration.capacity()));
-        qiHandler.addCapacityFlatModifier(Modifier.base(dimensionId,dimensionConfiguration.regenRate()));
+        qiHandler.addRegenFlatModifier(Modifier.base(dimensionId,dimensionConfiguration.regenRate()));
         for(Identifier path : dimensionConfiguration.affinities().keySet()){
             affinityProvider.addFlatModifier(path,Modifier.base(dimensionId,dimensionConfiguration.affinities().getDouble(path)));
         }
@@ -82,7 +80,7 @@ public class ChunkEventHandler {
     @SubscribeEvent
     public static void onServerTick(ServerTickEvent.Pre event) {
 
-        int bucket = event.getServer().getTickCount() % 20;
+        int bucket = Math.floorMod(event.getServer().getTickCount(), 20);
 
         for (ServerLevel level : event.getServer().getAllLevels()){
 
@@ -90,7 +88,7 @@ public class ChunkEventHandler {
             chunks.forEach(chunkHolder -> {
                 LevelChunk chunk = chunkHolder.getTickingChunk();
                 if(chunk == null) return;
-                if(chunk.getPos().hashCode()%20 != bucket) return;
+                if(Math.floorMod(chunk.getPos().hashCode(), 20) != bucket) return;
                 if(!chunk.hasData(AscensionAttachments.CHUNK_QI_HANDLER))return;
                 chunk.getData(AscensionAttachments.CHUNK_QI_HANDLER).regenQi();
 
