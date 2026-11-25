@@ -4,7 +4,7 @@
       "capacity": 100,
       "regen_rate": 2,
       "affinities":{
-        "ascension:water": 2
+        "ascension:elemental/water": 2
       }
     }
   }

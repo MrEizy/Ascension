@@ -50,39 +50,43 @@ public class ChunkEventHandler {
         ChunkQiHandler qiHandler = ChunkHelper.getQiHandler(event.getChunk());
         ChunkPathAffinityProvider affinityProvider = ChunkHelper.getAffinityProvider(event.getChunk());
 
-        ReferenceSet<Holder<Biome>> processed = new ReferenceOpenHashSet<>();
-        for(LevelChunkSection section : chunk.getSections()){
-            section.getBiomes().getAll(biome->{
+        affinityProvider.startProcess("updating_base_affinities");
+        try {
+            ReferenceSet<Holder<Biome>> processed = new ReferenceOpenHashSet<>();
+            for(LevelChunkSection section : chunk.getSections()){
+                section.getBiomes().getAll(biome->{
 
-                BiomeConfiguration configuration = biome.getData(ConfigurationDataMaps.BIOME_CONFIGURATION);
-                if (configuration == null) return;
-                Identifier modifierId = biome.getKey().identifier();
-                if(processed.contains(biome)) return;
+                    BiomeConfiguration configuration = biome.getData(ConfigurationDataMaps.BIOME_CONFIGURATION);
+                    if (configuration == null) return;
+                    Identifier modifierId = biome.getKey().identifier();
+                    if(processed.contains(biome)) return;
 
-                qiHandler.addCapacityFlatModifier(Modifier.base(modifierId,configuration.capacity()));
-                qiHandler.addRegenFlatModifier(Modifier.base(modifierId,configuration.regenRate()));
-                affinityProvider.startProcess("updating_base_affinities");
-                for(Identifier path : configuration.affinities().keySet()){
-                    affinityProvider.addFlatModifier(path,Modifier.base(modifierId,configuration.affinities().getDouble(path)));
-                }
-                processed.add(biome);
-            });
-        }
-        DimensionConfiguration dimensionConfiguration = DimensionConfiguration.getConfiguration(event.getChunk().getLevel());
+                    qiHandler.addCapacityFlatModifier(Modifier.base(modifierId,configuration.capacity()));
+                    qiHandler.addRegenFlatModifier(Modifier.base(modifierId,configuration.regenRate()));
+                    for(Identifier path : configuration.affinities().keySet()){
+                        affinityProvider.addFlatModifier(path,Modifier.base(modifierId,configuration.affinities().getDouble(path)));
+                    }
+                    processed.add(biome);
+                });
+            }
+            DimensionConfiguration dimensionConfiguration = DimensionConfiguration.getConfiguration(event.getChunk().getLevel());
 
-        if(dimensionConfiguration == null) return;
-        Identifier dimensionId = event.getChunk().getLevel().dimension().identifier();
-        qiHandler.addCapacityFlatModifier(Modifier.base(dimensionId,dimensionConfiguration.capacity()));
-        qiHandler.addCapacityFlatModifier(Modifier.base(dimensionId,dimensionConfiguration.regenRate()));
-        for(Identifier path : dimensionConfiguration.affinities().keySet()){
-            affinityProvider.addFlatModifier(path,Modifier.base(dimensionId,dimensionConfiguration.affinities().getDouble(path)));
+            if(dimensionConfiguration == null) return;
+            Identifier dimensionId = event.getChunk().getLevel().dimension().identifier();
+            qiHandler.addCapacityFlatModifier(Modifier.base(dimensionId,dimensionConfiguration.capacity()));
+            qiHandler.addRegenFlatModifier(Modifier.base(dimensionId,dimensionConfiguration.regenRate()));
+            for(Identifier path : dimensionConfiguration.affinities().keySet()){
+                affinityProvider.addFlatModifier(path,Modifier.base(dimensionId,dimensionConfiguration.affinities().getDouble(path)));
+            }
+        } finally {
+            affinityProvider.resolveProcess("updating_base_affinities");
         }
 
     }
     @SubscribeEvent
     public static void onServerTick(ServerTickEvent.Pre event) {
 
-        int bucket = event.getServer().getTickCount() % 20;
+        int bucket = Math.floorMod(event.getServer().getTickCount(), 20);
 
         for (ServerLevel level : event.getServer().getAllLevels()){
 
@@ -90,7 +94,7 @@ public class ChunkEventHandler {
             chunks.forEach(chunkHolder -> {
                 LevelChunk chunk = chunkHolder.getTickingChunk();
                 if(chunk == null) return;
-                if(chunk.getPos().hashCode()%20 != bucket) return;
+                if(Math.floorMod(chunk.getPos().hashCode(), 20) != bucket) return;
                 if(!chunk.hasData(AscensionAttachments.CHUNK_QI_HANDLER))return;
                 chunk.getData(AscensionAttachments.CHUNK_QI_HANDLER).regenQi();
 
