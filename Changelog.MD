@@ -11,6 +11,8 @@
 * Command to remove Bloodline, Technique and Total Rest for players selves
 * Atmospheric Qi to Nether, End, and Floating Realm
 * Atmospheric Qi affinities to various biomes
+* Cultivation (Weapon excluded) skills drain atmopsheric Qi
+* Raised atmospheric qi count (will be adjusted over future updates)
 
 ### Removed
 * 
