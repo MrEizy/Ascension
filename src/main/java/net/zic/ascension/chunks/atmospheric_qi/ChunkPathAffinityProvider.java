@@ -30,7 +30,7 @@ public class ChunkPathAffinityProvider extends Processable implements PathBonusP
         internalEntities.add(entity);
     }
     public void untrackEntity(LivingEntity entity){
-
+        internalEntities.remove(entity);
     }
 
     public void updateEntities(){

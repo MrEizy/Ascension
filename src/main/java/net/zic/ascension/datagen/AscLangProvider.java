@@ -121,6 +121,9 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.tablet.drop_mode.on", "On");
         add("ascension.tablet.cycle_mode_info", "Press [V] to cycle drop mode.");
 
+        add("item.ascension.qi_compass", "Qi Compass");
+        add("item.ascension.advanced_qi_compass", "Advanced Qi Compass");
+
 
 
         // Pills and Pill Things
@@ -1358,6 +1361,10 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.qi_coating.element.pure.name", "Pure Qi");
         add("ascension.qi_coating.element.time.name", "Time");
         add("ascension.qi_coating.element.life.name", "Life");
+
+        // Pill residue damage type
+        add("death.attack.pill_residue", "%1$s discovered why pill residue isn't edible");
+        add("death.attack.pill_residue.player", "%1$s discovered why pill residue isn't edible");
 
         // Qi damage types (data/ascension/damage_type), one per elemental path (plus pure qi)
         add("death.attack.ascension.blood_qi", "%1$s was turned into a husk by blood qi");

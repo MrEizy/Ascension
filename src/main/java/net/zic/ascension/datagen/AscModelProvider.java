@@ -4,6 +4,7 @@ import com.geckolib.renderer.internal.GeckolibItemSpecialRenderer;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.color.item.Dye;
+import net.minecraft.client.color.item.Constant;
 import net.minecraft.client.data.models.ModelProvider;
 import net.minecraft.client.data.models.MultiVariant;
 import net.minecraft.client.data.models.blockstates.MultiPartGenerator;
@@ -15,6 +16,8 @@ import net.minecraft.client.renderer.item.ItemModel;
 import net.minecraft.client.renderer.item.RangeSelectItemModel;
 import net.minecraft.client.renderer.item.SpecialModelWrapper;
 import net.minecraft.client.renderer.item.properties.numeric.Count;
+import net.minecraft.client.renderer.item.properties.numeric.CompassAngle;
+import net.minecraft.client.renderer.item.properties.numeric.CompassAngleState;
 import net.minecraft.client.data.models.model.ItemModelUtils;
 import net.minecraft.client.data.models.model.ModelLocationUtils;
 import net.minecraft.client.data.models.model.ModelTemplates;
@@ -30,6 +33,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DirectionalBlock;
 import net.neoforged.neoforge.client.model.generators.template.ExtendedModelTemplateBuilder;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.client.alchemy.ProceduralPillTint;
 import net.zic.ascension.common.blocks.ModBlocks;
 import net.zic.ascension.common.blocks.crops.herbs.HerbCropBlock;
 import net.zic.ascension.common.blocks.crops.herbs.LilyPadHerbCropBlock;
@@ -63,6 +67,8 @@ public class AscModelProvider extends ModelProvider {
         itemModels.generateFlatItem(ModItems.DESOLATE_BONES.get(), ModelTemplates.FLAT_ITEM);
 
         itemModels.generateFlatItem(ModItems.JADE_BOTTLE.get(), ModelTemplates.FLAT_ITEM);
+        qiCompassModel(itemModels, ModItems.QI_COMPASS.get());
+        qiCompassModel(itemModels, ModItems.ADVANCED_QI_COMPASS.get());
         itemModels.generateFlatItem(ModItems.SPIRITUAL_STONE_UPGRADE_SMITHING_TEMPLATE.get(), ModelTemplates.FLAT_ITEM);
 
 
@@ -138,7 +144,7 @@ public class AscModelProvider extends ModelProvider {
         chakram3dModel(itemModels, ChakramTier.SPIRITUAL_STONE);
 
         // Pills
-        pillItemModel(itemModels, ModItems.PROCEDURAL_PILL.get(), "qi_replenishing_pill");
+        proceduralPillModel(itemModels, ModItems.PROCEDURAL_PILL.get());
         pillItemModel(itemModels, ModItems.PILL_RESIDUE.get(), "pill_residue");
 
         //Key Items
@@ -284,6 +290,31 @@ public class AscModelProvider extends ModelProvider {
         itemModels.generateFlatItem(ModItems.YOUNG_MASTER_SPAWN_EGG.get(), ModelTemplates.FLAT_ITEM);
     }
 
+
+
+    private void qiCompassModel(ItemModelGenerators itemModels, Item item) {
+        String itemPath = BuiltInRegistries.ITEM.getKey(item).getPath();
+        Material face = new Material(AscensionCraft.prefix("item/compass/" + itemPath));
+        ItemModel.Unbaked[] frames = new ItemModel.Unbaked[32];
+        for (int frame = 0; frame < frames.length; frame++) {
+            String suffix = frame < 10 ? "0" + frame : Integer.toString(frame);
+            Identifier model = ModelTemplates.TWO_LAYERED_ITEM.create(
+                    AscensionCraft.prefix("item/" + itemPath + "_" + suffix),
+                    new TextureMapping().put(TextureSlot.LAYER0, face)
+                            .put(TextureSlot.LAYER1, new Material(AscensionCraft.prefix("item/compass/needle_" + suffix))),
+                    itemModels.modelOutput);
+            frames[frame] = ItemModelUtils.plainModel(model);
+        }
+
+        RangeSelectItemModel.Entry[] entries = new RangeSelectItemModel.Entry[33];
+        entries[0] = ItemModelUtils.override(frames[16], 0.0f);
+        for (int i = 1; i <= 32; i++) {
+            entries[i] = ItemModelUtils.override(frames[(16 + i) % 32], i - 0.5f);
+        }
+        itemModels.itemModelOutput.accept(item, ItemModelUtils.rangeSelect(
+                new CompassAngle(true, CompassAngleState.CompassTarget.LODESTONE),
+                32.0f, frames[16], entries));
+    }
 
     @SuppressWarnings("SameParameterValue")
     private void stackCountItemModel(ItemModelGenerators itemModels, Item item, String fallbackSuffix, StackTier... tiers) {
@@ -612,6 +643,17 @@ public class AscModelProvider extends ModelProvider {
                 itemModels.modelOutput);
     }
 
+
+    private void proceduralPillModel(ItemModelGenerators itemModels, Item item) {
+        Identifier model = ModelTemplates.TWO_LAYERED_ITEM.create(
+                ModelLocationUtils.getModelLocation(item),
+                new TextureMapping()
+                        .put(TextureSlot.LAYER0, new Material(AscensionCraft.prefix("item/pills/procedural_pill_paper")))
+                        .put(TextureSlot.LAYER1, new Material(AscensionCraft.prefix("item/pills/procedural_pill_overlay"))),
+                itemModels.modelOutput);
+        itemModels.itemModelOutput.accept(item, ItemModelUtils.tintedModel(model,
+                new Constant(0xFFFFFF), new ProceduralPillTint()));
+    }
 
     private void pillItemModel(ItemModelGenerators itemModels, Item item, String texturePath) {
         Identifier model = ModelTemplates.FLAT_ITEM.create(

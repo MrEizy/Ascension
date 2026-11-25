@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": "ascension:jade_block",
+    "C": "minecraft:compass",
+    "J": "ascension:jade"
+  },
+  "pattern": [
+    " B ",
+    "JCJ",
+    " B "
+  ],
+  "result": {
+    "id": "ascension:qi_compass"
+  }
+}

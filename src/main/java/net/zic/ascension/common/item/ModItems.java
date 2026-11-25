@@ -12,6 +12,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.common.entities.AscEntities;
 import net.zic.ascension.common.fluids.AscFluids;
+import net.zic.ascension.common.item.artifacts.QiCompassItem;
 import net.zic.ascension.common.item.artifacts.consumable.TabletOfDestructionAscendant;
 import net.zic.ascension.common.item.artifacts.consumable.TabletOfDestructionEarth;
 import net.zic.ascension.common.item.artifacts.consumable.TabletOfDestructionHeaven;
@@ -19,6 +20,7 @@ import net.zic.ascension.common.blocks.ModBlocks;
 import net.zic.ascension.common.herbs.ModHerbs;
 import net.zic.ascension.common.item.artifacts.consumable.TabletOfDestructionHuman;
 import net.zic.ascension.common.item.artifacts.pills.JadeBottleItem;
+import net.zic.ascension.common.item.artifacts.pills.PillResidueItem;
 import net.zic.ascension.common.item.artifacts.pills.ProceduralPillItem;
 import net.zic.ascension.common.item.herbs.HerbItem;
 import net.zic.ascension.common.item.qi_holder.SpiritStone;
@@ -81,6 +83,11 @@ public class ModItems {
 
     public static final DeferredItem<Item> DESOLATE_BONES = ITEMS.registerItem("desolate_bones",
             properties -> new Item(properties.rarity(Rarity.EPIC)));
+
+    public static final DeferredItem<Item> QI_COMPASS = ITEMS.registerItem("qi_compass",
+            properties -> new QiCompassItem(properties, QiCompassItem.BASIC_RADIUS));
+    public static final DeferredItem<Item> ADVANCED_QI_COMPASS = ITEMS.registerItem("advanced_qi_compass",
+            properties -> new QiCompassItem(properties.rarity(Rarity.UNCOMMON), QiCompassItem.ADVANCED_RADIUS));
 
     //Spirit Stone stuff
 
@@ -292,7 +299,7 @@ public class ModItems {
     // Pills
     public static final DeferredItem<Item> PROCEDURAL_PILL = ITEMS.registerItem("procedural_pill",
             properties -> new ProceduralPillItem(properties.stacksTo(16)));
-    public static final DeferredItem<Item> PILL_RESIDUE = ITEMS.registerSimpleItem("pill_residue");
+    public static final DeferredItem<Item> PILL_RESIDUE = ITEMS.registerItem("pill_residue", PillResidueItem::new);
 
 
 

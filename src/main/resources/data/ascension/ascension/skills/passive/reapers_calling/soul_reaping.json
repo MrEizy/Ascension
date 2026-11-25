@@ -14,12 +14,14 @@
       "actions": [
         {
           "type": "ascension:cultivate",
+          "consume_atmospheric_qi": false,
           "path": "ascension:foundation/soul",
           "secondary_path": "ascension:elemental/death",
           "rate": 100.0
         },
         {
           "type": "ascension:cultivate",
+          "consume_atmospheric_qi": false,
           "path": "ascension:elemental/death",
           "rate": 40.0
         }
