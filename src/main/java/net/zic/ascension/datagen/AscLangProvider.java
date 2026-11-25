@@ -1331,6 +1331,10 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.qi_coating.element.time.name", "Time");
         add("ascension.qi_coating.element.life.name", "Life");
 
+        // Pill residue damage type
+        add("death.attack.pill_residue", "%1$s discovered why pill residue isn't edible");
+        add("death.attack.pill_residue.player", "%1$s discovered why pill residue isn't edible");
+
         // Qi damage types (data/ascension/damage_type), one per elemental path (plus pure qi)
         add("death.attack.ascension.blood_qi", "%1$s was turned into a husk by blood qi");
         add("death.attack.ascension.blood_qi.player", "%1$s was turned into a husk by %2$s's blood qi");

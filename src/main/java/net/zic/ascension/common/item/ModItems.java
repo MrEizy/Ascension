@@ -20,6 +20,7 @@ import net.zic.ascension.common.blocks.ModBlocks;
 import net.zic.ascension.common.herbs.ModHerbs;
 import net.zic.ascension.common.item.artifacts.consumable.TabletOfDestructionHuman;
 import net.zic.ascension.common.item.artifacts.pills.JadeBottleItem;
+import net.zic.ascension.common.item.artifacts.pills.PillResidueItem;
 import net.zic.ascension.common.item.artifacts.pills.ProceduralPillItem;
 import net.zic.ascension.common.item.herbs.HerbItem;
 import net.zic.ascension.common.item.qi_holder.SpiritStone;
@@ -292,7 +293,7 @@ public class ModItems {
     // Pills
     public static final DeferredItem<Item> PROCEDURAL_PILL = ITEMS.registerItem("procedural_pill",
             properties -> new ProceduralPillItem(properties.stacksTo(16)));
-    public static final DeferredItem<Item> PILL_RESIDUE = ITEMS.registerSimpleItem("pill_residue");
+    public static final DeferredItem<Item> PILL_RESIDUE = ITEMS.registerItem("pill_residue", PillResidueItem::new);
 
 
 
