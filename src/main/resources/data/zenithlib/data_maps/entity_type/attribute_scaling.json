@@ -5,8 +5,8 @@
         "ascension:vitality": {
           "multiplier": [
             {
-              "id": "ascension:base_scaling",
-              "value": 2
+              "id": "ascension:vitality_max_health_scaling",
+              "value": -1
             }
           ]
         }
@@ -25,44 +25,28 @@
         "ascension:strength": {
           "multiplier": [
             {
-              "id": "ascension:strength_jump_scaling",
-              "value": -0.995
+              "id": "ascension:strength_jump_strength_scaling",
+              "value": -1
             }
           ]
         }
       },
       "minecraft:movement_speed": {
-        "ascension:strength": {
-          "multiplier": [
-            {
-              "id": "ascension:strength_movement_scaling",
-              "value": -0.99995
-            }
-          ]
-        },
         "ascension:agility": {
           "multiplier": [
             {
-              "id": "ascension:agility_movement_scaling",
-              "value": -0.998
+              "id": "ascension:agility_movement_speed_scaling",
+              "value": -1
             }
           ]
         }
       },
       "minecraft:attack_speed": {
-        "ascension:strength": {
-          "multiplier": [
-            {
-              "id": "ascension:strength_attack_speed_scaling",
-              "value": -0.999
-            }
-          ]
-        },
         "ascension:agility": {
           "multiplier": [
             {
               "id": "ascension:agility_attack_speed_scaling",
-              "value": -0.999
+              "value": -1
             }
           ]
         }
@@ -71,8 +55,16 @@
         "ascension:strength": {
           "multiplier": [
             {
-              "id": "ascension:strength_mining_scaling",
-              "value": -0.999
+              "id": "ascension:strength_mining_efficiency_scaling",
+              "value": -1
+            }
+          ]
+        },
+        "ascension:agility": {
+          "multiplier": [
+            {
+              "id": "ascension:agility_mining_efficiency_scaling",
+              "value": -1
             }
           ]
         }
@@ -92,26 +84,34 @@
           "multiplier": [
             {
               "id": "ascension:agility_step_height_scaling",
-              "value": -0.95
+              "value": -1
             }
           ]
         }
       },
       "ascension:max_stamina": {
+        "ascension:vitality": {
+          "multiplier": [
+            {
+              "id": "ascension:vitality_max_stamina_scaling",
+              "value": 1
+            }
+          ]
+        },
         "ascension:strength": {
           "multiplier": [
             {
               "id": "ascension:strength_max_stamina_scaling",
-              "value": 1.0
+              "value": -0.5
             }
           ]
         }
       },
       "ascension:stamina_regen_rate": {
-        "ascension:agility": {
+        "ascension:vitality": {
           "multiplier": [
             {
-              "id": "ascension:agility_stamina_regen_scaling",
+              "id": "ascension:vitality_stamina_regen_rate_scaling",
               "value": -0.8
             }
           ]
@@ -136,6 +136,24 @@
             }
           ]
         }
+      },
+      "minecraft:armor": {
+        "ascension:vitality": {
+          "multiplier": [
+            {
+              "id": "ascension:vitality_armor_scaling",
+              "value": -0.94
+            }
+          ]
+        },
+        "ascension:strength": {
+          "multiplier": [
+            {
+              "id": "ascension:strength_armor_scaling",
+              "value": -0.98
+            }
+          ]
+        }
       }
     },
     "#ascension:stat_scaling/mobs": {
@@ -143,8 +161,8 @@
         "ascension:vitality": {
           "multiplier": [
             {
-              "id": "ascension:mob_base_scaling",
-              "value": 2
+              "id": "ascension:mob_vitality_max_health_scaling",
+              "value": -1
             }
           ]
         }
@@ -163,8 +181,8 @@
         "ascension:agility": {
           "multiplier": [
             {
-              "id": "ascension:mob_agility_movement_scaling",
-              "value": -0.998
+              "id": "ascension:mob_agility_movement_speed_scaling",
+              "value": -1
             }
           ]
         }
@@ -185,6 +203,24 @@
             {
               "id": "ascension:mob_spirit_qi_regen_scaling",
               "value": -0.75
+            }
+          ]
+        }
+      },
+      "minecraft:armor": {
+        "ascension:vitality": {
+          "multiplier": [
+            {
+              "id": "ascension:mob_vitality_armor_scaling",
+              "value": -0.94
+            }
+          ]
+        },
+        "ascension:strength": {
+          "multiplier": [
+            {
+              "id": "ascension:mob_strength_armor_scaling",
+              "value": -0.98
             }
           ]
         }

@@ -7,6 +7,7 @@
     "accessor.ServerGamePacketListenerImplAccessor",
     "block.IceBlockQiCoatingMixin",
     "combat.LivingEntityBarrierHurtMixin",
+    "combat.LivingEntityExtendedArmorMixin",
     "concealment.ServerPlayerDeathMessageMixin",
     "resource.FoodDataRegenerationExhaustionMixin",
     "resource.PlayerAttackExhaustionMixin",
