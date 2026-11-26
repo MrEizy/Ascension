@@ -1,8 +1,5 @@
 package net.zic.ascension.common.gui.elements.skill_casting;
 
-import net.lucent.easygui.gui.RenderableElement;
-import net.lucent.easygui.gui.UIFrame;
-import net.lucent.easygui.gui.layout.positioning.rules.PositioningRules;
 import net.lucent.easygui.gui.textures.ITextureData;
 import net.lucent.easygui.gui.textures.TextureData;
 import net.minecraft.client.Minecraft;
@@ -14,9 +11,11 @@ import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.skill.Skill;
 import net.zic.ascension.common.gui.data.ClientAscensionData;
 
-public class SkillHotBarContainer extends RenderableElement {
+import java.util.ArrayList;
+import java.util.List;
+
+public class SkillHotBarContainer {
     private static final int WIDTH = 260;
-    private static final int HEIGHT = 240;
     private static final int WHEEL_LEFT = 34;
     private static final int WHEEL_TOP = 14;
     private static final float WHEEL_SCALE = 3.0F;
@@ -32,18 +31,11 @@ public class SkillHotBarContainer extends RenderableElement {
             64
     );
 
+    private final List<SkillSegment> segments = new ArrayList<>();
     private int selectedSlot;
     private int maxSlots = 6;
 
-    public SkillHotBarContainer(UIFrame frame) {
-        super(frame);
-        setWidth(WIDTH);
-        setHeight(HEIGHT);
-
-        getPositioning().setPositioningRule(PositioningRules.CENTER);
-        getPositioning().setX(-WIDTH / 2);
-        getPositioning().setY(-110);
-
+    public SkillHotBarContainer() {
         ClientAscensionData.getSkillCastHandler().ifPresent(handler -> {
             maxSlots = Math.max(1, handler.getMaxSlots());
             selectedSlot = handler.getSelectedSlot();
@@ -84,19 +76,21 @@ public class SkillHotBarContainer extends RenderableElement {
     }
 
     private void rebuildSegments() {
-        removeChildren();
+        segments.clear();
         for (int slot = 0; slot < maxSlots; slot++) {
-            SkillSegment segment = new SkillSegment(getUiFrame(), this, slot);
-            segment.getPositioning().setX(WHEEL_LEFT);
-            segment.getPositioning().setY(WHEEL_TOP);
-            addChild(segment);
+            segments.add(new SkillSegment(this, slot));
         }
     }
 
-    @Override
-    public void render(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+    public void render(GuiGraphicsExtractor graphics) {
         renderWheelBackground(graphics);
         renderSelectedSkillName(graphics);
+        graphics.pose().pushMatrix();
+        graphics.pose().translate(WHEEL_LEFT, WHEEL_TOP);
+        for (SkillSegment segment : segments) {
+            segment.render(graphics);
+        }
+        graphics.pose().popMatrix();
     }
 
     private void renderWheelBackground(GuiGraphicsExtractor graphics) {

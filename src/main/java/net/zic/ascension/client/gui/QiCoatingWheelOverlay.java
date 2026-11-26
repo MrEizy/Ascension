@@ -1,6 +1,5 @@
 package net.zic.ascension.client.gui;
 
-import net.lucent.easygui.gui.UIFrame;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -25,9 +24,6 @@ import java.util.Optional;
  * a switch (old coating shrinking away, new one growing in) from firing for every element the mouse passes over.
  */
 public final class QiCoatingWheelOverlay {
-    private static final double DEAD_ZONE = 12.0D;
-
-    private static UIFrame frame;
     private static QiCoatingWheelContainer container;
     private static boolean open;
     private static QiCoatingChannel channel;
@@ -69,8 +65,8 @@ public final class QiCoatingWheelOverlay {
         if (!open) {
             return;
         }
-        ensureFrame();
-        frame.run(graphics, getMouseX(), getMouseY(), partialTick);
+        ensureContainer();
+        RadialWheelLayout.render(graphics, container::render);
     }
 
     private static Optional<QiCoatingChannel> selectedChannel() {
@@ -85,7 +81,7 @@ public final class QiCoatingWheelOverlay {
 
     private static void open(QiCoatingChannel openedChannel) {
         Minecraft minecraft = Minecraft.getInstance();
-        ensureFrame();
+        ensureContainer();
         open = true;
         channel = openedChannel;
         ClientLevel level = minecraft.level;
@@ -124,14 +120,10 @@ public final class QiCoatingWheelOverlay {
         return definition == null ? Component.literal(element.getPath()) : definition.name();
     }
 
-    private static void ensureFrame() {
-        if (frame != null) {
-            return;
+    private static void ensureContainer() {
+        if (container == null) {
+            container = new QiCoatingWheelContainer();
         }
-        frame = new UIFrame();
-        frame.setPauseGame(false);
-        container = new QiCoatingWheelContainer(frame);
-        frame.setRoot(container);
     }
 
     private static void updateHover() {
@@ -139,26 +131,11 @@ public final class QiCoatingWheelOverlay {
             return;
         }
         Minecraft minecraft = Minecraft.getInstance();
-        double centerX = minecraft.getWindow().getGuiScaledWidth() / 2.0D;
-        double centerY = minecraft.getWindow().getGuiScaledHeight() / 2.0D;
-        double dx = getMouseX() - centerX;
-        double dy = getMouseY() - centerY;
-        if (dx * dx + dy * dy < DEAD_ZONE * DEAD_ZONE) {
+        int selected = RadialWheelLayout.selectedSlot(minecraft, elements.size());
+        if (selected < 0) {
             return;
         }
-        double segmentDegrees = 360.0D / elements.size();
-        double clockwiseFromTop = (Math.toDegrees(Math.atan2(dy, dx)) + 90.0D + 360.0D) % 360.0D;
-        hovered = (int) Math.floor((clockwiseFromTop + segmentDegrees / 2.0D) / segmentDegrees) % elements.size();
+        hovered = selected;
         container.setHovered(hovered);
-    }
-
-    private static int getMouseX() {
-        Minecraft minecraft = Minecraft.getInstance();
-        return (int) Math.round(minecraft.mouseHandler.xpos() / minecraft.getWindow().getGuiScale());
-    }
-
-    private static int getMouseY() {
-        Minecraft minecraft = Minecraft.getInstance();
-        return (int) Math.round(minecraft.mouseHandler.ypos() / minecraft.getWindow().getGuiScale());
     }
 }

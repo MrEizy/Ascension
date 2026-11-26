@@ -1,6 +1,5 @@
 package net.zic.ascension.client.gui;
 
-import net.lucent.easygui.gui.UIFrame;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
@@ -10,9 +9,6 @@ import net.zic.ascension.common.gui.elements.skill_casting.SkillHotBarContainer;
 import net.zic.ascension.network.SelectSkillSlotPacket;
 
 public final class SkillWheelOverlay {
-    private static final double DEAD_ZONE = 12.0D;
-
-    private static UIFrame frame;
     private static SkillHotBarContainer container;
     private static boolean open;
 
@@ -49,13 +45,13 @@ public final class SkillWheelOverlay {
             return;
         }
 
-        ensureFrame();
+        ensureContainer();
         container.refreshFromHandler();
-        frame.run(graphics, getMouseX(), getMouseY(), partialTick);
+        RadialWheelLayout.render(graphics, container::render);
     }
 
     private static void open() {
-        ensureFrame();
+        ensureContainer();
         open = true;
         container.refreshFromHandler();
         container.syncSelectionFromHandler();
@@ -70,15 +66,10 @@ public final class SkillWheelOverlay {
         }
     }
 
-    private static void ensureFrame() {
-        if (frame != null) {
-            return;
+    private static void ensureContainer() {
+        if (container == null) {
+            container = new SkillHotBarContainer();
         }
-
-        frame = new UIFrame();
-        frame.setPauseGame(false);
-        container = new SkillHotBarContainer(frame);
-        frame.setRoot(container);
     }
 
     private static void updateSelection() {
@@ -93,19 +84,11 @@ public final class SkillWheelOverlay {
                 return;
             }
 
-            double centerX = minecraft.getWindow().getGuiScaledWidth() / 2.0D;
-            double centerY = minecraft.getWindow().getGuiScaledHeight() / 2.0D;
-            double dx = getMouseX() - centerX;
-            double dy = getMouseY() - centerY;
-
-            if (dx * dx + dy * dy < DEAD_ZONE * DEAD_ZONE) {
+            int selected = RadialWheelLayout.selectedSlot(minecraft, maxSlots);
+            if (selected < 0) {
                 container.setSelectedSlot(handler.getSelectedSlot());
                 return;
             }
-
-            double segmentDegrees = 360.0D / maxSlots;
-            double clockwiseFromTop = (Math.toDegrees(Math.atan2(dy, dx)) + 90.0D + 360.0D) % 360.0D;
-            int selected = (int) Math.floor((clockwiseFromTop + segmentDegrees / 2.0D) / segmentDegrees) % maxSlots;
 
             if (selected == container.getSelectedSlot()) {
                 return;
@@ -116,15 +99,5 @@ public final class SkillWheelOverlay {
             handler.select(selected);
             ClientPacketDistributor.sendToServer(new SelectSkillSlotPacket(selected));
         });
-    }
-
-    private static int getMouseX() {
-        Minecraft minecraft = Minecraft.getInstance();
-        return (int) Math.round(minecraft.mouseHandler.xpos() / minecraft.getWindow().getGuiScale());
-    }
-
-    private static int getMouseY() {
-        Minecraft minecraft = Minecraft.getInstance();
-        return (int) Math.round(minecraft.mouseHandler.ypos() / minecraft.getWindow().getGuiScale());
     }
 }
