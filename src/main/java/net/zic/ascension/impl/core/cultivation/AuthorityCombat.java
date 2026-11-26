@@ -37,9 +37,15 @@ public final class AuthorityCombat {
         var channels = AuthorityCombatMath.channels(classifications, path, damageType, skill);
 
         final double ratio;
+        final double[] offense;
+        final double[] rawDefense;
+        final double[] defense;
         try {
-            ratio = AuthorityCombatMath.ratio(channels, values(CultivationAuthority.read(attacker)),
-                    values(CultivationAuthority.read(event.getEntity())));
+            offense = CultivationAuthority.read(attacker).offensiveAuthorities();
+            var defender = CultivationAuthority.read(event.getEntity());
+            rawDefense = defender.offensiveAuthorities();
+            defense = defender.defensiveAuthorities();
+            ratio = AuthorityCombatMath.ratio(channels, offense, defense);
             if (!Double.isFinite(event.getDamage() * ratio)) {
                 throw new IllegalArgumentException("Authority-scaled damage overflows double");
             }
@@ -49,6 +55,15 @@ public final class AuthorityCombat {
             }
             return;
         }
+        if (trace.enabled()) {
+            for (var channel : channels) {
+                int index = channel.ordinal();
+                trace.value("Attacker " + channel, offense[index]);
+                trace.value("Defender " + channel + " (raw)", rawDefense[index]);
+                trace.value("Defender " + channel + " (effective)", defense[index]);
+            }
+            trace.value("Authority ratio " + channels, ratio);
+        }
         if (ratio == 1.0D) return;
 
         int count = AuthorityCombatMath.factorCount(ratio);
@@ -57,10 +72,5 @@ public final class AuthorityCombat {
             Identifier id = AscensionCraft.prefix("damage_authority_" + i);
             event.addMultiplierModifier(Modifier.multiplier(id, id, operationGroup, factor - 1.0D));
         }
-        trace.value("Authority ratio " + channels, ratio);
-    }
-
-    private static double[] values(CultivationAuthority.Snapshot snapshot) {
-        return new double[]{snapshot.body(), snapshot.essence(), snapshot.soul()};
     }
 }

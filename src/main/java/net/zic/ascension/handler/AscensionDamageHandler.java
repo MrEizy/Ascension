@@ -124,6 +124,11 @@ public final class AscensionDamageHandler {
         trace.finish(event);
     }
 
+    @SubscribeEvent
+    public static void onRPGEngineDamagePost(RPGEngineEntityDamagedEvent.Post event) {
+        DamageTrace.post(event);
+    }
+
     private static void applyProfile(RPGEngineEntityDamagedEvent.Pre event, DamageTrace trace) {
         if (!(event.getSource().getDamageTypeHolder(AscensionDamageTypeHolders.PROFILE)
                 instanceof AscensionDamageProfile profile)

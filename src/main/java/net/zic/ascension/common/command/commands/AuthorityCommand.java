@@ -31,6 +31,10 @@ public final class AuthorityCommand {
             context.getSource().sendSuccess(() -> Component.literal(String.format(Locale.ROOT,
                     "Authority of %s: Body %.6g | Essence %.6g | Soul %.6g",
                     entity.getName().getString(), authority.body(), authority.essence(), authority.soul())), false);
+            double[] defense = authority.defensiveAuthorities();
+            context.getSource().sendSuccess(() -> Component.literal(String.format(Locale.ROOT,
+                    "Effective defence: Body %.6g | Essence %.6g | Soul %.6g (floor %.1f%%)",
+                    defense[0], defense[1], defense[2], authority.existentialProtection() * 100.0D)), false);
             return Command.SINGLE_SUCCESS;
         } catch (IllegalArgumentException | IllegalStateException exception) {
             context.getSource().sendFailure(Component.literal(exception.getMessage()));

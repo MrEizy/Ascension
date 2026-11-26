@@ -2,12 +2,22 @@ package net.zic.ascension.api.ascension.core.cultivation;
 
 import java.util.List;
 
-public record AuthorityCurve(List<Double> multipliers, double mortalAuthority, double terminalGrowth) {
+public record AuthorityCurve(List<Double> multipliers, double mortalAuthority, double terminalGrowth,
+                             double existentialProtection) {
+    public static final double DEFAULT_EXISTENTIAL_PROTECTION = 0.25D;
+
+    public AuthorityCurve(List<Double> multipliers, double mortalAuthority, double terminalGrowth) {
+        this(multipliers, mortalAuthority, terminalGrowth, DEFAULT_EXISTENTIAL_PROTECTION);
+    }
+
     public AuthorityCurve {
         multipliers = List.copyOf(multipliers);
         if (multipliers.isEmpty() || !Double.isFinite(mortalAuthority) || mortalAuthority <= 0.0D
                 || !Double.isFinite(terminalGrowth) || terminalGrowth <= 1.0D) {
             throw new IllegalArgumentException("Authority requires positive mortal authority, major anchors and terminal growth > 1");
+        }
+        if (!Double.isFinite(existentialProtection) || existentialProtection < 0.0D || existentialProtection > 1.0D) {
+            throw new IllegalArgumentException("Existential protection must be between 0 and 1");
         }
         double previous = mortalAuthority;
         for (double anchor : multipliers) {

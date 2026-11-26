@@ -6,6 +6,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreDataSources;
 import net.zic.ascension.api.ascension.core.cultivation.AuthorityCurve;
+import net.zic.ascension.api.ascension.core.cultivation.AuthorityCombatMath;
 import net.zic.ascension.api.ascension.core.path.PathHolder;
 import net.zic.ascension.api.ascension.core.path.PathInstance;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
@@ -19,7 +20,19 @@ public final class CultivationAuthority {
 
     private CultivationAuthority() {}
 
-    public record Snapshot(double body, double essence, double soul) {}
+    public record Snapshot(double body, double essence, double soul, double existentialProtection) {
+        public Snapshot(double body, double essence, double soul) {
+            this(body, essence, soul, AuthorityCurve.DEFAULT_EXISTENTIAL_PROTECTION);
+        }
+
+        public double[] offensiveAuthorities() {
+            return new double[]{body, essence, soul};
+        }
+
+        public double[] defensiveAuthorities() {
+            return AuthorityCombatMath.defensiveAuthorities(offensiveAuthorities(), existentialProtection);
+        }
+    }
 
     public static Snapshot read(LivingEntity entity) {
         Registry<AuthorityCurve> registry = entity.registryAccess()
@@ -30,7 +43,8 @@ public final class CultivationAuthority {
         }
         PathHolder holder = AscensionOriginSourceHelper.getEntitySource(entity)
                 .getDataSource(CoreDataSources.PATH_DATA_SOURCE.get());
-        return new Snapshot(read(holder, BODY, curve), read(holder, ESSENCE, curve), read(holder, SOUL, curve));
+        return new Snapshot(read(holder, BODY, curve), read(holder, ESSENCE, curve), read(holder, SOUL, curve),
+                curve.existentialProtection());
     }
 
     private static double read(PathHolder holder, Identifier id, AuthorityCurve curve) {

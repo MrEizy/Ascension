@@ -27,6 +27,24 @@ public final class AuthorityCombatMath {
         return EnumSet.of(Channel.BODY);
     }
 
+    public static double[] defensiveAuthorities(double[] authority, double protection) {
+        if (authority.length != Channel.values().length || !Double.isFinite(protection)
+                || protection < 0.0D || protection > 1.0D) {
+            throw new IllegalArgumentException("Invalid existential protection or foundation values");
+        }
+        double highest = 0.0D;
+        for (double value : authority) {
+            if (!Double.isFinite(value) || value <= 0.0D) {
+                throw new IllegalArgumentException("Combat authority must be positive and finite");
+            }
+            highest = Math.max(highest, value);
+        }
+        double floor = highest * protection;
+        double[] result = authority.clone();
+        for (int i = 0; i < result.length; i++) result[i] = Math.max(result[i], floor);
+        return result;
+    }
+
     public static double ratio(Set<Channel> channels, double[] attacker, double[] defender) {
         if (channels.isEmpty() || attacker.length != 3 || defender.length != 3) {
             throw new IllegalArgumentException("Authority combat needs channels and three foundation values");

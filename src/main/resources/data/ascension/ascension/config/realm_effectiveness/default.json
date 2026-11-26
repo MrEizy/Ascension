@@ -1,6 +1,7 @@
 {
   "mortal_authority": 0.1,
   "terminal_growth": 2.0,
+  "existential_protection": 0.25,
   "multipliers": [
     1.0,
     2.0,
