@@ -1166,8 +1166,8 @@ public class AscLangProvider extends LanguageProvider {
         //Technique Items
         add("ascension.technique.page_number", "Page %s");
         add("ascension.technique.technique_page", "Technique Page");
-        add("ascension.technique.technique_binder", "Technique Binder");
-        add("ascension.technique.technique_page.named", "%s: %s");
+        add("item.ascension.technique_binder", "Technique Binder");
+        add("item.ascension.technique_page.named", "%s: %s");
         add("ascension.binder.empty", "Empty. Hold it in your off hand and use a technique page.");
         add("ascension.binder.technique", "Technique: %s");
         add("ascension.binder.progress", "Pages: %s / %s");

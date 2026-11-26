@@ -9,12 +9,12 @@
 ### Added
 * Command to remove Bloodline, Technique and Total Reset for admins
 * Command to remove Bloodline, Technique and Total Rest for players selves
-* Atmospheric Qi to Nether, End, and Floating Realm
-* Atmospheric Qi affinities to various biomes
-* Cultivation (Weapon excluded) skills drain atmopsheric Qi
-* Raised atmospheric qi count (will be adjusted over future updates)
-* Added A Qi compass to locate chunks with the most available Qi
-* Added an Advanced Qi Compass with a higher range
+* Atmospheric Qi now generates in the Nether, End, and Floating Realm
+* Added biome-specific Qi affinities
+* Cultivation skills (weapon skills excluded) now drain atmospheric Qi
+* Increased overall atmospheric Qi levels (tuning ongoing)
+* Added Qi Compass and Advanced Qi Compass (longer range)
+* Added a new technique Type (Lost Techniques so technique pages + binder from 1.21.1)
 
 ### Removed
 * 
