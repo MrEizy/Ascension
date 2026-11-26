@@ -6,7 +6,6 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.registries.DataPackRegistryEvent;
 import net.neoforged.neoforge.registries.NewRegistryEvent;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.ascension.core.cultivation.AuthorityCurve;
 import net.zic.ascension.configuration.cultivation.RealmEffectivenessDefinition;
 import net.zic.ascension.configuration.cultivation.RealmStatScaling;
 import net.zic.ascension.configuration.cultivation.PurityStatScaling;
@@ -18,7 +17,7 @@ import net.zic.ascension.configuration.mob_traits.MobTraitDefinitionType;
 import net.zic.zenithlib.registry.RegistryHelper;
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
 public class ConfigurationRegistries {
-    public static final RegistryHelper.DataPackRegistry<AuthorityCurve> REALM_EFFECTIVENESS_REGISTRY =
+    public static final RegistryHelper.DataPackRegistry<RealmEffectivenessDefinition> REALM_EFFECTIVENESS_REGISTRY =
             RegistryHelper.dataPackRegistry(AscensionCraft.MOD_ID, "config/realm_effectiveness", () -> RealmEffectivenessDefinition.CODEC);
 
     public static final RegistryHelper.DataPackRegistry<RealmStatScaling> REALM_STAT_SCALING_REGISTRY =

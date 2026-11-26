@@ -4,8 +4,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.Identifier;
-import net.zic.ascension.api.ascension.core.attribute.AttributeScalingMath;
-import net.zic.ascension.api.ascension.core.attribute.RecoveryScaling;
 
 import java.util.List;
 import java.util.Map;
@@ -48,8 +46,8 @@ public record AttributeScalingDefinition(Map<Identifier, List<Curve>> common,
         }
 
         public double at(double value) {
-            return type.equals("saturation") ? AttributeScalingMath.saturation(value, coefficient, scale)
-                    : AttributeScalingMath.power(value, coefficient, scale, exponent);
+            return type.equals("saturation") ? saturation(value, coefficient, scale)
+                    : power(value, coefficient, scale, exponent);
         }
     }
 
@@ -63,4 +61,59 @@ public record AttributeScalingDefinition(Map<Identifier, List<Curve>> common,
             Double.isFinite(profile.excessArmorResistance) && profile.excessArmorResistance >= 1.0E-9D
                     && java.util.Collections.disjoint(profile.common.keySet(), profile.player.keySet())
                     ? DataResult.success(profile) : DataResult.error(() -> "Armour resistance must be positive and finite; common and player attribute keys must not overlap"));
+
+    private static final double MAX_CONTRIBUTION = Float.MAX_VALUE / 1024.0D;
+
+    private static double power(double stat, double coefficient, double scale, double exponent) {
+        double x = positiveStat(stat);
+        if (x == 0 || coefficient == 0) return 0;
+        double ratio = x / scale;
+        double logTerm = Double.isFinite(ratio) ? Math.log1p(ratio) : Math.log(x) - Math.log(scale);
+        return finiteContribution(Math.exp(Math.log(coefficient) + Math.log(x)
+                + (exponent - 1.0D) * logTerm));
+    }
+
+    private static double saturation(double stat, double coefficient, double scale) {
+        double x = positiveStat(stat);
+        if (x == 0 || coefficient == 0) return 0;
+        return finiteContribution(coefficient / (1.0D + scale / x));
+    }
+
+    private static double positiveStat(double stat) {
+        return Double.isFinite(stat) ? Math.max(0, stat) : 0;
+    }
+
+    public static double finiteContribution(double value) {
+        return Double.isNaN(value) ? 0 : Math.clamp(value, 0, MAX_CONTRIBUTION);
+    }
+
+    public record RecoveryScaling(double minimumSeconds, double maximumSeconds,
+                                  double healthThreshold, double sleepFraction) {
+        public static final RecoveryScaling DEFAULT = new RecoveryScaling(60, 1200, 100000, 0.25);
+
+        public RecoveryScaling {
+            if (!Double.isFinite(minimumSeconds) || minimumSeconds < 1
+                    || !Double.isFinite(maximumSeconds) || maximumSeconds < minimumSeconds
+                    || !Double.isFinite(healthThreshold) || healthThreshold <= 0
+                    || !Double.isFinite(sleepFraction) || sleepFraction < 0 || sleepFraction > 1) {
+                throw new IllegalArgumentException("Invalid recovery scaling: expected 1 <= minimum <= maximum, positive threshold, and sleep fraction in [0, 1]");
+            }
+        }
+
+        public double recoverySeconds(double maximumHealth) {
+            if (!Double.isFinite(maximumHealth) || maximumHealth <= 0) return minimumSeconds;
+            double fraction = 1.0 / (1.0 + healthThreshold / maximumHealth);
+            return minimumSeconds + (maximumSeconds - minimumSeconds) * fraction;
+        }
+
+        public double healthPerSecond(double maximumHealth) {
+            if (!Double.isFinite(maximumHealth) || maximumHealth <= 0) return 0;
+            return maximumHealth / recoverySeconds(maximumHealth);
+        }
+
+        public double sleepHealing(double maximumHealth, double currentHealth) {
+            if (!Double.isFinite(maximumHealth) || !Double.isFinite(currentHealth) || currentHealth <= 0) return 0;
+            return Math.max(0, maximumHealth - currentHealth) * sleepFraction;
+        }
+    }
 }

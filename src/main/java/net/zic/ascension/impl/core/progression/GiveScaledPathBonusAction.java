@@ -41,7 +41,7 @@ public record GiveScaledPathBonusAction(UUID uuid, Identifier id, Identifier cat
         }
         double value = stages * perStage;
         if (!Double.isFinite(value)) throw new IllegalArgumentException("Non-finite path bonus: " + contextIdentifier);
-        Identifier modifierId = ScaledStatModifiers.id("path_bonus", contextIdentifier, id, category, "flat");
+        Identifier modifierId = ProgressionModifiers.scaledId("path_bonus", contextIdentifier, id, category, "flat");
         AscensionOriginSourceHelper.removeBonusModifier(source, category, contextIdentifier, modifierId);
         if (value != 0) AscensionOriginSourceHelper.addBonusFlatModifier(source, category, contextIdentifier, Modifier.flat(modifierId, 0, value));
     }

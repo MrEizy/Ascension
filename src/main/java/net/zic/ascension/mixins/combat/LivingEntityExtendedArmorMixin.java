@@ -6,7 +6,7 @@ import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.zic.ascension.api.ascension.core.attribute.AttributeScalingMath;
+import net.zic.ascension.util.AscensionDamageUtil;
 import net.zic.ascension.impl.core.attribute.ScaledAttributes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -27,7 +27,7 @@ public abstract class LivingEntityExtendedArmorMixin {
             return original.call(victim, damage, source, armor, toughness);
         }
         float vanilla = original.call(victim, damage, source, 20.0F, toughness);
-        double effectiveness = AttributeScalingMath.armorEffectiveness(damage, toughness, vanilla);
-        return (float) (vanilla * AttributeScalingMath.excessArmorMultiplier(total, profile.excessArmorResistance(), effectiveness));
+        double effectiveness = AscensionDamageUtil.armorEffectiveness(damage, toughness, vanilla);
+        return (float) (vanilla * AscensionDamageUtil.excessArmorMultiplier(total, profile.excessArmorResistance(), effectiveness));
     }
 }

@@ -13,7 +13,7 @@ import net.zic.ascension.api.ascension.core.damage.AscensionDamageProfile;
 import net.zic.ascension.api.ascension.core.damage.AscensionDamageTypeHolders;
 import net.zic.ascension.api.rpg_engine.damage.RPGEngineEntityDamagedEvent;
 import net.zic.ascension.api.rpg_engine.damage.RPGEngineGatherDamageTypesEvent;
-import net.zic.ascension.impl.core.cultivation.AuthorityCombat;
+import net.zic.ascension.impl.core.damage.AuthorityCombat;
 import net.zic.ascension.impl.core.damage.AscensionDamageProfileResolver;
 import net.zic.ascension.impl.core.damage.DamageTrace;
 import net.zic.ascension.impl.core.skill.passive.PassiveCombatService;

@@ -8,7 +8,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.ascension.core.attribute.AttributeScalingMath;
 import net.zic.ascension.configuration.ConfigurationRegistries;
 import net.zic.ascension.configuration.cultivation.AttributeScalingDefinition;
 import net.zic.zenithlib.common.ZenithAttachments;
@@ -82,7 +81,7 @@ public final class ScaledAttributes {
                 if (stat == null || stats.getStatInstance(stat) == null) continue;
                 contribution += curve.at(stats.getStat(stat));
             }
-            contribution = AttributeScalingMath.finiteContribution(contribution);
+            contribution = AttributeScalingDefinition.finiteContribution(contribution);
             var existing = attribute.getFlatModifier(MODIFIER);
             if (existing == null ? contribution == 0 : Double.compare(existing.value(), contribution) == 0) continue;
             updates.add(new Pending(attribute, contribution));

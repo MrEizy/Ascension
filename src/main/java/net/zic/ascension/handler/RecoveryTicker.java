@@ -17,7 +17,7 @@ import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.capabilities.EntityQiProvider;
 import net.zic.ascension.api.ascension.core.resource.ResourceSourceIdentity;
 import net.zic.ascension.common.util.AscensionAttributes;
-import net.zic.ascension.api.ascension.core.attribute.RecoveryScaling;
+import net.zic.ascension.configuration.cultivation.AttributeScalingDefinition.RecoveryScaling;
 import net.zic.ascension.impl.core.attribute.ScaledAttributes;
 import net.zic.zenithlib.common.ZenithAttachments;
 import net.zic.zenithlib.value_containers.typed.Modifier;

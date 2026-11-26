@@ -40,8 +40,8 @@ public record GiveScaledRealmStatsAction(UUID uuid, Identifier id, Either<Identi
         int minor = path.getCurrentMinorRealm();
         int max = major < 0 ? 0 : path.getPath().getMaxMinorRealm(major);
         RealmStatScaling profile = ScalingProfiles.resolve(source.getRegistryAccess(), ConfigurationRegistries.REALM_STAT_SCALING_REGISTRY, scaling);
-        stats.forEach((stat, base) -> ScaledStatModifiers.setFlat(source, stat,
-                ScaledStatModifiers.id("realm", contextIdentifier, id, stat, "flat"), profile.at(base, major, minor, max)));
+        stats.forEach((stat, base) -> ProgressionModifiers.setScaledFlat(source, stat,
+                ProgressionModifiers.scaledId("realm", contextIdentifier, id, stat, "flat"), profile.at(base, major, minor, max)));
         source.updateEntityStatHolder();
     }
 

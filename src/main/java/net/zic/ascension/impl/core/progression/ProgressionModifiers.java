@@ -97,4 +97,27 @@ public final class ProgressionModifiers {
                 add, remove
         );
     }
+
+    static Identifier scaledId(String kind, Identifier context, Identifier action, Identifier stat, String suffix) {
+        return Identifier.fromNamespaceAndPath("ascension", "scaled_stats/" + kind + "/"
+                + context.getNamespace() + "/" + context.getPath() + "/"
+                + action.getNamespace() + "/" + action.getPath() + "/"
+                + stat.getNamespace() + "/" + stat.getPath() + "/" + suffix);
+    }
+
+    static void setScaledFlat(OriginSource source, Identifier statId, Identifier id, double value) {
+        Stat stat = ZenithStatHelper.stat(statId);
+        if (stat == null) throw new IllegalArgumentException("Unknown scaled stat: " + statId);
+        if (!Double.isFinite(value)) throw new IllegalArgumentException("Non-finite scaled stat: " + id);
+        source.removeStatModifier(stat, id);
+        if (value != 0) source.addFlatStatModifier(stat, Modifier.flat(id, 0, value));
+    }
+
+    static void setScaledMultiplier(OriginSource source, Identifier statId, Identifier id, Identifier group, double value) {
+        Stat stat = ZenithStatHelper.stat(statId);
+        if (stat == null) throw new IllegalArgumentException("Unknown scaled stat: " + statId);
+        if (!Double.isFinite(value)) throw new IllegalArgumentException("Non-finite scaled stat: " + id);
+        source.removeStatModifier(stat, id);
+        if (value != 0) source.addMultiplierStatModifier(stat, Modifier.multiplier(id, group, 0, value));
+    }
 }

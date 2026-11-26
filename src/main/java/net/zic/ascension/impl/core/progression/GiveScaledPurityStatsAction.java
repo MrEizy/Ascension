@@ -34,11 +34,11 @@ public record GiveScaledPurityStatsAction(UUID uuid, Identifier id, Either<Ident
 
         public Reward { milestones = Map.copyOf(milestones); }
         private boolean valid() {
-            if (!StatScalingMath.nonNegativeFinite(continuous) || !Double.isFinite(total())) return false;
+            if (!PurityStatScaling.nonNegativeFinite(continuous) || !Double.isFinite(total())) return false;
             for (var entry : milestones.entrySet()) {
                 try {
                     int p = Integer.parseInt(entry.getKey());
-                    if (p < 1 || p > 100 || !Integer.toString(p).equals(entry.getKey()) || !StatScalingMath.nonNegativeFinite(entry.getValue())) return false;
+                    if (p < 1 || p > 100 || !Integer.toString(p).equals(entry.getKey()) || !PurityStatScaling.nonNegativeFinite(entry.getValue())) return false;
                 } catch (NumberFormatException ex) { return false; }
             }
             return true;
@@ -47,7 +47,9 @@ public record GiveScaledPurityStatsAction(UUID uuid, Identifier id, Either<Ident
         double fraction(int purity) {
             double reached = milestones.entrySet().stream().filter(e -> Integer.parseInt(e.getKey()) <= purity)
                     .mapToDouble(Map.Entry::getValue).sum();
-            return StatScalingMath.purityFraction(continuous, reached, total(), purity);
+            double total = total();
+            if (total == 0) return 0;
+            return (continuous * Math.clamp(purity, 0, 100) / 100.0 + reached) / total;
         }
     }
 
@@ -68,9 +70,9 @@ public record GiveScaledPurityStatsAction(UUID uuid, Identifier id, Either<Ident
         PurityStatScaling profile = ScalingProfiles.resolve(source.getRegistryAccess(), ConfigurationRegistries.PURITY_STAT_SCALING_REGISTRY, scaling);
         stats.forEach((stat, reward) -> {
             double fraction = reward.fraction(purity);
-            ScaledStatModifiers.setFlat(source, stat, ScaledStatModifiers.id("purity", contextIdentifier, id, stat, "flat"),
+            ProgressionModifiers.setScaledFlat(source, stat, ProgressionModifiers.scaledId("purity", contextIdentifier, id, stat, "flat"),
                     profile.flat(reward.total()) * fraction);
-            ScaledStatModifiers.setMultiplier(source, stat, ScaledStatModifiers.id("purity", contextIdentifier, id, stat, "multiplier"),
+            ProgressionModifiers.setScaledMultiplier(source, stat, ProgressionModifiers.scaledId("purity", contextIdentifier, id, stat, "multiplier"),
                     GROUP, profile.multiplier(reward.total()) * fraction);
         });
         source.updateEntityStatHolder();
