@@ -15,23 +15,35 @@
 * Raised atmospheric qi count (will be adjusted over future updates)
 * Added A Qi compass to locate chunks with the most available Qi
 * Added an Advanced Qi Compass with a higher range
+* Added Cultivation Authority, representing the difference in power between cultivation realms (not viewable for player)
+* Added natural armour scaling through Strength and Vitality
+* Added health recovery upon successfully sleeping through the night, restoring 25% of missing health
+* Added Existential Protection, granting passive defensive benefits across foundation paths (not viewable for player)
 
 ### Removed
-* 
+* Armor cap
+* Health Regen, Qi Regen and Stamina Regen Caps
 
 ### Changes
 * Eating Pill Residue now kills the player
 * Pill texture changes colour based on effect
+* Overhauled power scaling across foundation paths, bloodlines, physiques and techniques
+* Major realm stat growth is now exponential, while minor realm stat growth is linear
+* Elemental and Weapon Dao comprehension now increases respective damage
+* Rebalanced Strength, Vitality, Agility and Spirit attribute contributions
+* Overhauled health, Qi and stamina regeneration to better accommodate higher cultivation realms
 
 
 ### Fixes
 * Fixed **Boundless Qi Scripture** not spawning in End Cities (Missing ```consumer.accept``` call in the loot table registration).
 * Internal code for atmospheric qi regeneration and calls
 * Skill Wheel keeps the same size regardless of GUI scale
+* Fixed natural health regeneration not scaling appropriately with increased maximum health
 
 
 ### Technical Changes
-* 
+* Introduced reusable, datapack-configurable scaling formulas
+* Improved combat damage tracing
 
 ---
 
