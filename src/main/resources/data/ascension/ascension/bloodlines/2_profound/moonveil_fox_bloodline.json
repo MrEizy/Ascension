@@ -24,10 +24,17 @@
               "flat": [
                 {
                   "id": "ascension:2_profound_moonveil_fox_bloodline_spirit_a1",
-                  "value": 0.12
+                  "value": 0.0786
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:2_profound_moonveil_fox_bloodline_spirit_a1_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0001125
+                }
+              ]
             },
             "ascension:agility": {
               "flat": [
@@ -100,10 +107,17 @@
               "flat": [
                 {
                   "id": "ascension:2_profound_moonveil_fox_bloodline_spirit_a3",
-                  "value": 2.0
+                  "value": 1.31
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:2_profound_moonveil_fox_bloodline_spirit_a3_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.001875
+                }
+              ]
             }
           }
         }
@@ -132,10 +146,17 @@
               "flat": [
                 {
                   "id": "ascension:2_profound_moonveil_fox_bloodline_spirit_a4",
-                  "value": 2.0
+                  "value": 1.31
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:2_profound_moonveil_fox_bloodline_spirit_a4_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.001875
+                }
+              ]
             }
           }
         }

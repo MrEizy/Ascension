@@ -47,11 +47,11 @@
   "stats_per_realm": {
     "ascension:agility": {
       "flat": 0.0625,
-      "multiplier": 0.00875
+      "multiplier": 0.004375
     },
     "ascension:spirit": {
       "flat": 0.25,
-      "multiplier": 0.025
+      "multiplier": 0.0125
     }
   },
   "item_tooltip": {

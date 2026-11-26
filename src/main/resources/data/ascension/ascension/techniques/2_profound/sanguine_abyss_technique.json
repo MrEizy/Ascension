@@ -53,12 +53,12 @@
     "ascension:spirit": {
       "path": "ascension:foundation/essence",
       "flat": 0.17647,
-      "multiplier": 0.013
+      "multiplier": 0.025
     },
     "ascension:vitality": {
       "path": "ascension:elemental/blood",
       "flat": 0.05882,
-      "multiplier": 0.0045
+      "multiplier": 0.0086538462
     }
   },
   "item_tooltip": {

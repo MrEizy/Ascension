@@ -45,11 +45,11 @@
   "stats_per_realm": {
     "ascension:strength": {
       "flat": 0.17647,
-      "multiplier": 0.013
+      "multiplier": 0.025
     },
     "ascension:vitality": {
       "flat": 0.05882,
-      "multiplier": 0.0045
+      "multiplier": 0.0086538462
     }
   },
   "item_tooltip": {

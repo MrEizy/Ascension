@@ -22,10 +22,17 @@
               "flat": [
                 {
                   "id": "ascension:2_profound_jade_cicada_bloodline_spirit_a1",
-                  "value": 0.09
+                  "value": 0.0762
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:2_profound_jade_cicada_bloodline_spirit_a1_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 3.75e-05
+                }
+              ]
             },
             "ascension:vitality": {
               "flat": [
@@ -89,10 +96,17 @@
               "flat": [
                 {
                   "id": "ascension:2_profound_jade_cicada_bloodline_spirit_a3",
-                  "value": 2.0
+                  "value": 1.6933333333
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:2_profound_jade_cicada_bloodline_spirit_a3_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0008333333
+                }
+              ]
             }
           }
         }
@@ -121,10 +135,17 @@
               "flat": [
                 {
                   "id": "ascension:2_profound_jade_cicada_bloodline_spirit_a4",
-                  "value": 1.0
+                  "value": 0.8466666667
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:2_profound_jade_cicada_bloodline_spirit_a4_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0004166667
+                }
+              ]
             }
           }
         }

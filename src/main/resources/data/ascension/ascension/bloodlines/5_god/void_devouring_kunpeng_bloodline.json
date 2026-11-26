@@ -23,37 +23,65 @@
               "flat": [
                 {
                   "id": "ascension:5_god_void_devouring_kunpeng_bloodline_agility_a1",
-                  "value": 0.55
+                  "value": 0.0940990099
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:5_god_void_devouring_kunpeng_bloodline_agility_a1_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0012388614
+                }
+              ]
             },
             "ascension:spirit": {
               "flat": [
                 {
                   "id": "ascension:5_god_void_devouring_kunpeng_bloodline_spirit_a1",
-                  "value": 0.38
+                  "value": 0.0796394366
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:5_god_void_devouring_kunpeng_bloodline_spirit_a1_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0008161972
+                }
+              ]
             },
             "ascension:vitality": {
               "flat": [
                 {
                   "id": "ascension:5_god_void_devouring_kunpeng_bloodline_vitality_a1",
-                  "value": 0.3
+                  "value": 0.0715862069
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:5_god_void_devouring_kunpeng_bloodline_vitality_a1_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0006206897
+                }
+              ]
             },
             "ascension:strength": {
               "flat": [
                 {
                   "id": "ascension:5_god_void_devouring_kunpeng_bloodline_strength_a1",
-                  "value": 0.2
+                  "value": 0.0644210526
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:5_god_void_devouring_kunpeng_bloodline_strength_a1_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0003684211
+                }
+              ]
             }
           }
         },
@@ -126,19 +154,33 @@
               "flat": [
                 {
                   "id": "ascension:5_god_void_devouring_kunpeng_bloodline_agility_a3",
-                  "value": 8.0
+                  "value": 1.3687128713
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:5_god_void_devouring_kunpeng_bloodline_agility_a3_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.018019802
+                }
+              ]
             },
             "ascension:vitality": {
               "flat": [
                 {
                   "id": "ascension:5_god_void_devouring_kunpeng_bloodline_vitality_a3",
-                  "value": 5.0
+                  "value": 1.1931034483
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:5_god_void_devouring_kunpeng_bloodline_vitality_a3_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0103448276
+                }
+              ]
             }
           }
         }
@@ -158,19 +200,33 @@
               "flat": [
                 {
                   "id": "ascension:5_god_void_devouring_kunpeng_bloodline_spirit_a4",
-                  "value": 8.0
+                  "value": 1.6766197183
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:5_god_void_devouring_kunpeng_bloodline_spirit_a4_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0171830986
+                }
+              ]
             },
             "ascension:agility": {
               "flat": [
                 {
                   "id": "ascension:5_god_void_devouring_kunpeng_bloodline_agility_a4",
-                  "value": 8.0
+                  "value": 1.3687128713
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:5_god_void_devouring_kunpeng_bloodline_agility_a4_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.018019802
+                }
+              ]
             }
           }
         },
@@ -206,19 +262,33 @@
               "flat": [
                 {
                   "id": "ascension:5_god_void_devouring_kunpeng_bloodline_strength_a6",
-                  "value": 8.0
+                  "value": 2.5768421053
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:5_god_void_devouring_kunpeng_bloodline_strength_a6_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0147368421
+                }
+              ]
             },
             "ascension:vitality": {
               "flat": [
                 {
                   "id": "ascension:5_god_void_devouring_kunpeng_bloodline_vitality_a6",
-                  "value": 8.0
+                  "value": 1.9089655172
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:5_god_void_devouring_kunpeng_bloodline_vitality_a6_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0165517241
+                }
+              ]
             }
           }
         },
@@ -254,19 +324,33 @@
               "flat": [
                 {
                   "id": "ascension:5_god_void_devouring_kunpeng_bloodline_agility_a8",
-                  "value": 12.0
+                  "value": 2.0530693069
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:5_god_void_devouring_kunpeng_bloodline_agility_a8_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.027029703
+                }
+              ]
             },
             "ascension:spirit": {
               "flat": [
                 {
                   "id": "ascension:5_god_void_devouring_kunpeng_bloodline_spirit_a8",
-                  "value": 10.0
+                  "value": 2.0957746479
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:5_god_void_devouring_kunpeng_bloodline_spirit_a8_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0214788732
+                }
+              ]
             }
           }
         },
@@ -302,37 +386,65 @@
               "flat": [
                 {
                   "id": "ascension:5_god_void_devouring_kunpeng_bloodline_agility_a10",
-                  "value": 18.0
+                  "value": 3.0796039604
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:5_god_void_devouring_kunpeng_bloodline_agility_a10_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0405445545
+                }
+              ]
             },
             "ascension:spirit": {
               "flat": [
                 {
                   "id": "ascension:5_god_void_devouring_kunpeng_bloodline_spirit_a10",
-                  "value": 15.0
+                  "value": 3.1436619718
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:5_god_void_devouring_kunpeng_bloodline_spirit_a10_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0322183099
+                }
+              ]
             },
             "ascension:vitality": {
               "flat": [
                 {
                   "id": "ascension:5_god_void_devouring_kunpeng_bloodline_vitality_a10",
-                  "value": 15.0
+                  "value": 3.5793103448
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:5_god_void_devouring_kunpeng_bloodline_vitality_a10_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0310344828
+                }
+              ]
             },
             "ascension:strength": {
               "flat": [
                 {
                   "id": "ascension:5_god_void_devouring_kunpeng_bloodline_strength_a10",
-                  "value": 10.0
+                  "value": 3.2210526316
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:5_god_void_devouring_kunpeng_bloodline_strength_a10_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0184210526
+                }
+              ]
             }
           }
         },

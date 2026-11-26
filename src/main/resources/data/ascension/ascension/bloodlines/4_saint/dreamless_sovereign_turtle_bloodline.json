@@ -23,28 +23,49 @@
               "flat": [
                 {
                   "id": "ascension:4_saint_dreamless_sovereign_turtle_bloodline_vitality_a1",
-                  "value": 0.3
+                  "value": 0.0760754717
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:4_saint_dreamless_sovereign_turtle_bloodline_vitality_a1_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0006084906
+                }
+              ]
             },
             "ascension:spirit": {
               "flat": [
                 {
                   "id": "ascension:4_saint_dreamless_sovereign_turtle_bloodline_spirit_a1",
-                  "value": 0.24
+                  "value": 0.0744
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:4_saint_dreamless_sovereign_turtle_bloodline_spirit_a1_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.00045
+                }
+              ]
             },
             "ascension:strength": {
               "flat": [
                 {
                   "id": "ascension:4_saint_dreamless_sovereign_turtle_bloodline_strength_a1",
-                  "value": 0.13
+                  "value": 0.0624
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:4_saint_dreamless_sovereign_turtle_bloodline_strength_a1_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0001836957
+                }
+              ]
             },
             "ascension:agility": {
               "flat": [
@@ -126,19 +147,33 @@
               "flat": [
                 {
                   "id": "ascension:4_saint_dreamless_sovereign_turtle_bloodline_vitality_a3",
-                  "value": 4.0
+                  "value": 1.0143396226
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:4_saint_dreamless_sovereign_turtle_bloodline_vitality_a3_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0081132075
+                }
+              ]
             },
             "ascension:spirit": {
               "flat": [
                 {
                   "id": "ascension:4_saint_dreamless_sovereign_turtle_bloodline_spirit_a3",
-                  "value": 3.0
+                  "value": 0.93
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:4_saint_dreamless_sovereign_turtle_bloodline_spirit_a3_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.005625
+                }
+              ]
             }
           }
         }
@@ -158,19 +193,33 @@
               "flat": [
                 {
                   "id": "ascension:4_saint_dreamless_sovereign_turtle_bloodline_vitality_a4",
-                  "value": 5.0
+                  "value": 1.2679245283
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:4_saint_dreamless_sovereign_turtle_bloodline_vitality_a4_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0101415094
+                }
+              ]
             },
             "ascension:strength": {
               "flat": [
                 {
                   "id": "ascension:4_saint_dreamless_sovereign_turtle_bloodline_strength_a4",
-                  "value": 4.0
+                  "value": 1.92
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:4_saint_dreamless_sovereign_turtle_bloodline_strength_a4_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0056521739
+                }
+              ]
             }
           }
         },
@@ -206,19 +255,33 @@
               "flat": [
                 {
                   "id": "ascension:4_saint_dreamless_sovereign_turtle_bloodline_spirit_a6",
-                  "value": 5.0
+                  "value": 1.55
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:4_saint_dreamless_sovereign_turtle_bloodline_spirit_a6_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.009375
+                }
+              ]
             },
             "ascension:vitality": {
               "flat": [
                 {
                   "id": "ascension:4_saint_dreamless_sovereign_turtle_bloodline_vitality_a6",
-                  "value": 4.0
+                  "value": 1.0143396226
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:4_saint_dreamless_sovereign_turtle_bloodline_vitality_a6_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0081132075
+                }
+              ]
             }
           }
         },
@@ -254,28 +317,49 @@
               "flat": [
                 {
                   "id": "ascension:4_saint_dreamless_sovereign_turtle_bloodline_vitality_a8",
-                  "value": 10.0
+                  "value": 2.5358490566
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:4_saint_dreamless_sovereign_turtle_bloodline_vitality_a8_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0202830189
+                }
+              ]
             },
             "ascension:spirit": {
               "flat": [
                 {
                   "id": "ascension:4_saint_dreamless_sovereign_turtle_bloodline_spirit_a8",
-                  "value": 8.0
+                  "value": 2.48
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:4_saint_dreamless_sovereign_turtle_bloodline_spirit_a8_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.015
+                }
+              ]
             },
             "ascension:strength": {
               "flat": [
                 {
                   "id": "ascension:4_saint_dreamless_sovereign_turtle_bloodline_strength_a8",
-                  "value": 6.0
+                  "value": 2.88
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:4_saint_dreamless_sovereign_turtle_bloodline_strength_a8_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0084782609
+                }
+              ]
             },
             "ascension:agility": {
               "flat": [

@@ -137,6 +137,32 @@
           ]
         }
       ]
+    },
+    {
+      "condition": {
+        "type": "ascension:realm_stage_range",
+        "min_minor": 0,
+        "max_minor": 2
+      },
+      "actions": [
+        {
+          "type": "ascension:give_path_bonuses",
+          "conflict_action": "salt",
+          "bonuses": {
+            "ascension:damage": {
+              "ascension:weapon/whip": {
+                "flat": [
+                  {
+                    "id": "ascension:progression_03/weapon/whip/damage",
+                    "value": 0.015
+                  }
+                ],
+                "multiplier": []
+              }
+            }
+          }
+        }
+      ]
     }
   ]
 }

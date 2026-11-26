@@ -23,28 +23,49 @@
               "flat": [
                 {
                   "id": "ascension:4_saint_sun_crowned_phoenix_bloodline_spirit_a1",
-                  "value": 0.28
+                  "value": 0.0719384615
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:4_saint_sun_crowned_phoenix_bloodline_spirit_a1_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0005653846
+                }
+              ]
             },
             "ascension:vitality": {
               "flat": [
                 {
                   "id": "ascension:4_saint_sun_crowned_phoenix_bloodline_vitality_a1",
-                  "value": 0.24
+                  "value": 0.0717714286
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:4_saint_sun_crowned_phoenix_bloodline_vitality_a1_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0004571429
+                }
+              ]
             },
             "ascension:agility": {
               "flat": [
                 {
                   "id": "ascension:4_saint_sun_crowned_phoenix_bloodline_agility_a1",
-                  "value": 0.12
+                  "value": 0.0576
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:4_saint_sun_crowned_phoenix_bloodline_agility_a1_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0001695652
+                }
+              ]
             }
           }
         },
@@ -117,19 +138,33 @@
               "flat": [
                 {
                   "id": "ascension:4_saint_sun_crowned_phoenix_bloodline_spirit_a3",
-                  "value": 4.0
+                  "value": 1.0276923077
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:4_saint_sun_crowned_phoenix_bloodline_spirit_a3_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0080769231
+                }
+              ]
             },
             "ascension:vitality": {
               "flat": [
                 {
                   "id": "ascension:4_saint_sun_crowned_phoenix_bloodline_vitality_a3",
-                  "value": 3.0
+                  "value": 0.8971428571
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:4_saint_sun_crowned_phoenix_bloodline_vitality_a3_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0057142857
+                }
+              ]
             }
           }
         }
@@ -149,19 +184,33 @@
               "flat": [
                 {
                   "id": "ascension:4_saint_sun_crowned_phoenix_bloodline_spirit_a4",
-                  "value": 5.0
+                  "value": 1.2846153846
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:4_saint_sun_crowned_phoenix_bloodline_spirit_a4_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0100961538
+                }
+              ]
             },
             "ascension:vitality": {
               "flat": [
                 {
                   "id": "ascension:4_saint_sun_crowned_phoenix_bloodline_vitality_a4",
-                  "value": 5.0
+                  "value": 1.4952380952
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:4_saint_sun_crowned_phoenix_bloodline_vitality_a4_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0095238095
+                }
+              ]
             }
           }
         },
@@ -197,19 +246,33 @@
               "flat": [
                 {
                   "id": "ascension:4_saint_sun_crowned_phoenix_bloodline_agility_a6",
-                  "value": 5.0
+                  "value": 2.4
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:4_saint_sun_crowned_phoenix_bloodline_agility_a6_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0070652174
+                }
+              ]
             },
             "ascension:spirit": {
               "flat": [
                 {
                   "id": "ascension:4_saint_sun_crowned_phoenix_bloodline_spirit_a6",
-                  "value": 5.0
+                  "value": 1.2846153846
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:4_saint_sun_crowned_phoenix_bloodline_spirit_a6_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0100961538
+                }
+              ]
             }
           }
         },
@@ -245,28 +308,49 @@
               "flat": [
                 {
                   "id": "ascension:4_saint_sun_crowned_phoenix_bloodline_spirit_a8",
-                  "value": 10.0
+                  "value": 2.5692307692
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:4_saint_sun_crowned_phoenix_bloodline_spirit_a8_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0201923077
+                }
+              ]
             },
             "ascension:vitality": {
               "flat": [
                 {
                   "id": "ascension:4_saint_sun_crowned_phoenix_bloodline_vitality_a8",
-                  "value": 10.0
+                  "value": 2.9904761905
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:4_saint_sun_crowned_phoenix_bloodline_vitality_a8_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.019047619
+                }
+              ]
             },
             "ascension:agility": {
               "flat": [
                 {
                   "id": "ascension:4_saint_sun_crowned_phoenix_bloodline_agility_a8",
-                  "value": 6.0
+                  "value": 2.88
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:4_saint_sun_crowned_phoenix_bloodline_agility_a8_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0084782609
+                }
+              ]
             }
           }
         },

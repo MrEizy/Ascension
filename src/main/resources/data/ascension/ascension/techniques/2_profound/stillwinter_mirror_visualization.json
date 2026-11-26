@@ -37,7 +37,7 @@
   "stats_per_realm": {
     "ascension:spirit": {
       "flat": 0.17647,
-      "multiplier": 0.013
+      "multiplier": 0.025
     }
   },
   "item_tooltip": {

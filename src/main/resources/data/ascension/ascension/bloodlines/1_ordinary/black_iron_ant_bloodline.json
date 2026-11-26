@@ -22,10 +22,17 @@
               "flat": [
                 {
                   "id": "ascension:1_ordinary_black_iron_ant_bloodline_strength_a1",
-                  "value": 0.09
+                  "value": 0.0824727273
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:1_ordinary_black_iron_ant_bloodline_strength_a1_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 2.04545e-05
+                }
+              ]
             },
             "ascension:vitality": {
               "flat": [
@@ -80,10 +87,17 @@
               "flat": [
                 {
                   "id": "ascension:1_ordinary_black_iron_ant_bloodline_strength_a3",
-                  "value": 2.0
+                  "value": 1.8327272727
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:1_ordinary_black_iron_ant_bloodline_strength_a3_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0004545455
+                }
+              ]
             }
           }
         }

@@ -1,7 +1,11 @@
 {
   "type": "ascension:simple",
-  "name": {"translate": "ascension.bloodline.dragon_bloodline.name"},
-  "description": {"translate": "ascension.bloodline.dragon_bloodline.desc"},
+  "name": {
+    "translate": "ascension.bloodline.dragon_bloodline.name"
+  },
+  "description": {
+    "translate": "ascension.bloodline.dragon_bloodline.desc"
+  },
   "paths": [
     "ascension:foundation/body",
     "ascension:elemental/earth",
@@ -19,19 +23,33 @@
               "flat": [
                 {
                   "id": "ascension:3_heaven_dragon_bloodline_vitality_a1",
-                  "value": 0.18
+                  "value": 0.0757333333
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:3_heaven_dragon_bloodline_vitality_a1_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0002833333
+                }
+              ]
             },
             "ascension:strength": {
               "flat": [
                 {
                   "id": "ascension:3_heaven_dragon_bloodline_strength_a1",
-                  "value": 0.16
+                  "value": 0.0797090909
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:3_heaven_dragon_bloodline_strength_a1_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0002181818
+                }
+              ]
             },
             "ascension:spirit": {
               "flat": [
@@ -95,10 +113,17 @@
               "flat": [
                 {
                   "id": "ascension:3_heaven_dragon_bloodline_vitality_a3",
-                  "value": 2.0
+                  "value": 0.8414814815
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:3_heaven_dragon_bloodline_vitality_a3_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0031481481
+                }
+              ]
             }
           }
         }
@@ -118,10 +143,17 @@
               "flat": [
                 {
                   "id": "ascension:3_heaven_dragon_bloodline_strength_a4",
-                  "value": 2.0
+                  "value": 0.9963636364
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:3_heaven_dragon_bloodline_strength_a4_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0027272727
+                }
+              ]
             }
           }
         }
@@ -141,10 +173,17 @@
               "flat": [
                 {
                   "id": "ascension:3_heaven_dragon_bloodline_vitality_a5",
-                  "value": 2.0
+                  "value": 0.8414814815
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:3_heaven_dragon_bloodline_vitality_a5_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0031481481
+                }
+              ]
             }
           }
         },
@@ -170,19 +209,33 @@
               "flat": [
                 {
                   "id": "ascension:3_heaven_dragon_bloodline_vitality_a6",
-                  "value": 5.0
+                  "value": 2.1037037037
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:3_heaven_dragon_bloodline_vitality_a6_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0078703704
+                }
+              ]
             },
             "ascension:strength": {
               "flat": [
                 {
                   "id": "ascension:3_heaven_dragon_bloodline_strength_a6",
-                  "value": 4.0
+                  "value": 1.9927272727
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:3_heaven_dragon_bloodline_strength_a6_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0054545455
+                }
+              ]
             },
             "ascension:spirit": {
               "flat": [

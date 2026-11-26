@@ -17,7 +17,7 @@
       "flat": [
         {
           "id": "ascension:6_heavens_path_thirty_three_divines_chaotic_vessel_meridians_vitality_base",
-          "value": 24.0
+          "value": 9.0
         }
       ],
       "multiplier": [
@@ -32,7 +32,7 @@
       "flat": [
         {
           "id": "ascension:6_heavens_path_thirty_three_divines_chaotic_vessel_meridians_strength_base",
-          "value": 15.0
+          "value": 6.75
         }
       ],
       "multiplier": [
@@ -47,7 +47,7 @@
       "flat": [
         {
           "id": "ascension:6_heavens_path_thirty_three_divines_chaotic_vessel_meridians_spirit_base",
-          "value": 48.0
+          "value": 15.0
         }
       ],
       "multiplier": [
@@ -62,7 +62,7 @@
       "flat": [
         {
           "id": "ascension:6_heavens_path_thirty_three_divines_chaotic_vessel_meridians_agility_base",
-          "value": 33.0
+          "value": 11.25
         }
       ],
       "multiplier": [

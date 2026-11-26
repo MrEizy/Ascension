@@ -23,28 +23,49 @@
               "flat": [
                 {
                   "id": "ascension:4_saint_formless_river_dragon_bloodline_spirit_a1",
-                  "value": 0.24
+                  "value": 0.0693818182
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:4_saint_formless_river_dragon_bloodline_spirit_a1_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0004636364
+                }
+              ]
             },
             "ascension:agility": {
               "flat": [
                 {
                   "id": "ascension:4_saint_formless_river_dragon_bloodline_agility_a1",
-                  "value": 0.2
+                  "value": 0.0671111111
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:4_saint_formless_river_dragon_bloodline_agility_a1_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0003611111
+                }
+              ]
             },
             "ascension:vitality": {
               "flat": [
                 {
                   "id": "ascension:4_saint_formless_river_dragon_bloodline_vitality_a1",
-                  "value": 0.18
+                  "value": 0.0696
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:4_saint_formless_river_dragon_bloodline_vitality_a1_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0003
+                }
+              ]
             },
             "ascension:strength": {
               "flat": [
@@ -126,19 +147,33 @@
               "flat": [
                 {
                   "id": "ascension:4_saint_formless_river_dragon_bloodline_spirit_a3",
-                  "value": 4.0
+                  "value": 1.1563636364
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:4_saint_formless_river_dragon_bloodline_spirit_a3_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0077272727
+                }
+              ]
             },
             "ascension:agility": {
               "flat": [
                 {
                   "id": "ascension:4_saint_formless_river_dragon_bloodline_agility_a3",
-                  "value": 3.0
+                  "value": 1.0066666667
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:4_saint_formless_river_dragon_bloodline_agility_a3_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0054166667
+                }
+              ]
             }
           }
         }
@@ -158,19 +193,33 @@
               "flat": [
                 {
                   "id": "ascension:4_saint_formless_river_dragon_bloodline_vitality_a4",
-                  "value": 5.0
+                  "value": 1.9333333333
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:4_saint_formless_river_dragon_bloodline_vitality_a4_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0083333333
+                }
+              ]
             },
             "ascension:spirit": {
               "flat": [
                 {
                   "id": "ascension:4_saint_formless_river_dragon_bloodline_spirit_a4",
-                  "value": 4.0
+                  "value": 1.1563636364
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:4_saint_formless_river_dragon_bloodline_spirit_a4_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0077272727
+                }
+              ]
             }
           }
         },
@@ -206,19 +255,33 @@
               "flat": [
                 {
                   "id": "ascension:4_saint_formless_river_dragon_bloodline_agility_a6",
-                  "value": 5.0
+                  "value": 1.6777777778
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:4_saint_formless_river_dragon_bloodline_agility_a6_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0090277778
+                }
+              ]
             },
             "ascension:spirit": {
               "flat": [
                 {
                   "id": "ascension:4_saint_formless_river_dragon_bloodline_spirit_a6",
-                  "value": 3.0
+                  "value": 0.8672727273
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:4_saint_formless_river_dragon_bloodline_spirit_a6_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0057954545
+                }
+              ]
             }
           }
         },
@@ -254,28 +317,49 @@
               "flat": [
                 {
                   "id": "ascension:4_saint_formless_river_dragon_bloodline_spirit_a8",
-                  "value": 9.0
+                  "value": 2.6018181818
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:4_saint_formless_river_dragon_bloodline_spirit_a8_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0173863636
+                }
+              ]
             },
             "ascension:agility": {
               "flat": [
                 {
                   "id": "ascension:4_saint_formless_river_dragon_bloodline_agility_a8",
-                  "value": 8.0
+                  "value": 2.6844444444
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:4_saint_formless_river_dragon_bloodline_agility_a8_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0144444444
+                }
+              ]
             },
             "ascension:vitality": {
               "flat": [
                 {
                   "id": "ascension:4_saint_formless_river_dragon_bloodline_vitality_a8",
-                  "value": 7.0
+                  "value": 2.7066666667
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:4_saint_formless_river_dragon_bloodline_vitality_a8_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0116666667
+                }
+              ]
             },
             "ascension:strength": {
               "flat": [

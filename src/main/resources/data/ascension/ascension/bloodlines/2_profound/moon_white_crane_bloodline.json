@@ -22,10 +22,17 @@
               "flat": [
                 {
                   "id": "ascension:2_profound_moon_white_crane_bloodline_agility_a1",
-                  "value": 0.1
+                  "value": 0.0737142857
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:2_profound_moon_white_crane_bloodline_agility_a1_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 7.14286e-05
+                }
+              ]
             },
             "ascension:spirit": {
               "flat": [
@@ -80,10 +87,17 @@
               "flat": [
                 {
                   "id": "ascension:2_profound_moon_white_crane_bloodline_agility_a3",
-                  "value": 2.0
+                  "value": 1.4742857143
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:2_profound_moon_white_crane_bloodline_agility_a3_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0014285714
+                }
+              ]
             }
           }
         }
@@ -103,10 +117,17 @@
               "flat": [
                 {
                   "id": "ascension:2_profound_moon_white_crane_bloodline_agility_a4",
-                  "value": 2.0
+                  "value": 1.4742857143
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:2_profound_moon_white_crane_bloodline_agility_a4_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0014285714
+                }
+              ]
             },
             "ascension:spirit": {
               "flat": [

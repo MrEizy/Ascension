@@ -17,7 +17,7 @@
       "flat": [
         {
           "id": "ascension:6_heavens_path_nine_heavens_myriad_worlds_dao_body_physique_vitality_base",
-          "value": 32.0
+          "value": 11.0
         }
       ],
       "multiplier": [
@@ -32,7 +32,7 @@
       "flat": [
         {
           "id": "ascension:6_heavens_path_nine_heavens_myriad_worlds_dao_body_physique_strength_base",
-          "value": 30.0
+          "value": 10.5
         }
       ],
       "multiplier": [
@@ -47,7 +47,7 @@
       "flat": [
         {
           "id": "ascension:6_heavens_path_nine_heavens_myriad_worlds_dao_body_physique_spirit_base",
-          "value": 32.0
+          "value": 11.0
         }
       ],
       "multiplier": [
@@ -62,7 +62,7 @@
       "flat": [
         {
           "id": "ascension:6_heavens_path_nine_heavens_myriad_worlds_dao_body_physique_agility_base",
-          "value": 28.0
+          "value": 10.0
         }
       ],
       "multiplier": [

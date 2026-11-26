@@ -1,7 +1,11 @@
 {
   "type": "ascension:simple",
-  "name": {"translate": "ascension.bloodline.beast_bloodline.name"},
-  "description": {"translate": "ascension.bloodline.beast_bloodline.desc"},
+  "name": {
+    "translate": "ascension.bloodline.beast_bloodline.name"
+  },
+  "description": {
+    "translate": "ascension.bloodline.beast_bloodline.desc"
+  },
   "paths": [
     "ascension:foundation/body"
   ],
@@ -26,10 +30,17 @@
               "flat": [
                 {
                   "id": "ascension:1_ordinary_beast_bloodline_vitality_a1",
-                  "value": 0.08
+                  "value": 0.0733090909
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:1_ordinary_beast_bloodline_vitality_a1_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 1.81818e-05
+                }
+              ]
             },
             "ascension:agility": {
               "flat": [
@@ -75,10 +86,17 @@
               "flat": [
                 {
                   "id": "ascension:1_ordinary_beast_bloodline_vitality_a3",
-                  "value": 1.0
+                  "value": 0.9163636364
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:1_ordinary_beast_bloodline_vitality_a3_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0002272727
+                }
+              ]
             }
           }
         },
@@ -113,10 +131,17 @@
               "flat": [
                 {
                   "id": "ascension:1_ordinary_beast_bloodline_vitality_a4",
-                  "value": 2.0
+                  "value": 1.8327272727
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:1_ordinary_beast_bloodline_vitality_a4_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0004545455
+                }
+              ]
             }
           }
         }

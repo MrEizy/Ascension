@@ -32,10 +32,17 @@
               "flat": [
                 {
                   "id": "ascension:2_profound_deep_spring_spirit_bloodline_vitality_a1",
-                  "value": 0.07
+                  "value": 0.0641454545
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:2_profound_deep_spring_spirit_bloodline_vitality_a1_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 1.59091e-05
+                }
+              ]
             },
             "ascension:agility": {
               "flat": [
@@ -99,10 +106,17 @@
               "flat": [
                 {
                   "id": "ascension:2_profound_deep_spring_spirit_bloodline_vitality_a3",
-                  "value": 2.0
+                  "value": 1.8327272727
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:2_profound_deep_spring_spirit_bloodline_vitality_a3_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0004545455
+                }
+              ]
             }
           }
         }
@@ -131,10 +145,17 @@
               "flat": [
                 {
                   "id": "ascension:2_profound_deep_spring_spirit_bloodline_vitality_a4",
-                  "value": 2.0
+                  "value": 1.8327272727
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:2_profound_deep_spring_spirit_bloodline_vitality_a4_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0004545455
+                }
+              ]
             }
           }
         }

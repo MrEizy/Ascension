@@ -23,19 +23,33 @@
               "flat": [
                 {
                   "id": "ascension:3_heaven_verdant_flame_spirit_bloodline_spirit_a1",
-                  "value": 0.12
+                  "value": 0.0709333333
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:3_heaven_verdant_flame_spirit_bloodline_spirit_a1_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0001333333
+                }
+              ]
             },
             "ascension:vitality": {
               "flat": [
                 {
                   "id": "ascension:3_heaven_verdant_flame_spirit_bloodline_vitality_a1",
-                  "value": 0.08
+                  "value": 0.0630153846
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:3_heaven_verdant_flame_spirit_bloodline_vitality_a1_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 4.61538e-05
+                }
+              ]
             },
             "ascension:agility": {
               "flat": [
@@ -99,10 +113,17 @@
               "flat": [
                 {
                   "id": "ascension:3_heaven_verdant_flame_spirit_bloodline_spirit_a3",
-                  "value": 2.0
+                  "value": 1.1822222222
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:3_heaven_verdant_flame_spirit_bloodline_spirit_a3_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0022222222
+                }
+              ]
             }
           }
         }
@@ -122,10 +143,17 @@
               "flat": [
                 {
                   "id": "ascension:3_heaven_verdant_flame_spirit_bloodline_vitality_a4",
-                  "value": 2.0
+                  "value": 1.5753846154
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:3_heaven_verdant_flame_spirit_bloodline_vitality_a4_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0011538462
+                }
+              ]
             }
           }
         }
@@ -168,19 +196,33 @@
               "flat": [
                 {
                   "id": "ascension:3_heaven_verdant_flame_spirit_bloodline_spirit_a6",
-                  "value": 4.0
+                  "value": 2.3644444444
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:3_heaven_verdant_flame_spirit_bloodline_spirit_a6_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0044444444
+                }
+              ]
             },
             "ascension:vitality": {
               "flat": [
                 {
                   "id": "ascension:3_heaven_verdant_flame_spirit_bloodline_vitality_a6",
-                  "value": 3.0
+                  "value": 2.3630769231
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:3_heaven_verdant_flame_spirit_bloodline_vitality_a6_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0017307692
+                }
+              ]
             }
           }
         }

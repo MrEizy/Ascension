@@ -23,37 +23,65 @@
               "flat": [
                 {
                   "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_spirit_a1",
-                  "value": 0.9
+                  "value": 0.1218795181
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_spirit_a1_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0021144578
+                }
+              ]
             },
             "ascension:agility": {
               "flat": [
                 {
                   "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_agility_a1",
-                  "value": 0.85
+                  "value": 0.1219310345
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_agility_a1_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0019784483
+                }
+              ]
             },
             "ascension:vitality": {
               "flat": [
                 {
                   "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_vitality_a1",
-                  "value": 0.8
+                  "value": 0.1165714286
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_vitality_a1_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0018571429
+                }
+              ]
             },
             "ascension:strength": {
               "flat": [
                 {
                   "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_strength_a1",
-                  "value": 0.65
+                  "value": 0.1006178862
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_strength_a1_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0014928862
+                }
+              ]
             }
           }
         },
@@ -135,19 +163,33 @@
               "flat": [
                 {
                   "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_spirit_a3",
-                  "value": 10.0
+                  "value": 1.3542168675
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_spirit_a3_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0234939759
+                }
+              ]
             },
             "ascension:agility": {
               "flat": [
                 {
                   "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_agility_a3",
-                  "value": 10.0
+                  "value": 1.4344827586
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_agility_a3_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0232758621
+                }
+              ]
             }
           }
         }
@@ -167,19 +209,33 @@
               "flat": [
                 {
                   "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_vitality_a4",
-                  "value": 12.0
+                  "value": 1.7485714286
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_vitality_a4_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0278571429
+                }
+              ]
             },
             "ascension:strength": {
               "flat": [
                 {
                   "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_strength_a4",
-                  "value": 12.0
+                  "value": 1.8575609756
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_strength_a4_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0275609756
+                }
+              ]
             }
           }
         },
@@ -215,28 +271,49 @@
               "flat": [
                 {
                   "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_spirit_a6",
-                  "value": 14.0
+                  "value": 1.8959036145
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_spirit_a6_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0328915663
+                }
+              ]
             },
             "ascension:vitality": {
               "flat": [
                 {
                   "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_vitality_a6",
-                  "value": 18.0
+                  "value": 2.6228571429
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_vitality_a6_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0417857143
+                }
+              ]
             },
             "ascension:strength": {
               "flat": [
                 {
                   "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_strength_a6",
-                  "value": 18.0
+                  "value": 2.7863414634
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_strength_a6_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0413414634
+                }
+              ]
             }
           }
         },
@@ -272,19 +349,33 @@
               "flat": [
                 {
                   "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_spirit_a8",
-                  "value": 20.0
+                  "value": 2.7084337349
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_spirit_a8_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0469879518
+                }
+              ]
             },
             "ascension:agility": {
               "flat": [
                 {
                   "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_agility_a8",
-                  "value": 20.0
+                  "value": 2.8689655172
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_agility_a8_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0465517241
+                }
+              ]
             }
           }
         },
@@ -329,37 +420,65 @@
               "flat": [
                 {
                   "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_spirit_a10",
-                  "value": 32.0
+                  "value": 4.3334939759
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_spirit_a10_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0751807229
+                }
+              ]
             },
             "ascension:agility": {
               "flat": [
                 {
                   "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_agility_a10",
-                  "value": 30.0
+                  "value": 4.3034482759
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_agility_a10_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0698275862
+                }
+              ]
             },
             "ascension:vitality": {
               "flat": [
                 {
                   "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_vitality_a10",
-                  "value": 30.0
+                  "value": 4.3714285714
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_vitality_a10_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0696428571
+                }
+              ]
             },
             "ascension:strength": {
               "flat": [
                 {
                   "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_strength_a10",
-                  "value": 28.0
+                  "value": 4.3343089431
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_strength_a10_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0643089431
+                }
+              ]
             }
           }
         },

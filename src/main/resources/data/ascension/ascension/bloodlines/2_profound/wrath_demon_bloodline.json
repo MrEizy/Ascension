@@ -1,7 +1,11 @@
 {
   "type": "ascension:simple",
-  "name": {"translate": "ascension.bloodline.wrath_demon_bloodline.name"},
-  "description": {"translate": "ascension.bloodline.wrath_demon_bloodline.desc"},
+  "name": {
+    "translate": "ascension.bloodline.wrath_demon_bloodline.name"
+  },
+  "description": {
+    "translate": "ascension.bloodline.wrath_demon_bloodline.desc"
+  },
   "paths": [
     "ascension:foundation/body",
     "ascension:elemental/fire",
@@ -19,10 +23,17 @@
               "flat": [
                 {
                   "id": "ascension:2_profound_wrath_demon_bloodline_strength_a1",
-                  "value": 0.12
+                  "value": 0.0745411765
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:2_profound_wrath_demon_bloodline_strength_a1_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0001235294
+                }
+              ]
             },
             "ascension:vitality": {
               "flat": [
@@ -95,10 +106,17 @@
               "flat": [
                 {
                   "id": "ascension:2_profound_wrath_demon_bloodline_strength_a3",
-                  "value": 2.0
+                  "value": 1.2423529412
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:2_profound_wrath_demon_bloodline_strength_a3_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0020588235
+                }
+              ]
             }
           }
         },
@@ -124,10 +142,17 @@
               "flat": [
                 {
                   "id": "ascension:2_profound_wrath_demon_bloodline_strength_a4",
-                  "value": 3.0
+                  "value": 1.8635294118
                 }
               ],
-              "multiplier": []
+              "multiplier": [
+                {
+                  "id": "ascension:2_profound_wrath_demon_bloodline_strength_a4_cultivation_growth",
+                  "group": "ascension:bloodline_cultivation_growth",
+                  "operation_group": 0,
+                  "value": 0.0030882353
+                }
+              ]
             },
             "ascension:vitality": {
               "flat": [

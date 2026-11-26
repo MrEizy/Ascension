@@ -185,6 +185,1202 @@
           }
         }
       ]
+    },
+    {
+      "condition": {
+        "type": "ascension:realm_stage_range",
+        "min_minor": 1,
+        "max_minor": 2,
+        "major": 0
+      },
+      "actions": [
+        {
+          "type": "ascension:give_stats",
+          "conflict_action": "salt",
+          "stats": {
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/spirit/minor",
+                  "value": 0.02
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/vitality/minor",
+                  "value": 0.08
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/strength/minor",
+                  "value": 0.1
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/agility/minor",
+                  "value": 0.01
+                }
+              ],
+              "multiplier": []
+            }
+          }
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:realm_stage_range",
+        "min_minor": 0,
+        "max_minor": 0,
+        "major": 1
+      },
+      "actions": [
+        {
+          "type": "ascension:give_stats",
+          "conflict_action": "salt",
+          "stats": {
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/spirit/major",
+                  "value": 0.46
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/vitality/major",
+                  "value": 1.84
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/strength/major",
+                  "value": 2.3
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/agility/major",
+                  "value": 0.23
+                }
+              ],
+              "multiplier": []
+            }
+          }
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:realm_stage_range",
+        "min_minor": 1,
+        "max_minor": 2,
+        "major": 1
+      },
+      "actions": [
+        {
+          "type": "ascension:give_stats",
+          "conflict_action": "salt",
+          "stats": {
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/spirit/minor",
+                  "value": 0.13
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/vitality/minor",
+                  "value": 0.52
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/strength/minor",
+                  "value": 0.65
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/agility/minor",
+                  "value": 0.065
+                }
+              ],
+              "multiplier": []
+            }
+          }
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:realm_stage_range",
+        "min_minor": 0,
+        "max_minor": 0,
+        "major": 2
+      },
+      "actions": [
+        {
+          "type": "ascension:give_stats",
+          "conflict_action": "salt",
+          "stats": {
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/spirit/major",
+                  "value": 0.79
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/vitality/major",
+                  "value": 3.16
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/strength/major",
+                  "value": 3.95
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/agility/major",
+                  "value": 0.395
+                }
+              ],
+              "multiplier": []
+            }
+          }
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:realm_stage_range",
+        "min_minor": 1,
+        "max_minor": 2,
+        "major": 2
+      },
+      "actions": [
+        {
+          "type": "ascension:give_stats",
+          "conflict_action": "salt",
+          "stats": {
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/spirit/minor",
+                  "value": 0.295
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/vitality/minor",
+                  "value": 1.18
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/strength/minor",
+                  "value": 1.475
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/agility/minor",
+                  "value": 0.1475
+                }
+              ],
+              "multiplier": []
+            }
+          }
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:realm_stage_range",
+        "min_minor": 0,
+        "max_minor": 0,
+        "major": 3
+      },
+      "actions": [
+        {
+          "type": "ascension:give_stats",
+          "conflict_action": "salt",
+          "stats": {
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/spirit/major",
+                  "value": 1.285
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/vitality/major",
+                  "value": 5.14
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/strength/major",
+                  "value": 6.425
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/agility/major",
+                  "value": 0.6425
+                }
+              ],
+              "multiplier": []
+            }
+          }
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:realm_stage_range",
+        "min_minor": 1,
+        "max_minor": 2,
+        "major": 3
+      },
+      "actions": [
+        {
+          "type": "ascension:give_stats",
+          "conflict_action": "salt",
+          "stats": {
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/spirit/minor",
+                  "value": 0.5425
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/vitality/minor",
+                  "value": 2.17
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/strength/minor",
+                  "value": 2.7125
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/agility/minor",
+                  "value": 0.27125
+                }
+              ],
+              "multiplier": []
+            }
+          }
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:realm_stage_range",
+        "min_minor": 0,
+        "max_minor": 0,
+        "major": 4
+      },
+      "actions": [
+        {
+          "type": "ascension:give_stats",
+          "conflict_action": "salt",
+          "stats": {
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/spirit/major",
+                  "value": 2.0275
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/vitality/major",
+                  "value": 8.11
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/strength/major",
+                  "value": 10.1375
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/agility/major",
+                  "value": 1.01375
+                }
+              ],
+              "multiplier": []
+            }
+          }
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:realm_stage_range",
+        "min_minor": 1,
+        "max_minor": 2,
+        "major": 4
+      },
+      "actions": [
+        {
+          "type": "ascension:give_stats",
+          "conflict_action": "salt",
+          "stats": {
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/spirit/minor",
+                  "value": 0.91375
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/vitality/minor",
+                  "value": 3.655
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/strength/minor",
+                  "value": 4.56875
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/agility/minor",
+                  "value": 0.456875
+                }
+              ],
+              "multiplier": []
+            }
+          }
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:realm_stage_range",
+        "min_minor": 0,
+        "max_minor": 0,
+        "major": 5
+      },
+      "actions": [
+        {
+          "type": "ascension:give_stats",
+          "conflict_action": "salt",
+          "stats": {
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/spirit/major",
+                  "value": 3.14125
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/vitality/major",
+                  "value": 12.565
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/strength/major",
+                  "value": 15.70625
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/agility/major",
+                  "value": 1.570625
+                }
+              ],
+              "multiplier": []
+            }
+          }
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:realm_stage_range",
+        "min_minor": 1,
+        "max_minor": 2,
+        "major": 5
+      },
+      "actions": [
+        {
+          "type": "ascension:give_stats",
+          "conflict_action": "salt",
+          "stats": {
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/spirit/minor",
+                  "value": 1.470625
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/vitality/minor",
+                  "value": 5.8825
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/strength/minor",
+                  "value": 7.353125
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/agility/minor",
+                  "value": 0.7353125
+                }
+              ],
+              "multiplier": []
+            }
+          }
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:realm_stage_range",
+        "min_minor": 0,
+        "max_minor": 0,
+        "major": 6
+      },
+      "actions": [
+        {
+          "type": "ascension:give_stats",
+          "conflict_action": "salt",
+          "stats": {
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/spirit/major",
+                  "value": 4.811875
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/vitality/major",
+                  "value": 19.2475
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/strength/major",
+                  "value": 24.059375
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/agility/major",
+                  "value": 2.4059375
+                }
+              ],
+              "multiplier": []
+            }
+          }
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:realm_stage_range",
+        "min_minor": 1,
+        "max_minor": 2,
+        "major": 6
+      },
+      "actions": [
+        {
+          "type": "ascension:give_stats",
+          "conflict_action": "salt",
+          "stats": {
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/spirit/minor",
+                  "value": 2.3059375
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/vitality/minor",
+                  "value": 9.22375
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/strength/minor",
+                  "value": 11.5296875
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/agility/minor",
+                  "value": 1.15296875
+                }
+              ],
+              "multiplier": []
+            }
+          }
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:realm_stage_range",
+        "min_minor": 0,
+        "max_minor": 0,
+        "major": 7
+      },
+      "actions": [
+        {
+          "type": "ascension:give_stats",
+          "conflict_action": "salt",
+          "stats": {
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/spirit/major",
+                  "value": 7.3178125
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/vitality/major",
+                  "value": 29.27125
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/strength/major",
+                  "value": 36.5890625
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/agility/major",
+                  "value": 3.65890625
+                }
+              ],
+              "multiplier": []
+            }
+          }
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:realm_stage_range",
+        "min_minor": 1,
+        "max_minor": 2,
+        "major": 7
+      },
+      "actions": [
+        {
+          "type": "ascension:give_stats",
+          "conflict_action": "salt",
+          "stats": {
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/spirit/minor",
+                  "value": 3.55890625
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/vitality/minor",
+                  "value": 14.235625
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/strength/minor",
+                  "value": 17.79453125
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/agility/minor",
+                  "value": 1.779453125
+                }
+              ],
+              "multiplier": []
+            }
+          }
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:realm_stage_range",
+        "min_minor": 0,
+        "max_minor": 0,
+        "major": 8
+      },
+      "actions": [
+        {
+          "type": "ascension:give_stats",
+          "conflict_action": "salt",
+          "stats": {
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/spirit/major",
+                  "value": 11.07671875
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/vitality/major",
+                  "value": 44.306875
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/strength/major",
+                  "value": 55.38359375
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/agility/major",
+                  "value": 5.538359375
+                }
+              ],
+              "multiplier": []
+            }
+          }
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:realm_stage_range",
+        "min_minor": 1,
+        "max_minor": 2,
+        "major": 8
+      },
+      "actions": [
+        {
+          "type": "ascension:give_stats",
+          "conflict_action": "salt",
+          "stats": {
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/spirit/minor",
+                  "value": 5.438359375
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/vitality/minor",
+                  "value": 21.7534375
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/strength/minor",
+                  "value": 27.191796875
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/agility/minor",
+                  "value": 2.7191796875
+                }
+              ],
+              "multiplier": []
+            }
+          }
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:realm_stage_range",
+        "min_minor": 0,
+        "max_minor": 0,
+        "major": 9
+      },
+      "actions": [
+        {
+          "type": "ascension:give_stats",
+          "conflict_action": "salt",
+          "stats": {
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/spirit/major",
+                  "value": 16.715078125
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/vitality/major",
+                  "value": 66.8603125
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/strength/major",
+                  "value": 83.575390625
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/agility/major",
+                  "value": 8.3575390625
+                }
+              ],
+              "multiplier": []
+            }
+          }
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:realm_stage_range",
+        "min_minor": 1,
+        "max_minor": 2,
+        "major": 9
+      },
+      "actions": [
+        {
+          "type": "ascension:give_stats",
+          "conflict_action": "salt",
+          "stats": {
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/spirit/minor",
+                  "value": 8.2575390625
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/vitality/minor",
+                  "value": 33.03015625
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/strength/minor",
+                  "value": 41.2876953125
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/agility/minor",
+                  "value": 4.1287695313
+                }
+              ],
+              "multiplier": []
+            }
+          }
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:realm_stage_range",
+        "min_minor": 0,
+        "max_minor": 0,
+        "major": 10
+      },
+      "actions": [
+        {
+          "type": "ascension:give_stats",
+          "conflict_action": "salt",
+          "stats": {
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/spirit/major",
+                  "value": 25.1726171875
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/vitality/major",
+                  "value": 100.69046875
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/strength/major",
+                  "value": 125.8630859375
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/agility/major",
+                  "value": 12.5863085938
+                }
+              ],
+              "multiplier": []
+            }
+          }
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:realm_stage_range",
+        "min_minor": 1,
+        "max_minor": 2,
+        "major": 10
+      },
+      "actions": [
+        {
+          "type": "ascension:give_stats",
+          "conflict_action": "salt",
+          "stats": {
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/spirit/minor",
+                  "value": 12.4863085938
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/vitality/minor",
+                  "value": 49.945234375
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/strength/minor",
+                  "value": 62.4315429688
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/agility/minor",
+                  "value": 6.2431542969
+                }
+              ],
+              "multiplier": []
+            }
+          }
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:realm_stage_range",
+        "min_minor": 0,
+        "max_minor": 0,
+        "major": 11
+      },
+      "actions": [
+        {
+          "type": "ascension:give_stats",
+          "conflict_action": "salt",
+          "stats": {
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/spirit/major",
+                  "value": 37.8589257812
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/vitality/major",
+                  "value": 151.435703125
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/strength/major",
+                  "value": 189.2946289062
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/agility/major",
+                  "value": 18.9294628906
+                }
+              ],
+              "multiplier": []
+            }
+          }
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:realm_stage_range",
+        "min_minor": 1,
+        "max_minor": 2,
+        "major": 11
+      },
+      "actions": [
+        {
+          "type": "ascension:give_stats",
+          "conflict_action": "salt",
+          "stats": {
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/spirit/minor",
+                  "value": 18.8294628906
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/vitality/minor",
+                  "value": 75.3178515625
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/strength/minor",
+                  "value": 94.1473144531
+                }
+              ],
+              "multiplier": []
+            },
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:progression_03/body/agility/minor",
+                  "value": 9.4147314453
+                }
+              ],
+              "multiplier": []
+            }
+          }
+        }
+      ]
     }
   ]
 }
