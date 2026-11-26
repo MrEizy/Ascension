@@ -6,12 +6,17 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.registries.DataPackRegistryEvent;
 import net.neoforged.neoforge.registries.NewRegistryEvent;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.api.ascension.core.cultivation.AuthorityCurve;
+import net.zic.ascension.configuration.cultivation.RealmEffectivenessDefinition;
 import net.zic.ascension.configuration.mobs.condition.MobConfigurationConditionType;
 import net.zic.ascension.configuration.mob_traits.MobTraitDefinition;
 import net.zic.ascension.configuration.mob_traits.MobTraitDefinitionType;
 import net.zic.zenithlib.registry.RegistryHelper;
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
 public class ConfigurationRegistries {
+    public static final RegistryHelper.DataPackRegistry<AuthorityCurve> REALM_EFFECTIVENESS_REGISTRY =
+            RegistryHelper.dataPackRegistry(AscensionCraft.MOD_ID, "config/realm_effectiveness", () -> RealmEffectivenessDefinition.CODEC);
+
     public static final RegistryHelper.DataPackRegistry<MobTraitDefinition> MOB_TRAIT_DEFINITION_REGISTRY =
             new RegistryHelper.DataPackRegistry<>(RegistryHelper.key(AscensionCraft.MOD_ID,"config/mob_traits"),()->MobTraitDefinitionType.MOB_TRAIT_CODEC);
 
@@ -21,6 +26,11 @@ public class ConfigurationRegistries {
 
     @SubscribeEvent
     public static void registerDatapackRegistries(DataPackRegistryEvent.NewRegistry event) {
+        event.dataPackRegistry(
+                REALM_EFFECTIVENESS_REGISTRY.key(),
+                REALM_EFFECTIVENESS_REGISTRY.codec().get(),
+                REALM_EFFECTIVENESS_REGISTRY.codec().get()
+        );
         event.dataPackRegistry(
                 MOB_TRAIT_DEFINITION_REGISTRY.key(),
                 MOB_TRAIT_DEFINITION_REGISTRY.codec().get(),

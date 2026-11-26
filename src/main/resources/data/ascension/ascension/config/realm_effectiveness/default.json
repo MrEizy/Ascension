@@ -1,4 +1,6 @@
 {
+  "mortal_authority": 0.1,
+  "terminal_growth": 2.0,
   "multipliers": [
     1.0,
     2.0,
