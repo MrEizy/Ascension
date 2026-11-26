@@ -27,6 +27,7 @@
 ### Fixes
 * Fixed **Boundless Qi Scripture** not spawning in End Cities (Missing ```consumer.accept``` call in the loot table registration).
 * Internal code for atmospheric qi regeneration and calls
+* Skill Wheel keeps the same size regardless of GUI scale
 
 
 ### Technical Changes
