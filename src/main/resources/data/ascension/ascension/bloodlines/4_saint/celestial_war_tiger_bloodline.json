@@ -16,44 +16,38 @@
       "condition": "ascension:all_purity",
       "actions": [
         {
-          "type": "ascension:give_stats_using_purity",
-          "conflict_action": "replace",
+          "type": "ascension:give_scaled_purity_stats",
+          "scaling": "ascension:bloodline",
           "stats": {
             "ascension:strength": {
-              "flat": [
-                {
-                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_strength_a1",
-                  "value": 0.26
-                }
-              ],
-              "multiplier": []
+              "continuous": 26.0,
+              "milestones": {
+                "25": 4.0,
+                "50": 5.0,
+                "100": 9.0
+              }
             },
             "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_agility_a1",
-                  "value": 0.2
-                }
-              ],
-              "multiplier": []
+              "continuous": 20.0,
+              "milestones": {
+                "25": 3.0,
+                "75": 4.0,
+                "100": 7.0
+              }
             },
             "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_vitality_a1",
-                  "value": 0.16
-                }
-              ],
-              "multiplier": []
+              "continuous": 16.0,
+              "milestones": {
+                "50": 4.0,
+                "100": 7.0
+              }
             },
             "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_spirit_a1",
-                  "value": 0.08
-                }
-              ],
-              "multiplier": []
+              "continuous": 8.0,
+              "milestones": {
+                "75": 3.0,
+                "100": 4.0
+              }
             }
           }
         },
@@ -106,65 +100,10 @@
     {
       "condition": {
         "type": "ascension:on_purity_in_range",
-        "start": 25,
-        "end": 25
-      },
-      "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:strength": {
-              "flat": [
-                {
-                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_strength_a3",
-                  "value": 4.0
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_agility_a3",
-                  "value": 3.0
-                }
-              ],
-              "multiplier": []
-            }
-          }
-        }
-      ]
-    },
-    {
-      "condition": {
-        "type": "ascension:on_purity_in_range",
         "start": 50,
         "end": 50
       },
       "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:strength": {
-              "flat": [
-                {
-                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_strength_a4",
-                  "value": 5.0
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_vitality_a4",
-                  "value": 4.0
-                }
-              ],
-              "multiplier": []
-            }
-          }
-        },
         {
           "type": "ascension:give_path_bonuses",
           "bonuses": {
@@ -191,29 +130,6 @@
       },
       "actions": [
         {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_agility_a6",
-                  "value": 4.0
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_spirit_a6",
-                  "value": 3.0
-                }
-              ],
-              "multiplier": []
-            }
-          }
-        },
-        {
           "type": "ascension:give_path_bonuses",
           "bonuses": {
             "ascension:affinity": {
@@ -238,47 +154,6 @@
         "end": 100
       },
       "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:strength": {
-              "flat": [
-                {
-                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_strength_a8",
-                  "value": 9.0
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_agility_a8",
-                  "value": 7.0
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_vitality_a8",
-                  "value": 7.0
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_spirit_a8",
-                  "value": 4.0
-                }
-              ],
-              "multiplier": []
-            }
-          }
-        },
         {
           "type": "ascension:give_path_bonuses",
           "bonuses": {

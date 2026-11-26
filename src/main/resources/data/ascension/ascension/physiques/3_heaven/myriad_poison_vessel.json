@@ -1,7 +1,11 @@
 {
   "type": "ascension:simple",
-  "name": {"translate": "ascension.physique.myriad_poison_vessel.name"},
-  "description": {"translate": "ascension.physique.myriad_poison_vessel.desc"},
+  "name": {
+    "translate": "ascension.physique.myriad_poison_vessel.name"
+  },
+  "description": {
+    "translate": "ascension.physique.myriad_poison_vessel.desc"
+  },
   "paths": [
     "ascension:foundation/essence",
     "ascension:elemental/poison",
@@ -13,7 +17,7 @@
       "flat": [
         {
           "id": "ascension:3_heaven_myriad_poison_vessel_spirit_base",
-          "value": 5.0
+          "value": 4.25
         }
       ],
       "multiplier": [

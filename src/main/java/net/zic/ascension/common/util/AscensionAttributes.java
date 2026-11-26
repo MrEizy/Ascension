@@ -9,6 +9,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.AscensionCraft;
 
 public class AscensionAttributes {
+    public static final double BASE_HEALTH_REGEN_RATE = 1.0D;
     public static final DeferredRegister<Attribute> ATTRIBUTES = DeferredRegister.create(
             BuiltInRegistries.ATTRIBUTE, AscensionCraft.MOD_ID);
 
@@ -19,12 +20,12 @@ public class AscensionAttributes {
     public static final Holder<Attribute> QI_REGEN_RATE = ATTRIBUTES.register("qi_regen_rate",()->new RangedAttribute(
             "attributes.ascension.qi_regen_rate",
             1,
-            0,10000).setSyncable(true));
+            0,Double.MAX_VALUE).setSyncable(true));
     public static final Holder<Attribute> HEALTH_REGEN_RATE = ATTRIBUTES.register("health_regen_rate", () -> new RangedAttribute(
             "attributes.ascension.health_regen_rate",
-            1.0D,
+            BASE_HEALTH_REGEN_RATE,
             0.0D,
-            10000.0D).setSyncable(true));
+            Double.MAX_VALUE).setSyncable(true));
     public static final Holder<Attribute> MAX_STAMINA = ATTRIBUTES.register("max_stamina", () -> new RangedAttribute(
             "attributes.ascension.max_stamina",
             100.0D,
@@ -34,7 +35,7 @@ public class AscensionAttributes {
             "attributes.ascension.stamina_regen_rate",
             10.0D,
             0.0D,
-            10000.0D).setSyncable(true));
+            Double.MAX_VALUE).setSyncable(true));
     public static final Holder<Attribute> STAMINA_REGEN_DELAY = ATTRIBUTES.register("stamina_regen_delay", () -> new RangedAttribute(
             "attributes.ascension.stamina_regen_delay",
             40.0D,

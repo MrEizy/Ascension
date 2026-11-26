@@ -1,5 +1,6 @@
 package net.zic.ascension.mob_cultivation.oliver_rewrite;
 
+import net.zic.ascension.impl.core.attribute.ScaledAttributes;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -79,6 +80,7 @@ public class MobConfigurationHolder implements ConfigurableMobData {
     public void finishSpawnInitialization() {
         if (!freshlyGenerated) return;
         freshlyGenerated = false;
+        ScaledAttributes.refresh(mob);
         mob.setHealth(mob.getMaxHealth());
     }
 

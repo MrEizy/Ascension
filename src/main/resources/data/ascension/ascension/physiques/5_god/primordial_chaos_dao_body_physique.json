@@ -17,7 +17,7 @@
       "flat": [
         {
           "id": "ascension:5_god_primordial_chaos_dao_body_physique_spirit_base",
-          "value": 18.0
+          "value": 7.5
         }
       ],
       "multiplier": [
@@ -32,7 +32,7 @@
       "flat": [
         {
           "id": "ascension:5_god_primordial_chaos_dao_body_physique_vitality_base",
-          "value": 15.0
+          "value": 6.75
         }
       ],
       "multiplier": [
@@ -47,7 +47,7 @@
       "flat": [
         {
           "id": "ascension:5_god_primordial_chaos_dao_body_physique_strength_base",
-          "value": 12.0
+          "value": 6.0
         }
       ],
       "multiplier": [
@@ -62,7 +62,7 @@
       "flat": [
         {
           "id": "ascension:5_god_primordial_chaos_dao_body_physique_agility_base",
-          "value": 12.0
+          "value": 6.0
         }
       ],
       "multiplier": [

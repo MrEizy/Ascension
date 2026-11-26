@@ -44,12 +44,10 @@
   ],
   "stats_per_realm": {
     "ascension:strength": {
-      "flat": 0.0625,
-      "multiplier": 0.00875
+      "profile": "ascension:ordinary/secondary"
     },
     "ascension:vitality": {
-      "flat": 0.25,
-      "multiplier": 0.025
+      "profile": "ascension:ordinary/primary"
     }
   },
   "item_tooltip": {

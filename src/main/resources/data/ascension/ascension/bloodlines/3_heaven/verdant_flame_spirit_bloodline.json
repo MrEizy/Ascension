@@ -16,35 +16,28 @@
       "condition": "ascension:all_purity",
       "actions": [
         {
-          "type": "ascension:give_stats_using_purity",
-          "conflict_action": "replace",
+          "type": "ascension:give_scaled_purity_stats",
+          "scaling": "ascension:bloodline",
           "stats": {
             "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_verdant_flame_spirit_bloodline_spirit_a1",
-                  "value": 0.12
-                }
-              ],
-              "multiplier": []
+              "continuous": 12.0,
+              "milestones": {
+                "25": 2.0,
+                "100": 4.0
+              }
             },
             "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_verdant_flame_spirit_bloodline_vitality_a1",
-                  "value": 0.08
-                }
-              ],
-              "multiplier": []
+              "continuous": 8.0,
+              "milestones": {
+                "50": 2.0,
+                "100": 3.0
+              }
             },
             "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_verdant_flame_spirit_bloodline_agility_a1",
-                  "value": 0.05
-                }
-              ],
-              "multiplier": []
+              "continuous": 5.0,
+              "milestones": {
+                "75": 2.0
+              }
             }
           }
         },
@@ -80,107 +73,6 @@
                 ],
                 "multiplier": []
               }
-            }
-          }
-        }
-      ]
-    },
-    {
-      "condition": {
-        "type": "ascension:on_purity_in_range",
-        "start": 25,
-        "end": 25
-      },
-      "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_verdant_flame_spirit_bloodline_spirit_a3",
-                  "value": 2.0
-                }
-              ],
-              "multiplier": []
-            }
-          }
-        }
-      ]
-    },
-    {
-      "condition": {
-        "type": "ascension:on_purity_in_range",
-        "start": 50,
-        "end": 50
-      },
-      "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_verdant_flame_spirit_bloodline_vitality_a4",
-                  "value": 2.0
-                }
-              ],
-              "multiplier": []
-            }
-          }
-        }
-      ]
-    },
-    {
-      "condition": {
-        "type": "ascension:on_purity_in_range",
-        "start": 75,
-        "end": 75
-      },
-      "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_verdant_flame_spirit_bloodline_agility_a5",
-                  "value": 2.0
-                }
-              ],
-              "multiplier": []
-            }
-          }
-        }
-      ]
-    },
-    {
-      "condition": {
-        "type": "ascension:on_purity_in_range",
-        "start": 100,
-        "end": 100
-      },
-      "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_verdant_flame_spirit_bloodline_spirit_a6",
-                  "value": 4.0
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_verdant_flame_spirit_bloodline_vitality_a6",
-                  "value": 3.0
-                }
-              ],
-              "multiplier": []
             }
           }
         }

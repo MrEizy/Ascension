@@ -15,35 +15,24 @@
       "condition": "ascension:all_purity",
       "actions": [
         {
-          "type": "ascension:give_stats_using_purity",
-          "conflict_action": "replace",
+          "type": "ascension:give_scaled_purity_stats",
+          "scaling": "ascension:bloodline",
           "stats": {
             "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:2_profound_jade_cicada_bloodline_spirit_a1",
-                  "value": 0.09
-                }
-              ],
-              "multiplier": []
+              "continuous": 9.0,
+              "milestones": {
+                "50": 2.0,
+                "100": 1.0
+              }
             },
             "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:2_profound_jade_cicada_bloodline_vitality_a1",
-                  "value": 0.07
-                }
-              ],
-              "multiplier": []
+              "continuous": 7.0,
+              "milestones": {
+                "100": 3.0
+              }
             },
             "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:2_profound_jade_cicada_bloodline_agility_a1",
-                  "value": 0.03
-                }
-              ],
-              "multiplier": []
+              "continuous": 3.0
             }
           }
         },
@@ -70,61 +59,6 @@
                 ],
                 "multiplier": []
               }
-            }
-          }
-        }
-      ]
-    },
-    {
-      "condition": {
-        "type": "ascension:on_purity_in_range",
-        "start": 50,
-        "end": 50
-      },
-      "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:2_profound_jade_cicada_bloodline_spirit_a3",
-                  "value": 2.0
-                }
-              ],
-              "multiplier": []
-            }
-          }
-        }
-      ]
-    },
-    {
-      "condition": {
-        "type": "ascension:on_purity_in_range",
-        "start": 100,
-        "end": 100
-      },
-      "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:2_profound_jade_cicada_bloodline_vitality_a4",
-                  "value": 3.0
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:2_profound_jade_cicada_bloodline_spirit_a4",
-                  "value": 1.0
-                }
-              ],
-              "multiplier": []
             }
           }
         }

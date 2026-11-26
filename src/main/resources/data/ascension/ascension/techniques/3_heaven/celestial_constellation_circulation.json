@@ -48,12 +48,10 @@
   ],
   "stats_per_realm": {
     "ascension:agility": {
-      "flat": 0.05769,
-      "multiplier": 0.00375
+      "profile": "ascension:heaven/secondary"
     },
     "ascension:spirit": {
-      "flat": 0.19231,
-      "multiplier": 0.01125
+      "profile": "ascension:heaven/primary"
     }
   },
   "item_tooltip": {

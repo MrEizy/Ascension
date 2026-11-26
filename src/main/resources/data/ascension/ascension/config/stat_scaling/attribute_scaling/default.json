@@ -1,0 +1,72 @@
+{
+  "common": {
+    "minecraft:max_health": [
+      {
+        "stat": "ascension:vitality",
+        "type": "power",
+        "coefficient": 3,
+        "scale": 100,
+        "exponent": 1.5
+      }
+    ],
+    "minecraft:movement_speed": [
+      {
+        "stat": "ascension:agility",
+        "type": "power",
+        "coefficient": 0.002,
+        "scale": 50,
+        "exponent": 0.25
+      }
+    ]
+  },
+  "player": {
+    "minecraft:jump_strength": [
+      {
+        "stat": "ascension:strength",
+        "type": "power",
+        "coefficient": 0.005,
+        "scale": 50,
+        "exponent": 0.35
+      }
+    ],
+    "minecraft:attack_speed": [
+      {
+        "stat": "ascension:agility",
+        "type": "saturation",
+        "coefficient": 8,
+        "scale": 400
+      }
+    ],
+    "minecraft:mining_efficiency": [
+      {
+        "stat": "ascension:strength",
+        "type": "power",
+        "coefficient": 0.015,
+        "scale": 100,
+        "exponent": 1.25
+      },
+      {
+        "stat": "ascension:agility",
+        "type": "power",
+        "coefficient": 0.005,
+        "scale": 100,
+        "exponent": 1.25
+      }
+    ],
+    "minecraft:step_height": [
+      {
+        "stat": "ascension:agility",
+        "type": "saturation",
+        "coefficient": 1.4,
+        "scale": 140
+      }
+    ]
+  },
+  "excess_armor_resistance": 100,
+  "recovery": {
+    "minimum_recovery_seconds": 60,
+    "maximum_recovery_seconds": 1200,
+    "health_scaling_threshold": 100000,
+    "sleep_missing_health_fraction": 0.25
+  }
+}

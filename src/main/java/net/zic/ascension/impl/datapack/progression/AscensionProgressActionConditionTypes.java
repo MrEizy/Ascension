@@ -11,6 +11,7 @@ import net.zic.ascension.api.ascension.datapack.progresison.ProgressActionCondit
 import net.zic.ascension.impl.datapack.bloodline.purity.condition.OnPurityInRangeConditionType;
 import net.zic.ascension.impl.datapack.progression.condition.UnitConditionType;
 import net.zic.ascension.impl.core.path.realm_change.condition.RealmChangeConditions;
+import net.zic.ascension.impl.core.path.realm_change.condition.RealmStageRangeCondition;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -73,6 +74,14 @@ public class AscensionProgressActionConditionTypes {
                 }
             }
     );
+    public static final DeferredHolder<ProgressActionConditionType, ProgressActionConditionType> REALM_STAGE_RANGE =
+            PROGRESS_ACTION_CONDITION_TYPES.register("realm_stage_range", () -> new ProgressActionConditionType() {
+                @Override
+                public com.mojang.serialization.MapCodec<? extends net.zic.ascension.api.ascension.core.progression.ProgressActionCondition> codec() {
+                    return RealmStageRangeCondition.CODEC;
+                }
+            });
+
     public static void register(IEventBus eventBus){
 
         PROGRESS_ACTION_CONDITION_TYPES.register(eventBus);

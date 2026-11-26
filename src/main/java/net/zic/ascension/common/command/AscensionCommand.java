@@ -52,6 +52,7 @@ public final class AscensionCommand {
                 .then(admin(ViewStats.build()))
                 .then(admin(Commands.literal("inspect")
                         .then(ViewStats.buildAs("stats"))
+                        .then(AuthorityCommand.build())
                         .then(MobCommands.buildAs("mob"))
                         .then(CultivationCommand.buildInspect())
                         .then(AffinityCommand.buildAs("affinity"))

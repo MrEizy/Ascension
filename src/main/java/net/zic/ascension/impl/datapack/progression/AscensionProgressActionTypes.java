@@ -9,6 +9,9 @@ import net.zic.ascension.api.ascension.datapack.progresison.ProgressActionType;
 import net.zic.ascension.impl.datapack.progression.action.GivePathBonusesActionType;
 import net.zic.ascension.impl.datapack.progression.action.GivePathBonusesUsingPurityActionType;
 import net.zic.ascension.impl.datapack.progression.action.GiveStatsActionType;
+import net.zic.ascension.impl.datapack.progression.action.GiveScaledRealmStatsActionType;
+import net.zic.ascension.impl.datapack.progression.action.GiveScaledPathBonusActionType;
+import net.zic.ascension.impl.datapack.progression.action.GiveScaledPurityStatsActionType;
 import net.zic.ascension.impl.datapack.progression.action.GiveStatsUsingPurityActionType;
 import net.zic.ascension.impl.datapack.progression.action.GrantSkillsActionType;
 import net.zic.ascension.impl.datapack.progression.action.RemoveSkillsActionType;
@@ -46,6 +49,14 @@ public final class AscensionProgressActionTypes {
             "remove_skills",
             RemoveSkillsActionType::new
     );
+
+    public static final DeferredHolder<ProgressActionType, ProgressActionType> GIVE_SCALED_REALM_STATS = PROGRESS_ACTION_TYPES.register(
+            "give_scaled_realm_stats", GiveScaledRealmStatsActionType::new);
+    public static final DeferredHolder<ProgressActionType, ProgressActionType> GIVE_SCALED_PURITY_STATS = PROGRESS_ACTION_TYPES.register(
+            "give_scaled_purity_stats", GiveScaledPurityStatsActionType::new);
+
+    public static final DeferredHolder<ProgressActionType, ProgressActionType> GIVE_SCALED_PATH_BONUS = PROGRESS_ACTION_TYPES.register(
+            "give_scaled_path_bonus", GiveScaledPathBonusActionType::new);
 
     private AscensionProgressActionTypes() {
     }

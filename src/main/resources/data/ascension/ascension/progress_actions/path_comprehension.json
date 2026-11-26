@@ -1,0 +1,5 @@
+{
+  "type": "ascension:give_scaled_path_bonus",
+  "category": "ascension:damage",
+  "per_stage": 0.025
+}

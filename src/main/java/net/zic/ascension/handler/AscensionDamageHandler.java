@@ -13,6 +13,7 @@ import net.zic.ascension.api.ascension.core.damage.AscensionDamageProfile;
 import net.zic.ascension.api.ascension.core.damage.AscensionDamageTypeHolders;
 import net.zic.ascension.api.rpg_engine.damage.RPGEngineEntityDamagedEvent;
 import net.zic.ascension.api.rpg_engine.damage.RPGEngineGatherDamageTypesEvent;
+import net.zic.ascension.impl.core.damage.AuthorityCombat;
 import net.zic.ascension.impl.core.damage.AscensionDamageProfileResolver;
 import net.zic.ascension.impl.core.damage.DamageTrace;
 import net.zic.ascension.impl.core.skill.passive.PassiveCombatService;
@@ -29,6 +30,7 @@ public final class AscensionDamageHandler {
     // Separate groups so the attacker's path damage and the defender's path resistance multiply rather than add.
     private static final int PATH_DAMAGE_GROUP = 16;
     private static final int PATH_RESISTANCE_GROUP = 17;
+    private static final int AUTHORITY_GROUP = 18;
     private static final int PASSIVE_OFFENSE_GROUP = 20;
     private static final int PASSIVE_DEFENSE_GROUP = 30;
 
@@ -88,6 +90,11 @@ public final class AscensionDamageHandler {
             applyPathBonuses(event, trace, path);
         }
 
+        AuthorityCombat.apply(event, trace, AUTHORITY_GROUP);
+        if (finishIfResolved(event, trace)) {
+            return;
+        }
+
         double outgoingMultiplier = PassiveCombatService.outgoingDamageMultiplier(event);
         if (Double.isFinite(outgoingMultiplier) && outgoingMultiplier >= 0.0D) {
             event.multiplyDamage(AscensionCraft.prefix("damage_passive_offense"), PASSIVE_OFFENSE_GROUP, outgoingMultiplier);
@@ -115,6 +122,11 @@ public final class AscensionDamageHandler {
         Barriers.applyDamage(event);
         trace.transition("Barriers", beforeBarriers, event.getDamage());
         trace.finish(event);
+    }
+
+    @SubscribeEvent
+    public static void onRPGEngineDamagePost(RPGEngineEntityDamagedEvent.Post event) {
+        DamageTrace.post(event);
     }
 
     private static void applyProfile(RPGEngineEntityDamagedEvent.Pre event, DamageTrace trace) {

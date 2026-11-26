@@ -209,7 +209,7 @@ public class SimpleTechnique implements Technique<SimpleTechnique.Data> {
             if (!path.equals(ratePath)) continue;
             Stat stat = ZenithStatHelper.stat(entry.getKey());
             if (stat == null) continue;
-            TechniqueRealmStatRate rate = entry.getValue();
+            TechniqueRealmStatRate rate = entry.getValue().resolve(source.getRegistryAccess());
             Identifier flatId = modifierId(techniqueId, path, entry.getKey(), "minor_flat");
             Identifier multiplierId = modifierId(techniqueId, path, entry.getKey(), "major_percent");
             if (rate.flat() != 0.0D && beforeMinor != afterMinor) {

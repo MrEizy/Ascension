@@ -16,44 +16,42 @@
       "condition": "ascension:all_purity",
       "actions": [
         {
-          "type": "ascension:give_stats_using_purity",
-          "conflict_action": "replace",
+          "type": "ascension:give_scaled_purity_stats",
+          "scaling": "ascension:bloodline",
           "stats": {
             "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:6_heavens_path_eighteen_winged_three_legged_glass_crow_bloodline_spirit_a1",
-                  "value": 1.05
-                }
-              ],
-              "multiplier": []
+              "continuous": 105.0,
+              "milestones": {
+                "10": 10.0,
+                "50": 20.0,
+                "75": 18.0,
+                "100": 38.0
+              }
             },
             "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:6_heavens_path_eighteen_winged_three_legged_glass_crow_bloodline_agility_a1",
-                  "value": 0.9
-                }
-              ],
-              "multiplier": []
+              "continuous": 90.0,
+              "milestones": {
+                "10": 10.0,
+                "25": 12.0,
+                "50": 18.0,
+                "75": 18.0,
+                "100": 32.0
+              }
             },
             "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:6_heavens_path_eighteen_winged_three_legged_glass_crow_bloodline_vitality_a1",
-                  "value": 0.75
-                }
-              ],
-              "multiplier": []
+              "continuous": 75.0,
+              "milestones": {
+                "25": 12.0,
+                "50": 12.0,
+                "75": 14.0,
+                "100": 28.0
+              }
             },
             "ascension:strength": {
-              "flat": [
-                {
-                  "id": "ascension:6_heavens_path_eighteen_winged_three_legged_glass_crow_bloodline_strength_a1",
-                  "value": 0.5
-                }
-              ],
-              "multiplier": []
+              "continuous": 50.0,
+              "milestones": {
+                "100": 22.0
+              }
             }
           }
         },
@@ -115,65 +113,10 @@
     {
       "condition": {
         "type": "ascension:on_purity_in_range",
-        "start": 10,
-        "end": 10
-      },
-      "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:6_heavens_path_eighteen_winged_three_legged_glass_crow_bloodline_spirit_a3",
-                  "value": 10.0
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:6_heavens_path_eighteen_winged_three_legged_glass_crow_bloodline_agility_a3",
-                  "value": 10.0
-                }
-              ],
-              "multiplier": []
-            }
-          }
-        }
-      ]
-    },
-    {
-      "condition": {
-        "type": "ascension:on_purity_in_range",
         "start": 25,
         "end": 25
       },
       "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:6_heavens_path_eighteen_winged_three_legged_glass_crow_bloodline_vitality_a4",
-                  "value": 12.0
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:6_heavens_path_eighteen_winged_three_legged_glass_crow_bloodline_agility_a4",
-                  "value": 12.0
-                }
-              ],
-              "multiplier": []
-            }
-          }
-        },
         {
           "type": "ascension:give_path_bonuses",
           "bonuses": {
@@ -200,38 +143,6 @@
       },
       "actions": [
         {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:6_heavens_path_eighteen_winged_three_legged_glass_crow_bloodline_spirit_a6",
-                  "value": 20.0
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:6_heavens_path_eighteen_winged_three_legged_glass_crow_bloodline_agility_a6",
-                  "value": 18.0
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:6_heavens_path_eighteen_winged_three_legged_glass_crow_bloodline_vitality_a6",
-                  "value": 12.0
-                }
-              ],
-              "multiplier": []
-            }
-          }
-        },
-        {
           "type": "ascension:give_path_bonuses",
           "bonuses": {
             "ascension:affinity": {
@@ -256,38 +167,6 @@
         "end": 75
       },
       "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:6_heavens_path_eighteen_winged_three_legged_glass_crow_bloodline_spirit_a8",
-                  "value": 18.0
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:6_heavens_path_eighteen_winged_three_legged_glass_crow_bloodline_agility_a8",
-                  "value": 18.0
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:6_heavens_path_eighteen_winged_three_legged_glass_crow_bloodline_vitality_a8",
-                  "value": 14.0
-                }
-              ],
-              "multiplier": []
-            }
-          }
-        },
         {
           "type": "ascension:give_path_bonuses",
           "bonuses": {
@@ -322,47 +201,6 @@
         "end": 100
       },
       "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:6_heavens_path_eighteen_winged_three_legged_glass_crow_bloodline_spirit_a10",
-                  "value": 38.0
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:6_heavens_path_eighteen_winged_three_legged_glass_crow_bloodline_agility_a10",
-                  "value": 32.0
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:6_heavens_path_eighteen_winged_three_legged_glass_crow_bloodline_vitality_a10",
-                  "value": 28.0
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:strength": {
-              "flat": [
-                {
-                  "id": "ascension:6_heavens_path_eighteen_winged_three_legged_glass_crow_bloodline_strength_a10",
-                  "value": 22.0
-                }
-              ],
-              "multiplier": []
-            }
-          }
-        },
         {
           "type": "ascension:give_path_bonuses",
           "bonuses": {

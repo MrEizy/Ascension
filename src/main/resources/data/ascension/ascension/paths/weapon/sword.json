@@ -150,6 +150,12 @@
           ]
         }
       ]
+    },
+    {
+      "condition": "ascension:realm_change/all_realms",
+      "actions": [
+        "ascension:path_comprehension"
+      ]
     }
   ]
 }

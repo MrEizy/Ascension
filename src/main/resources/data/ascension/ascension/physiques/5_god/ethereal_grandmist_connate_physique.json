@@ -17,7 +17,7 @@
       "flat": [
         {
           "id": "ascension:5_god_ethereal_grandmist_connate_physique_spirit_base",
-          "value": 22.0
+          "value": 8.5
         }
       ],
       "multiplier": [
@@ -32,7 +32,7 @@
       "flat": [
         {
           "id": "ascension:5_god_ethereal_grandmist_connate_physique_vitality_base",
-          "value": 11.0
+          "value": 5.75
         }
       ],
       "multiplier": [
@@ -47,7 +47,7 @@
       "flat": [
         {
           "id": "ascension:5_god_ethereal_grandmist_connate_physique_strength_base",
-          "value": 8.0
+          "value": 5.0
         }
       ],
       "multiplier": [
@@ -62,7 +62,7 @@
       "flat": [
         {
           "id": "ascension:5_god_ethereal_grandmist_connate_physique_agility_base",
-          "value": 13.0
+          "value": 6.25
         }
       ],
       "multiplier": [

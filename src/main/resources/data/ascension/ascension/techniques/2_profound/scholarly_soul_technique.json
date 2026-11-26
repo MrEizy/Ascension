@@ -36,8 +36,7 @@
   ],
   "stats_per_realm": {
     "ascension:spirit": {
-      "flat": 0.17647,
-      "multiplier": 0.013
+      "profile": "ascension:profound/primary"
     }
   },
   "item_tooltip": {

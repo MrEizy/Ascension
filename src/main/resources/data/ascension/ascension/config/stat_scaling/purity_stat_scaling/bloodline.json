@@ -1,0 +1,5 @@
+{
+  "flat_threshold": 10,
+  "excess_flat_rate": 0.08,
+  "excess_multiplier_rate": 0.0025
+}

@@ -135,51 +135,63 @@
       ]
     },
     {
-      "condition": "ascension:realm_change/on_gained",
+      "condition": "ascension:realm_change/all_realms",
       "actions": [
         {
-          "type": "ascension:give_stats",
+          "type": "ascension:give_scaled_realm_stats",
+          "scaling": "ascension:foundation",
           "stats": {
-            "ascension:spirit": {
-              "flat": [ { "id": "ascension:foundation_body_spirit_a1", "value": 2.0 } ],
-              "multiplier": []
-            },
-            "ascension:vitality": {
-              "flat": [ { "id": "ascension:foundation_body_vitality_a1", "value": 8.0 } ],
-              "multiplier": []
-            },
-            "ascension:strength": {
-              "flat": [ { "id": "ascension:foundation_body_strength_a1", "value": 10.0 } ],
-              "multiplier": []
-            },
-            "ascension:agility": {
-              "flat": [ { "id": "ascension:foundation_body_agility_a1", "value": 1.0 } ],
-              "multiplier": []
-            }
+            "ascension:spirit": 2.2,
+            "ascension:vitality": 8.8,
+            "ascension:strength": 11.0,
+            "ascension:agility": 1.1
           }
         }
       ]
     },
     {
-      "condition": "ascension:realm_change/all_realms",
+      "condition": {
+        "type": "ascension:realm_stage_range",
+        "min_minor": 3
+      },
       "actions": [
         {
           "type": "ascension:give_stats",
           "stats": {
             "ascension:spirit": {
-              "flat": [ { "id": "ascension:foundation_body_spirit_a2", "value": 0.2 } ],
+              "flat": [
+                {
+                  "id": "ascension:foundation_body_spirit_a2",
+                  "value": 0.2
+                }
+              ],
               "multiplier": []
             },
             "ascension:vitality": {
-              "flat": [ { "id": "ascension:foundation_body_vitality_a2", "value": 0.8 } ],
+              "flat": [
+                {
+                  "id": "ascension:foundation_body_vitality_a2",
+                  "value": 0.8
+                }
+              ],
               "multiplier": []
             },
             "ascension:strength": {
-              "flat": [ { "id": "ascension:foundation_body_strength_a2", "value": 1.0 } ],
+              "flat": [
+                {
+                  "id": "ascension:foundation_body_strength_a2",
+                  "value": 1.0
+                }
+              ],
               "multiplier": []
             },
             "ascension:agility": {
-              "flat": [ { "id": "ascension:foundation_body_agility_a2", "value": 0.1 } ],
+              "flat": [
+                {
+                  "id": "ascension:foundation_body_agility_a2",
+                  "value": 0.1
+                }
+              ],
               "multiplier": []
             }
           }

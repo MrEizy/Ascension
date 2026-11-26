@@ -6,12 +6,30 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.registries.DataPackRegistryEvent;
 import net.neoforged.neoforge.registries.NewRegistryEvent;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.configuration.cultivation.RealmEffectivenessDefinition;
+import net.zic.ascension.configuration.cultivation.RealmStatScaling;
+import net.zic.ascension.configuration.cultivation.PurityStatScaling;
+import net.zic.ascension.configuration.cultivation.TechniqueStatScaling;
+import net.zic.ascension.configuration.cultivation.AttributeScalingDefinition;
 import net.zic.ascension.configuration.mobs.condition.MobConfigurationConditionType;
 import net.zic.ascension.configuration.mob_traits.MobTraitDefinition;
 import net.zic.ascension.configuration.mob_traits.MobTraitDefinitionType;
 import net.zic.zenithlib.registry.RegistryHelper;
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
 public class ConfigurationRegistries {
+    public static final RegistryHelper.DataPackRegistry<RealmEffectivenessDefinition> REALM_EFFECTIVENESS_REGISTRY =
+            RegistryHelper.dataPackRegistry(AscensionCraft.MOD_ID, "config/realm_effectiveness", () -> RealmEffectivenessDefinition.CODEC);
+
+    public static final RegistryHelper.DataPackRegistry<RealmStatScaling> REALM_STAT_SCALING_REGISTRY =
+            RegistryHelper.dataPackRegistry(AscensionCraft.MOD_ID, "config/stat_scaling/realm_stat_scaling", () -> RealmStatScaling.CODEC);
+    public static final RegistryHelper.DataPackRegistry<PurityStatScaling> PURITY_STAT_SCALING_REGISTRY =
+            RegistryHelper.dataPackRegistry(AscensionCraft.MOD_ID, "config/stat_scaling/purity_stat_scaling", () -> PurityStatScaling.CODEC);
+    public static final RegistryHelper.DataPackRegistry<TechniqueStatScaling> TECHNIQUE_STAT_SCALING_REGISTRY =
+            RegistryHelper.dataPackRegistry(AscensionCraft.MOD_ID, "config/stat_scaling/technique_stat_scaling", () -> TechniqueStatScaling.CODEC);
+
+    public static final RegistryHelper.DataPackRegistry<AttributeScalingDefinition> ATTRIBUTE_SCALING_REGISTRY =
+            RegistryHelper.dataPackRegistry(AscensionCraft.MOD_ID, "config/stat_scaling/attribute_scaling", () -> AttributeScalingDefinition.CODEC);
+
     public static final RegistryHelper.DataPackRegistry<MobTraitDefinition> MOB_TRAIT_DEFINITION_REGISTRY =
             new RegistryHelper.DataPackRegistry<>(RegistryHelper.key(AscensionCraft.MOD_ID,"config/mob_traits"),()->MobTraitDefinitionType.MOB_TRAIT_CODEC);
 
@@ -21,6 +39,15 @@ public class ConfigurationRegistries {
 
     @SubscribeEvent
     public static void registerDatapackRegistries(DataPackRegistryEvent.NewRegistry event) {
+        event.dataPackRegistry(
+                REALM_EFFECTIVENESS_REGISTRY.key(),
+                REALM_EFFECTIVENESS_REGISTRY.codec().get(),
+                REALM_EFFECTIVENESS_REGISTRY.codec().get()
+        );
+        event.dataPackRegistry(REALM_STAT_SCALING_REGISTRY.key(), RealmStatScaling.CODEC, RealmStatScaling.CODEC);
+        event.dataPackRegistry(PURITY_STAT_SCALING_REGISTRY.key(), PurityStatScaling.CODEC, PurityStatScaling.CODEC);
+        event.dataPackRegistry(TECHNIQUE_STAT_SCALING_REGISTRY.key(), TechniqueStatScaling.CODEC, TechniqueStatScaling.CODEC);
+        event.dataPackRegistry(ATTRIBUTE_SCALING_REGISTRY.key(), AttributeScalingDefinition.CODEC, AttributeScalingDefinition.CODEC);
         event.dataPackRegistry(
                 MOB_TRAIT_DEFINITION_REGISTRY.key(),
                 MOB_TRAIT_DEFINITION_REGISTRY.codec().get(),

@@ -17,7 +17,7 @@
       "flat": [
         {
           "id": "ascension:6_heavens_path_soul_sovereignty_revolution_throne_trinity_vitality_base",
-          "value": 14.0
+          "value": 6.5
         }
       ],
       "multiplier": [
@@ -32,7 +32,7 @@
       "flat": [
         {
           "id": "ascension:6_heavens_path_soul_sovereignty_revolution_throne_trinity_strength_base",
-          "value": 9.0
+          "value": 5.25
         }
       ],
       "multiplier": [
@@ -47,7 +47,7 @@
       "flat": [
         {
           "id": "ascension:6_heavens_path_soul_sovereignty_revolution_throne_trinity_spirit_base",
-          "value": 72.0
+          "value": 21.0
         }
       ],
       "multiplier": [
@@ -62,7 +62,7 @@
       "flat": [
         {
           "id": "ascension:6_heavens_path_soul_sovereignty_revolution_throne_trinity_agility_base",
-          "value": 13.0
+          "value": 6.25
         }
       ],
       "multiplier": [

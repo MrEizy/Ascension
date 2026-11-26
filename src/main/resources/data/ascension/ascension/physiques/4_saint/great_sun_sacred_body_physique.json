@@ -17,7 +17,7 @@
       "flat": [
         {
           "id": "ascension:4_saint_great_sun_sacred_body_physique_vitality_base",
-          "value": 12.0
+          "value": 6.0
         }
       ],
       "multiplier": [
@@ -32,7 +32,7 @@
       "flat": [
         {
           "id": "ascension:4_saint_great_sun_sacred_body_physique_strength_base",
-          "value": 10.0
+          "value": 5.5
         }
       ],
       "multiplier": [
@@ -47,7 +47,7 @@
       "flat": [
         {
           "id": "ascension:4_saint_great_sun_sacred_body_physique_spirit_base",
-          "value": 6.0
+          "value": 4.5
         }
       ],
       "multiplier": [

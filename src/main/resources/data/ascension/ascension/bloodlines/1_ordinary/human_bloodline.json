@@ -11,19 +11,13 @@
       "condition": "ascension:all_purity",
       "actions": [
         {
-          "type": "ascension:give_stats_using_purity",
+          "type": "ascension:give_scaled_purity_stats",
+          "scaling": "ascension:bloodline",
           "stats": {
             "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:1_ordinary_human_bloodline_vitality_a1",
-                  "value": 0.1
-                }
-              ],
-              "multiplier": []
+              "continuous": 10.0
             }
-          },
-          "conflict_action": "replace"
+          }
         }
       ]
     }

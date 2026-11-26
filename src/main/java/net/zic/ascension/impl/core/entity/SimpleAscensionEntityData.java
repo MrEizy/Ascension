@@ -1,5 +1,6 @@
 package net.zic.ascension.impl.core.entity;
 
+import net.zic.ascension.impl.core.attribute.ScaledAttributes;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -101,6 +102,8 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
         pathBonusHolder.resolveProcess("initialize_on_entity");
         statHolder.resolveProcess("initialize_on_entity");
         attributeHolder.resolveProcess("initialize_on_entity");
+
+        ScaledAttributes.refresh(attachedEntity);
 
         float restoredHealth = fullHealth ? attachedEntity.getMaxHealth() : Math.min(cachedHealth, attachedEntity.getMaxHealth());
         attachedEntity.setHealth(Math.max(0.0F, restoredHealth));

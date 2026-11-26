@@ -1,7 +1,11 @@
 {
   "type": "ascension:simple",
-  "name": {"translate": "ascension.physique.crystal_soul.name"},
-  "description": {"translate": "ascension.physique.crystal_soul.desc"},
+  "name": {
+    "translate": "ascension.physique.crystal_soul.name"
+  },
+  "description": {
+    "translate": "ascension.physique.crystal_soul.desc"
+  },
   "paths": [
     "ascension:foundation/soul",
     "ascension:elemental/light",
@@ -13,7 +17,7 @@
       "flat": [
         {
           "id": "ascension:3_heaven_crystal_soul_spirit_base",
-          "value": 7.0
+          "value": 4.75
         }
       ],
       "multiplier": [

@@ -1,10 +1,13 @@
 package net.zic.ascension.handler;
 
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.neoforge.event.level.SleepFinishedTimeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
@@ -14,6 +17,11 @@ import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.capabilities.EntityQiProvider;
 import net.zic.ascension.api.ascension.core.resource.ResourceSourceIdentity;
 import net.zic.ascension.common.util.AscensionAttributes;
+import net.zic.ascension.configuration.cultivation.AttributeScalingDefinition.RecoveryScaling;
+import net.zic.ascension.impl.core.attribute.ScaledAttributes;
+import net.zic.zenithlib.common.ZenithAttachments;
+import net.zic.zenithlib.value_containers.typed.Modifier;
+import net.minecraft.resources.Identifier;
 import net.zic.ascension.impl.core.skill.body.BodyCultivationSkillService;
 import net.zic.ascension.impl.resource.AscensionResourceSources;
 import net.zic.ascension.impl.resource.AscensionResourceTypes;
@@ -28,6 +36,8 @@ import java.util.UUID;
 public final class RecoveryTicker {
     private static final double TICKS_PER_SECOND = 20.0D;
     private static final float VANILLA_HEALTH_THRESHOLD = 20.0F;
+    private static final Identifier HEALTH_RECOVERY_MODIFIER = AscensionCraft.prefix("capacity_health_recovery");
+    private static final String RECOVERY_PROCESS = "ascension_capacity_health_recovery";
     public static final double SPRINTING_COST = 0.3D;
     public static final double SWIMMING_COST = 0.14D;
     public static final double ELYTRA_COST = 0.08D;
@@ -79,12 +89,55 @@ public final class RecoveryTicker {
         }
         float maximum = player.getMaxHealth();
         float current = player.getHealth();
-        if (current >= maximum || current < Math.min(VANILLA_HEALTH_THRESHOLD, maximum)) {
+        refreshHealthRecovery(player, maximum);
+        if (current >= maximum || (maximum <= VANILLA_HEALTH_THRESHOLD && current < maximum)) {
             return;
         }
         double rate = Math.max(0.0D, player.getAttributeValue(AscensionAttributes.HEALTH_REGEN_RATE));
-        if (rate > 0.0D) {
+        if (Double.isFinite(rate) && rate > 0.0D) {
             player.heal((float) Math.min(rate / TICKS_PER_SECOND, maximum - current));
+        }
+    }
+
+    private static RecoveryScaling recoveryProfile(ServerPlayer player) {
+        var profile = ScaledAttributes.profile(player);
+        return profile == null ? RecoveryScaling.DEFAULT : profile.recovery();
+    }
+
+    private static void refreshHealthRecovery(ServerPlayer player, float maximum) {
+        var holder = player.getData(ZenithAttachments.ATTRIBUTE_HOLDER);
+        if (!holder.hasAttribute(AscensionAttributes.HEALTH_REGEN_RATE)) return;
+        var attribute = holder.getAttribute(AscensionAttributes.HEALTH_REGEN_RATE);
+        if (attribute == null) return;
+        double bonus = maximum > VANILLA_HEALTH_THRESHOLD && Float.isFinite(maximum)
+                ? recoveryProfile(player).healthPerSecond(maximum) - AscensionAttributes.BASE_HEALTH_REGEN_RATE
+                : 0.0D;
+        var existing = attribute.getFlatModifier(HEALTH_RECOVERY_MODIFIER);
+        if (existing == null ? bonus == 0 : Double.compare(existing.value(), bonus) == 0) return;
+        holder.startProcess(RECOVERY_PROCESS);
+        try {
+            attribute.startProcess(RECOVERY_PROCESS);
+            try {
+                attribute.removeModifier(HEALTH_RECOVERY_MODIFIER);
+                if (bonus != 0) attribute.addFlatModifier(Modifier.flat(HEALTH_RECOVERY_MODIFIER, 0, bonus));
+            } finally {
+                attribute.resolveProcess(RECOVERY_PROCESS);
+            }
+        } finally {
+            holder.resolveProcess(RECOVERY_PROCESS);
+        }
+        player.syncData(ZenithAttachments.ATTRIBUTE_HOLDER);
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public static void onSleepFinished(SleepFinishedTimeEvent event) {
+        if (event.isCanceled() || !(event.getLevel() instanceof ServerLevel level)) return;
+        for (ServerPlayer player : level.players()) {
+            if (!player.isAlive() || player.isSpectator() || !player.isSleepingLongEnough()) continue;
+            float maximum = player.getMaxHealth();
+            if (maximum <= VANILLA_HEALTH_THRESHOLD) continue;
+            double healing = recoveryProfile(player).sleepHealing(maximum, player.getHealth());
+            if (healing > 0) player.heal((float) healing);
         }
     }
 

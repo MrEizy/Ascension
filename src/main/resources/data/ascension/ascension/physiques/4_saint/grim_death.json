@@ -20,7 +20,7 @@
       "flat": [
         {
           "id": "ascension:4_saint_grim_death_physique_vitality_base",
-          "value": 6.0
+          "value": 4.5
         }
       ],
       "multiplier": [
@@ -35,7 +35,7 @@
       "flat": [
         {
           "id": "ascension:4_saint_grim_death_physique_strength_base",
-          "value": 6.0
+          "value": 4.5
         }
       ],
       "multiplier": [
@@ -50,7 +50,7 @@
       "flat": [
         {
           "id": "ascension:4_saint_grim_death_physique_spirit_base",
-          "value": 17.0
+          "value": 7.25
         }
       ],
       "multiplier": [
@@ -65,7 +65,7 @@
       "flat": [
         {
           "id": "ascension:4_saint_grim_death_physique_agility_base",
-          "value": 7.0
+          "value": 4.75
         }
       ],
       "multiplier": []
@@ -82,7 +82,7 @@
         ],
         "multiplier": []
       },
-      "ascension:elemental/death": { 
+      "ascension:elemental/death": {
         "flat": [
           {
             "id": "ascension:4_saint_grim_death_physique_affinity_elemental_death_base",
