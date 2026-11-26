@@ -1,8 +1,5 @@
 package net.zic.ascension.common.gui.elements.skill_casting;
 
-import net.lucent.easygui.gui.RenderableElement;
-import net.lucent.easygui.gui.UIFrame;
-import net.lucent.easygui.gui.layout.positioning.rules.PositioningRules;
 import net.lucent.easygui.gui.textures.ITextureData;
 import net.lucent.easygui.gui.textures.TextureData;
 import net.minecraft.client.Minecraft;
@@ -16,9 +13,8 @@ import java.util.List;
 /**
  * The coating wheel: the skill wheel's look, with the Qi Coating elements the player can pick around it by name.
  */
-public class QiCoatingWheelContainer extends RenderableElement {
+public class QiCoatingWheelContainer {
     private static final int WIDTH = 260;
-    private static final int HEIGHT = 240;
     private static final int WHEEL_LEFT = 34;
     private static final int WHEEL_TOP = 14;
     private static final float WHEEL_SCALE = 3.0F;
@@ -42,16 +38,6 @@ public class QiCoatingWheelContainer extends RenderableElement {
     private List<Component> names = List.of();
     private int hovered = -1;
 
-    public QiCoatingWheelContainer(UIFrame frame) {
-        super(frame);
-        setWidth(WIDTH);
-        setHeight(HEIGHT);
-
-        getPositioning().setPositioningRule(PositioningRules.CENTER);
-        getPositioning().setX(-WIDTH / 2);
-        getPositioning().setY(-110);
-    }
-
     public void setNames(List<Component> names) {
         this.names = List.copyOf(names);
     }
@@ -64,8 +50,7 @@ public class QiCoatingWheelContainer extends RenderableElement {
         return 360.0D / Math.max(1, names.size());
     }
 
-    @Override
-    public void render(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+    public void render(GuiGraphicsExtractor graphics) {
         renderWheelBackground(graphics);
         if (names.isEmpty()) {
             renderCentered(graphics, Component.translatable("gui.ascension.qi_coating_wheel.empty"), WHEEL_LEFT + CENTER, WHEEL_TOP + CENTER - 4);
