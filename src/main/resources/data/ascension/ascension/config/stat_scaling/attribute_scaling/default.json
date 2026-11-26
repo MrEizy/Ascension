@@ -62,5 +62,11 @@
       }
     ]
   },
-  "excess_armor_resistance": 100
+  "excess_armor_resistance": 100,
+  "recovery": {
+    "minimum_recovery_seconds": 60,
+    "maximum_recovery_seconds": 1200,
+    "health_scaling_threshold": 100000,
+    "sleep_missing_health_fraction": 0.25
+  }
 }

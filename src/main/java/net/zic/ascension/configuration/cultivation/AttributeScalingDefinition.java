@@ -5,13 +5,31 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.api.ascension.core.attribute.AttributeScalingMath;
+import net.zic.ascension.api.ascension.core.attribute.RecoveryScaling;
 
 import java.util.List;
 import java.util.Map;
 
 public record AttributeScalingDefinition(Map<Identifier, List<Curve>> common,
                                          Map<Identifier, List<Curve>> player,
-                                         double excessArmorResistance) {
+                                         double excessArmorResistance, RecoveryScaling recovery) {
+    public AttributeScalingDefinition(Map<Identifier, List<Curve>> common, Map<Identifier, List<Curve>> player, double excessArmorResistance) {
+        this(common, player, excessArmorResistance, RecoveryScaling.DEFAULT);
+    }
+
+    private static final Codec<RecoveryScaling> RECOVERY_CODEC = RecordCodecBuilder.<double[]>create(instance -> instance.group(
+            Codec.DOUBLE.optionalFieldOf("minimum_recovery_seconds", 60.0D).forGetter(v -> v[0]),
+            Codec.DOUBLE.optionalFieldOf("maximum_recovery_seconds", 1200.0D).forGetter(v -> v[1]),
+            Codec.DOUBLE.optionalFieldOf("health_scaling_threshold", 100000.0D).forGetter(v -> v[2]),
+            Codec.DOUBLE.optionalFieldOf("sleep_missing_health_fraction", 0.25D).forGetter(v -> v[3])
+    ).apply(instance, (a, b, c, d) -> new double[]{a, b, c, d})).comapFlatMap(v -> {
+        try {
+            return DataResult.success(new RecoveryScaling(v[0], v[1], v[2], v[3]));
+        } catch (IllegalArgumentException e) {
+            return DataResult.error(e::getMessage);
+        }
+    }, v -> new double[]{v.minimumSeconds(), v.maximumSeconds(), v.healthThreshold(), v.sleepFraction()});
+
     public record Curve(Identifier stat, String type, double coefficient, double scale, double exponent) {
         public static final Codec<Curve> CODEC = RecordCodecBuilder.<Curve>create(instance -> instance.group(
                 Identifier.CODEC.fieldOf("stat").forGetter(Curve::stat),
@@ -39,7 +57,8 @@ public record AttributeScalingDefinition(Map<Identifier, List<Curve>> common,
     public static final Codec<AttributeScalingDefinition> CODEC = RecordCodecBuilder.<AttributeScalingDefinition>create(instance -> instance.group(
             CURVES.optionalFieldOf("common", Map.of()).forGetter(AttributeScalingDefinition::common),
             CURVES.optionalFieldOf("player", Map.of()).forGetter(AttributeScalingDefinition::player),
-            Codec.DOUBLE.optionalFieldOf("excess_armor_resistance", 100.0D).forGetter(AttributeScalingDefinition::excessArmorResistance)
+            Codec.DOUBLE.optionalFieldOf("excess_armor_resistance", 100.0D).forGetter(AttributeScalingDefinition::excessArmorResistance),
+            RECOVERY_CODEC.optionalFieldOf("recovery", RecoveryScaling.DEFAULT).forGetter(AttributeScalingDefinition::recovery)
     ).apply(instance, AttributeScalingDefinition::new)).validate(profile ->
             Double.isFinite(profile.excessArmorResistance) && profile.excessArmorResistance >= 1.0E-9D
                     && java.util.Collections.disjoint(profile.common.keySet(), profile.player.keySet())
