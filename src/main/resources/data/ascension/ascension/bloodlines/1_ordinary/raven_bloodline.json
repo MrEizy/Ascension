@@ -1,7 +1,11 @@
 {
   "type": "ascension:simple",
-  "name": {"translate": "ascension.bloodline.raven_bloodline.name"},
-  "description": {"translate": "ascension.bloodline.raven_bloodline.desc"},
+  "name": {
+    "translate": "ascension.bloodline.raven_bloodline.name"
+  },
+  "description": {
+    "translate": "ascension.bloodline.raven_bloodline.desc"
+  },
   "paths": [
     "ascension:foundation/soul",
     "ascension:elemental/dark"
@@ -11,26 +15,21 @@
       "condition": "ascension:all_purity",
       "actions": [
         {
-          "type": "ascension:give_stats_using_purity",
-          "conflict_action": "replace",
+          "type": "ascension:give_scaled_purity_stats",
+          "scaling": "ascension:bloodline",
           "stats": {
             "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:1_ordinary_raven_bloodline_agility_a1",
-                  "value": 0.07
-                }
-              ],
-              "multiplier": []
+              "continuous": 7.0,
+              "milestones": {
+                "50": 1.0,
+                "100": 2.0
+              }
             },
             "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:1_ordinary_raven_bloodline_spirit_a1",
-                  "value": 0.04
-                }
-              ],
-              "multiplier": []
+              "continuous": 4.0,
+              "milestones": {
+                "100": 1.0
+              }
             }
           }
         },
@@ -70,56 +69,10 @@
       },
       "actions": [
         {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:1_ordinary_raven_bloodline_agility_a3",
-                  "value": 1.0
-                }
-              ],
-              "multiplier": []
-            }
-          }
-        },
-        {
           "type": "ascension:grant_skills",
           "skills": [
             "ascension:passive/bloodline/raven/nightwing_instinct"
           ]
-        }
-      ]
-    },
-    {
-      "condition": {
-        "type": "ascension:on_purity_in_range",
-        "start": 100,
-        "end": 100
-      },
-      "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:1_ordinary_raven_bloodline_agility_a4",
-                  "value": 2.0
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:1_ordinary_raven_bloodline_spirit_a4",
-                  "value": 1.0
-                }
-              ],
-              "multiplier": []
-            }
-          }
         }
       ]
     }

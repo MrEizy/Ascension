@@ -16,72 +16,40 @@
       "condition": "ascension:all_purity",
       "actions": [
         {
-          "type": "ascension:give_stats_using_purity",
-          "conflict_action": "replace",
+          "type": "ascension:give_scaled_purity_stats",
+          "scaling": "ascension:bloodline",
           "stats": {
             "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_agility_a1",
-                  "value": 0.0904163265
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_agility_a1_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0011673469
-                }
-              ]
+              "continuous": 52.0,
+              "milestones": {
+                "20": 8.0,
+                "40": 8.0,
+                "80": 12.0,
+                "100": 18.0
+              }
             },
             "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_spirit_a1",
-                  "value": 0.0765333333
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_spirit_a1_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0009333333
-                }
-              ]
+              "continuous": 42.0,
+              "milestones": {
+                "20": 5.0,
+                "40": 8.0,
+                "60": 9.0,
+                "80": 10.0,
+                "100": 16.0
+              }
             },
             "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_vitality_a1",
-                  "value": 0.0772085106
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_vitality_a1_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0005510638
-                }
-              ]
+              "continuous": 28.0,
+              "milestones": {
+                "60": 7.0,
+                "100": 12.0
+              }
             },
             "ascension:strength": {
-              "flat": [
-                {
-                  "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_strength_a1",
-                  "value": 0.0735428571
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_strength_a1_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0002892857
-                }
-              ]
+              "continuous": 18.0,
+              "milestones": {
+                "100": 10.0
+              }
             }
           }
         },
@@ -143,93 +111,10 @@
     {
       "condition": {
         "type": "ascension:on_purity_in_range",
-        "start": 20,
-        "end": 20
-      },
-      "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_agility_a3",
-                  "value": 1.3910204082
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_agility_a3_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0179591837
-                }
-              ]
-            },
-            "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_spirit_a3",
-                  "value": 0.9111111111
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_spirit_a3_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0111111111
-                }
-              ]
-            }
-          }
-        }
-      ]
-    },
-    {
-      "condition": {
-        "type": "ascension:on_purity_in_range",
         "start": 40,
         "end": 40
       },
       "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_agility_a4",
-                  "value": 1.3910204082
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_agility_a4_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0179591837
-                }
-              ]
-            },
-            "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_spirit_a4",
-                  "value": 1.4577777778
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_spirit_a4_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0177777778
-                }
-              ]
-            }
-          }
-        },
         {
           "type": "ascension:give_path_bonuses",
           "bonuses": {
@@ -256,43 +141,6 @@
       },
       "actions": [
         {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_spirit_a6",
-                  "value": 1.64
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_spirit_a6_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.02
-                }
-              ]
-            },
-            "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_vitality_a6",
-                  "value": 1.930212766
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_vitality_a6_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0137765957
-                }
-              ]
-            }
-          }
-        },
-        {
           "type": "ascension:give_path_bonuses",
           "bonuses": {
             "ascension:affinity": {
@@ -318,43 +166,6 @@
       },
       "actions": [
         {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_agility_a8",
-                  "value": 2.0865306122
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_agility_a8_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0269387755
-                }
-              ]
-            },
-            "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_spirit_a8",
-                  "value": 1.8222222222
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_spirit_a8_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0222222222
-                }
-              ]
-            }
-          }
-        },
-        {
           "type": "ascension:give_path_bonuses",
           "bonuses": {
             "ascension:affinity": {
@@ -379,75 +190,6 @@
         "end": 100
       },
       "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_agility_a10",
-                  "value": 3.1297959184
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_agility_a10_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0404081633
-                }
-              ]
-            },
-            "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_spirit_a10",
-                  "value": 2.9155555556
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_spirit_a10_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0355555556
-                }
-              ]
-            },
-            "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_vitality_a10",
-                  "value": 3.3089361702
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_vitality_a10_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0236170213
-                }
-              ]
-            },
-            "ascension:strength": {
-              "flat": [
-                {
-                  "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_strength_a10",
-                  "value": 4.0857142857
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_strength_a10_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0160714286
-                }
-              ]
-            }
-          }
-        },
         {
           "type": "ascension:give_path_bonuses",
           "bonuses": {

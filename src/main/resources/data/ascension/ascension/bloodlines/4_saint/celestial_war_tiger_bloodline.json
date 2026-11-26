@@ -16,72 +16,38 @@
       "condition": "ascension:all_purity",
       "actions": [
         {
-          "type": "ascension:give_stats_using_purity",
-          "conflict_action": "replace",
+          "type": "ascension:give_scaled_purity_stats",
+          "scaling": "ascension:bloodline",
           "stats": {
             "ascension:strength": {
-              "flat": [
-                {
-                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_strength_a1",
-                  "value": 0.0751636364
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_strength_a1_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0005022727
-                }
-              ]
+              "continuous": 26.0,
+              "milestones": {
+                "25": 4.0,
+                "50": 5.0,
+                "100": 9.0
+              }
             },
             "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_agility_a1",
-                  "value": 0.0701176471
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_agility_a1_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0003529412
-                }
-              ]
+              "continuous": 20.0,
+              "milestones": {
+                "25": 3.0,
+                "75": 4.0,
+                "100": 7.0
+              }
             },
             "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_vitality_a1",
-                  "value": 0.0673185185
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_vitality_a1_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0002518519
-                }
-              ]
+              "continuous": 16.0,
+              "milestones": {
+                "50": 4.0,
+                "100": 7.0
+              }
             },
             "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_spirit_a1",
-                  "value": 0.0554666667
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_spirit_a1_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 6.66667e-05
-                }
-              ]
+              "continuous": 8.0,
+              "milestones": {
+                "75": 3.0,
+                "100": 4.0
+              }
             }
           }
         },
@@ -134,93 +100,10 @@
     {
       "condition": {
         "type": "ascension:on_purity_in_range",
-        "start": 25,
-        "end": 25
-      },
-      "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:strength": {
-              "flat": [
-                {
-                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_strength_a3",
-                  "value": 1.1563636364
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_strength_a3_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0077272727
-                }
-              ]
-            },
-            "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_agility_a3",
-                  "value": 1.0517647059
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_agility_a3_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0052941176
-                }
-              ]
-            }
-          }
-        }
-      ]
-    },
-    {
-      "condition": {
-        "type": "ascension:on_purity_in_range",
         "start": 50,
         "end": 50
       },
       "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:strength": {
-              "flat": [
-                {
-                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_strength_a4",
-                  "value": 1.4454545455
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_strength_a4_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0096590909
-                }
-              ]
-            },
-            "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_vitality_a4",
-                  "value": 1.682962963
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_vitality_a4_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0062962963
-                }
-              ]
-            }
-          }
-        },
         {
           "type": "ascension:give_path_bonuses",
           "bonuses": {
@@ -247,43 +130,6 @@
       },
       "actions": [
         {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_agility_a6",
-                  "value": 1.4023529412
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_agility_a6_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0070588235
-                }
-              ]
-            },
-            "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_spirit_a6",
-                  "value": 2.08
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_spirit_a6_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0025
-                }
-              ]
-            }
-          }
-        },
-        {
           "type": "ascension:give_path_bonuses",
           "bonuses": {
             "ascension:affinity": {
@@ -308,75 +154,6 @@
         "end": 100
       },
       "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:strength": {
-              "flat": [
-                {
-                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_strength_a8",
-                  "value": 2.6018181818
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_strength_a8_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0173863636
-                }
-              ]
-            },
-            "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_agility_a8",
-                  "value": 2.4541176471
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_agility_a8_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0123529412
-                }
-              ]
-            },
-            "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_vitality_a8",
-                  "value": 2.9451851852
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_vitality_a8_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0110185185
-                }
-              ]
-            },
-            "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_spirit_a8",
-                  "value": 2.7733333333
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_spirit_a8_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0033333333
-                }
-              ]
-            }
-          }
-        },
         {
           "type": "ascension:give_path_bonuses",
           "bonuses": {

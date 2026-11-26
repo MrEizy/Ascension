@@ -16,72 +16,40 @@
       "condition": "ascension:all_purity",
       "actions": [
         {
-          "type": "ascension:give_stats_using_purity",
-          "conflict_action": "replace",
+          "type": "ascension:give_scaled_purity_stats",
+          "scaling": "ascension:bloodline",
           "stats": {
             "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:5_god_wilderness_stalker_dragon_turtle_bloodline_vitality_a1",
-                  "value": 0.0874666667
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:5_god_wilderness_stalker_dragon_turtle_bloodline_vitality_a1_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0010666667
-                }
-              ]
+              "continuous": 48.0,
+              "milestones": {
+                "20": 7.0,
+                "60": 10.0,
+                "80": 8.0,
+                "100": 17.0
+              }
             },
             "ascension:strength": {
-              "flat": [
-                {
-                  "id": "ascension:5_god_wilderness_stalker_dragon_turtle_bloodline_strength_a1",
-                  "value": 0.0845714286
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:5_god_wilderness_stalker_dragon_turtle_bloodline_strength_a1_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0008571429
-                }
-              ]
+              "continuous": 40.0,
+              "milestones": {
+                "20": 6.0,
+                "60": 9.0,
+                "100": 15.0
+              }
             },
             "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:5_god_wilderness_stalker_dragon_turtle_bloodline_agility_a1",
-                  "value": 0.0738622951
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:5_god_wilderness_stalker_dragon_turtle_bloodline_agility_a1_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0006688525
-                }
-              ]
+              "continuous": 32.0,
+              "milestones": {
+                "40": 7.0,
+                "80": 10.0,
+                "100": 12.0
+              }
             },
             "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:5_god_wilderness_stalker_dragon_turtle_bloodline_spirit_a1",
-                  "value": 0.0744
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:5_god_wilderness_stalker_dragon_turtle_bloodline_spirit_a1_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.00045
-                }
-              ]
+              "continuous": 24.0,
+              "milestones": {
+                "40": 6.0,
+                "100": 10.0
+              }
             }
           }
         },
@@ -143,93 +111,10 @@
     {
       "condition": {
         "type": "ascension:on_purity_in_range",
-        "start": 20,
-        "end": 20
-      },
-      "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:5_god_wilderness_stalker_dragon_turtle_bloodline_vitality_a3",
-                  "value": 1.2755555556
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:5_god_wilderness_stalker_dragon_turtle_bloodline_vitality_a3_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0155555556
-                }
-              ]
-            },
-            "ascension:strength": {
-              "flat": [
-                {
-                  "id": "ascension:5_god_wilderness_stalker_dragon_turtle_bloodline_strength_a3",
-                  "value": 1.2685714286
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:5_god_wilderness_stalker_dragon_turtle_bloodline_strength_a3_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0128571429
-                }
-              ]
-            }
-          }
-        }
-      ]
-    },
-    {
-      "condition": {
-        "type": "ascension:on_purity_in_range",
         "start": 40,
         "end": 40
       },
       "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:5_god_wilderness_stalker_dragon_turtle_bloodline_agility_a4",
-                  "value": 1.6157377049
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:5_god_wilderness_stalker_dragon_turtle_bloodline_agility_a4_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0146311475
-                }
-              ]
-            },
-            "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:5_god_wilderness_stalker_dragon_turtle_bloodline_spirit_a4",
-                  "value": 1.86
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:5_god_wilderness_stalker_dragon_turtle_bloodline_spirit_a4_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.01125
-                }
-              ]
-            }
-          }
-        },
         {
           "type": "ascension:give_path_bonuses",
           "bonuses": {
@@ -256,43 +141,6 @@
       },
       "actions": [
         {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:5_god_wilderness_stalker_dragon_turtle_bloodline_vitality_a6",
-                  "value": 1.8222222222
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:5_god_wilderness_stalker_dragon_turtle_bloodline_vitality_a6_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0222222222
-                }
-              ]
-            },
-            "ascension:strength": {
-              "flat": [
-                {
-                  "id": "ascension:5_god_wilderness_stalker_dragon_turtle_bloodline_strength_a6",
-                  "value": 1.9028571429
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:5_god_wilderness_stalker_dragon_turtle_bloodline_strength_a6_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0192857143
-                }
-              ]
-            }
-          }
-        },
-        {
           "type": "ascension:give_path_bonuses",
           "bonuses": {
             "ascension:affinity": {
@@ -318,43 +166,6 @@
       },
       "actions": [
         {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:5_god_wilderness_stalker_dragon_turtle_bloodline_agility_a8",
-                  "value": 2.3081967213
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:5_god_wilderness_stalker_dragon_turtle_bloodline_agility_a8_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0209016393
-                }
-              ]
-            },
-            "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:5_god_wilderness_stalker_dragon_turtle_bloodline_vitality_a8",
-                  "value": 1.4577777778
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:5_god_wilderness_stalker_dragon_turtle_bloodline_vitality_a8_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0177777778
-                }
-              ]
-            }
-          }
-        },
-        {
           "type": "ascension:give_path_bonuses",
           "bonuses": {
             "ascension:affinity": {
@@ -379,75 +190,6 @@
         "end": 100
       },
       "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:5_god_wilderness_stalker_dragon_turtle_bloodline_vitality_a10",
-                  "value": 3.0977777778
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:5_god_wilderness_stalker_dragon_turtle_bloodline_vitality_a10_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0377777778
-                }
-              ]
-            },
-            "ascension:strength": {
-              "flat": [
-                {
-                  "id": "ascension:5_god_wilderness_stalker_dragon_turtle_bloodline_strength_a10",
-                  "value": 3.1714285714
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:5_god_wilderness_stalker_dragon_turtle_bloodline_strength_a10_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0321428571
-                }
-              ]
-            },
-            "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:5_god_wilderness_stalker_dragon_turtle_bloodline_agility_a10",
-                  "value": 2.7698360656
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:5_god_wilderness_stalker_dragon_turtle_bloodline_agility_a10_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0250819672
-                }
-              ]
-            },
-            "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:5_god_wilderness_stalker_dragon_turtle_bloodline_spirit_a10",
-                  "value": 3.1
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:5_god_wilderness_stalker_dragon_turtle_bloodline_spirit_a10_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.01875
-                }
-              ]
-            }
-          }
-        },
         {
           "type": "ascension:give_path_bonuses",
           "bonuses": {

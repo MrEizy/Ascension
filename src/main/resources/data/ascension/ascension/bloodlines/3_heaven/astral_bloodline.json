@@ -16,49 +16,29 @@
       "condition": "ascension:all_purity",
       "actions": [
         {
-          "type": "ascension:give_stats_using_purity",
-          "conflict_action": "replace",
+          "type": "ascension:give_scaled_purity_stats",
+          "scaling": "ascension:bloodline",
           "stats": {
             "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_astral_bloodline_spirit_a1",
-                  "value": 0.0741333333
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:3_heaven_astral_bloodline_spirit_a1_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0002333333
-                }
-              ]
+              "continuous": 16.0,
+              "milestones": {
+                "25": 2.0,
+                "75": 2.0,
+                "100": 4.0
+              }
             },
             "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_astral_bloodline_agility_a1",
-                  "value": 0.0693333333
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:3_heaven_astral_bloodline_agility_a1_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 8.33333e-05
-                }
-              ]
+              "continuous": 10.0,
+              "milestones": {
+                "50": 2.0,
+                "100": 3.0
+              }
             },
             "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_astral_bloodline_vitality_a1",
-                  "value": 0.06
-                }
-              ],
-              "multiplier": []
+              "continuous": 6.0,
+              "milestones": {
+                "100": 2.0
+              }
             }
           }
         },
@@ -102,151 +82,15 @@
     {
       "condition": {
         "type": "ascension:on_purity_in_range",
-        "start": 25,
-        "end": 25
-      },
-      "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_astral_bloodline_spirit_a3",
-                  "value": 0.9266666667
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:3_heaven_astral_bloodline_spirit_a3_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0029166667
-                }
-              ]
-            }
-          }
-        }
-      ]
-    },
-    {
-      "condition": {
-        "type": "ascension:on_purity_in_range",
-        "start": 50,
-        "end": 50
-      },
-      "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_astral_bloodline_agility_a4",
-                  "value": 1.3866666667
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:3_heaven_astral_bloodline_agility_a4_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0016666667
-                }
-              ]
-            }
-          }
-        }
-      ]
-    },
-    {
-      "condition": {
-        "type": "ascension:on_purity_in_range",
         "start": 75,
         "end": 75
       },
       "actions": [
         {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_astral_bloodline_spirit_a5",
-                  "value": 0.9266666667
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:3_heaven_astral_bloodline_spirit_a5_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0029166667
-                }
-              ]
-            }
-          }
-        },
-        {
           "type": "ascension:grant_skills",
           "skills": [
             "ascension:passive/bloodline/astral/stellar_resonance"
           ]
-        }
-      ]
-    },
-    {
-      "condition": {
-        "type": "ascension:on_purity_in_range",
-        "start": 100,
-        "end": 100
-      },
-      "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_astral_bloodline_spirit_a6",
-                  "value": 1.8533333333
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:3_heaven_astral_bloodline_spirit_a6_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0058333333
-                }
-              ]
-            },
-            "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_astral_bloodline_agility_a6",
-                  "value": 2.08
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:3_heaven_astral_bloodline_agility_a6_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0025
-                }
-              ]
-            },
-            "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_astral_bloodline_vitality_a6",
-                  "value": 2.0
-                }
-              ],
-              "multiplier": []
-            }
-          }
         }
       ]
     }

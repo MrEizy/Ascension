@@ -15,26 +15,14 @@
       "condition": "ascension:all_purity",
       "actions": [
         {
-          "type": "ascension:give_stats_using_purity",
-          "conflict_action": "replace",
+          "type": "ascension:give_scaled_purity_stats",
+          "scaling": "ascension:bloodline",
           "stats": {
             "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:1_ordinary_verdantblood_bloodline_vitality_a1",
-                  "value": 0.08
-                }
-              ],
-              "multiplier": []
+              "continuous": 8.0
             },
             "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:1_ordinary_verdantblood_bloodline_spirit_a1",
-                  "value": 0.03
-                }
-              ],
-              "multiplier": []
+              "continuous": 3.0
             }
           }
         },

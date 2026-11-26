@@ -15,26 +15,17 @@
       "condition": "ascension:all_purity",
       "actions": [
         {
-          "type": "ascension:give_stats_using_purity",
-          "conflict_action": "replace",
+          "type": "ascension:give_scaled_purity_stats",
+          "scaling": "ascension:bloodline",
           "stats": {
             "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:1_ordinary_ember_spirit_bloodline_spirit_a1",
-                  "value": 0.06
-                }
-              ],
-              "multiplier": []
+              "continuous": 6.0,
+              "milestones": {
+                "100": 2.0
+              }
             },
             "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:1_ordinary_ember_spirit_bloodline_vitality_a1",
-                  "value": 0.04
-                }
-              ],
-              "multiplier": []
+              "continuous": 4.0
             }
           }
         },
@@ -61,29 +52,6 @@
                 ],
                 "multiplier": []
               }
-            }
-          }
-        }
-      ]
-    },
-    {
-      "condition": {
-        "type": "ascension:on_purity_in_range",
-        "start": 100,
-        "end": 100
-      },
-      "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:1_ordinary_ember_spirit_bloodline_spirit_a3",
-                  "value": 2.0
-                }
-              ],
-              "multiplier": []
             }
           }
         }

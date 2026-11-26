@@ -190,29 +190,9 @@
       ]
     },
     {
-      "condition": {
-        "type": "ascension:realm_stage_range",
-        "min_minor": 0,
-        "max_minor": 2
-      },
+      "condition": "ascension:realm_change/all_realms",
       "actions": [
-        {
-          "type": "ascension:give_path_bonuses",
-          "conflict_action": "salt",
-          "bonuses": {
-            "ascension:damage": {
-              "ascension:elemental/yin": {
-                "flat": [
-                  {
-                    "id": "ascension:progression_03/elemental/yin/damage",
-                    "value": 0.015
-                  }
-                ],
-                "multiplier": []
-              }
-            }
-          }
-        }
+        "ascension:path_comprehension"
       ]
     }
   ]

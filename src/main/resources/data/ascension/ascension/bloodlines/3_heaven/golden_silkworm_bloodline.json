@@ -16,49 +16,28 @@
       "condition": "ascension:all_purity",
       "actions": [
         {
-          "type": "ascension:give_stats_using_purity",
-          "conflict_action": "replace",
+          "type": "ascension:give_scaled_purity_stats",
+          "scaling": "ascension:bloodline",
           "stats": {
             "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_golden_silkworm_bloodline_spirit_a1",
-                  "value": 0.0745411765
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:3_heaven_golden_silkworm_bloodline_spirit_a1_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0001235294
-                }
-              ]
+              "continuous": 12.0,
+              "milestones": {
+                "25": 2.0,
+                "100": 3.0
+              }
             },
             "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_golden_silkworm_bloodline_vitality_a1",
-                  "value": 0.0630153846
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:3_heaven_golden_silkworm_bloodline_vitality_a1_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 4.61538e-05
-                }
-              ]
+              "continuous": 8.0,
+              "milestones": {
+                "50": 2.0,
+                "100": 3.0
+              }
             },
             "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_golden_silkworm_bloodline_agility_a1",
-                  "value": 0.06
-                }
-              ],
-              "multiplier": []
+              "continuous": 6.0,
+              "milestones": {
+                "75": 2.0
+              }
             }
           }
         },
@@ -94,135 +73,6 @@
                 ],
                 "multiplier": []
               }
-            }
-          }
-        }
-      ]
-    },
-    {
-      "condition": {
-        "type": "ascension:on_purity_in_range",
-        "start": 25,
-        "end": 25
-      },
-      "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_golden_silkworm_bloodline_spirit_a3",
-                  "value": 1.2423529412
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:3_heaven_golden_silkworm_bloodline_spirit_a3_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0020588235
-                }
-              ]
-            }
-          }
-        }
-      ]
-    },
-    {
-      "condition": {
-        "type": "ascension:on_purity_in_range",
-        "start": 50,
-        "end": 50
-      },
-      "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_golden_silkworm_bloodline_vitality_a4",
-                  "value": 1.5753846154
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:3_heaven_golden_silkworm_bloodline_vitality_a4_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0011538462
-                }
-              ]
-            }
-          }
-        }
-      ]
-    },
-    {
-      "condition": {
-        "type": "ascension:on_purity_in_range",
-        "start": 75,
-        "end": 75
-      },
-      "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_golden_silkworm_bloodline_agility_a5",
-                  "value": 2.0
-                }
-              ],
-              "multiplier": []
-            }
-          }
-        }
-      ]
-    },
-    {
-      "condition": {
-        "type": "ascension:on_purity_in_range",
-        "start": 100,
-        "end": 100
-      },
-      "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_golden_silkworm_bloodline_spirit_a6",
-                  "value": 1.8635294118
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:3_heaven_golden_silkworm_bloodline_spirit_a6_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0030882353
-                }
-              ]
-            },
-            "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_golden_silkworm_bloodline_vitality_a6",
-                  "value": 2.3630769231
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:3_heaven_golden_silkworm_bloodline_vitality_a6_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0017307692
-                }
-              ]
             }
           }
         }

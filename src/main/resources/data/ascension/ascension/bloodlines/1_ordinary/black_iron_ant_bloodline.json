@@ -15,33 +15,17 @@
       "condition": "ascension:all_purity",
       "actions": [
         {
-          "type": "ascension:give_stats_using_purity",
-          "conflict_action": "replace",
+          "type": "ascension:give_scaled_purity_stats",
+          "scaling": "ascension:bloodline",
           "stats": {
             "ascension:strength": {
-              "flat": [
-                {
-                  "id": "ascension:1_ordinary_black_iron_ant_bloodline_strength_a1",
-                  "value": 0.0824727273
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:1_ordinary_black_iron_ant_bloodline_strength_a1_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 2.04545e-05
-                }
-              ]
+              "continuous": 9.0,
+              "milestones": {
+                "100": 2.0
+              }
             },
             "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:1_ordinary_black_iron_ant_bloodline_vitality_a1",
-                  "value": 0.05
-                }
-              ],
-              "multiplier": []
+              "continuous": 5.0
             }
           }
         },
@@ -68,36 +52,6 @@
                 ],
                 "multiplier": []
               }
-            }
-          }
-        }
-      ]
-    },
-    {
-      "condition": {
-        "type": "ascension:on_purity_in_range",
-        "start": 100,
-        "end": 100
-      },
-      "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:strength": {
-              "flat": [
-                {
-                  "id": "ascension:1_ordinary_black_iron_ant_bloodline_strength_a3",
-                  "value": 1.8327272727
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:1_ordinary_black_iron_ant_bloodline_strength_a3_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0004545455
-                }
-              ]
             }
           }
         }

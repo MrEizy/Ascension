@@ -43,12 +43,10 @@
   ],
   "stats_per_realm": {
     "ascension:spirit": {
-      "flat": 0.25,
-      "multiplier": 0.0125
+      "profile": "ascension:ordinary/primary"
     },
     "ascension:vitality": {
-      "flat": 0.0625,
-      "multiplier": 0.004375
+      "profile": "ascension:ordinary/secondary"
     }
   },
   "item_tooltip": {

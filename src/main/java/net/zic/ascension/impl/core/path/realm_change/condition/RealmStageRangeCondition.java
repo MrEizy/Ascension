@@ -19,7 +19,7 @@ public record RealmStageRangeCondition(int major, int minMinor, int maxMinor) im
     public static final MapCodec<RealmStageRangeCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.intRange(-1, Integer.MAX_VALUE).optionalFieldOf("major", -1).forGetter(RealmStageRangeCondition::major),
             Codec.intRange(0, Integer.MAX_VALUE).fieldOf("min_minor").forGetter(RealmStageRangeCondition::minMinor),
-            Codec.intRange(0, Integer.MAX_VALUE).fieldOf("max_minor").forGetter(RealmStageRangeCondition::maxMinor)
+            Codec.intRange(0, Integer.MAX_VALUE).optionalFieldOf("max_minor", Integer.MAX_VALUE).forGetter(RealmStageRangeCondition::maxMinor)
     ).apply(instance, RealmStageRangeCondition::new));
 
     @Override

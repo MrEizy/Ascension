@@ -16,42 +16,24 @@
       "condition": "ascension:all_purity",
       "actions": [
         {
-          "type": "ascension:give_stats_using_purity",
-          "conflict_action": "replace",
+          "type": "ascension:give_scaled_purity_stats",
+          "scaling": "ascension:bloodline",
           "stats": {
             "ascension:strength": {
-              "flat": [
-                {
-                  "id": "ascension:2_profound_wrath_demon_bloodline_strength_a1",
-                  "value": 0.0745411765
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:2_profound_wrath_demon_bloodline_strength_a1_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0001235294
-                }
-              ]
+              "continuous": 12.0,
+              "milestones": {
+                "50": 2.0,
+                "100": 3.0
+              }
             },
             "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:2_profound_wrath_demon_bloodline_vitality_a1",
-                  "value": 0.06
-                }
-              ],
-              "multiplier": []
+              "continuous": 6.0,
+              "milestones": {
+                "100": 2.0
+              }
             },
             "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:2_profound_wrath_demon_bloodline_agility_a1",
-                  "value": 0.04
-                }
-              ],
-              "multiplier": []
+              "continuous": 4.0
             }
           }
         },
@@ -100,70 +82,10 @@
       },
       "actions": [
         {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:strength": {
-              "flat": [
-                {
-                  "id": "ascension:2_profound_wrath_demon_bloodline_strength_a3",
-                  "value": 1.2423529412
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:2_profound_wrath_demon_bloodline_strength_a3_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0020588235
-                }
-              ]
-            }
-          }
-        },
-        {
           "type": "ascension:grant_skills",
           "skills": [
             "ascension:passive/bloodline/wrath_demon/wrath_incarnate"
           ]
-        }
-      ]
-    },
-    {
-      "condition": {
-        "type": "ascension:on_purity_in_range",
-        "start": 100,
-        "end": 100
-      },
-      "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:strength": {
-              "flat": [
-                {
-                  "id": "ascension:2_profound_wrath_demon_bloodline_strength_a4",
-                  "value": 1.8635294118
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:2_profound_wrath_demon_bloodline_strength_a4_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0030882353
-                }
-              ]
-            },
-            "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:2_profound_wrath_demon_bloodline_vitality_a4",
-                  "value": 2.0
-                }
-              ],
-              "multiplier": []
-            }
-          }
         }
       ]
     }

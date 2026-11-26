@@ -493,7 +493,7 @@ public final class AscensionTooltipValueSources {
         definition.getStatsPerRealm().entrySet().stream()
                 .sorted(Map.Entry.comparingByKey(Comparator.comparing(Identifier::toString)))
                 .forEach(entry -> {
-                    TechniqueRealmStatRate rate = entry.getValue();
+                    TechniqueRealmStatRate rate = entry.getValue().resolve(context.registryAccess().orElseThrow());
                     Component name = statName(entry.getKey());
                     Identifier path = rate.path().orElseGet(() -> definition.getCultivationPaths().isEmpty()
                             ? null : definition.getCultivationPaths().getFirst());

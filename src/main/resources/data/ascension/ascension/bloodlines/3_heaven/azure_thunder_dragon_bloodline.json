@@ -16,56 +16,29 @@
       "condition": "ascension:all_purity",
       "actions": [
         {
-          "type": "ascension:give_stats_using_purity",
-          "conflict_action": "replace",
+          "type": "ascension:give_scaled_purity_stats",
+          "scaling": "ascension:bloodline",
           "stats": {
             "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_azure_thunder_dragon_bloodline_vitality_a1",
-                  "value": 0.0834
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:3_heaven_azure_thunder_dragon_bloodline_vitality_a1_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0002625
-                }
-              ]
+              "continuous": 18.0,
+              "milestones": {
+                "25": 2.0,
+                "100": 4.0
+              }
             },
             "ascension:strength": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_azure_thunder_dragon_bloodline_strength_a1",
-                  "value": 0.0797090909
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:3_heaven_azure_thunder_dragon_bloodline_strength_a1_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0002181818
-                }
-              ]
+              "continuous": 16.0,
+              "milestones": {
+                "50": 2.0,
+                "100": 4.0
+              }
             },
             "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_azure_thunder_dragon_bloodline_spirit_a1",
-                  "value": 0.0589714286
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:3_heaven_azure_thunder_dragon_bloodline_spirit_a1_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 5.71429e-05
-                }
-              ]
+              "continuous": 8.0,
+              "milestones": {
+                "75": 2.0,
+                "100": 4.0
+              }
             }
           }
         },
@@ -101,158 +74,6 @@
                 ],
                 "multiplier": []
               }
-            }
-          }
-        }
-      ]
-    },
-    {
-      "condition": {
-        "type": "ascension:on_purity_in_range",
-        "start": 25,
-        "end": 25
-      },
-      "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_azure_thunder_dragon_bloodline_vitality_a3",
-                  "value": 0.9266666667
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:3_heaven_azure_thunder_dragon_bloodline_vitality_a3_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0029166667
-                }
-              ]
-            }
-          }
-        }
-      ]
-    },
-    {
-      "condition": {
-        "type": "ascension:on_purity_in_range",
-        "start": 50,
-        "end": 50
-      },
-      "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:strength": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_azure_thunder_dragon_bloodline_strength_a4",
-                  "value": 0.9963636364
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:3_heaven_azure_thunder_dragon_bloodline_strength_a4_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0027272727
-                }
-              ]
-            }
-          }
-        }
-      ]
-    },
-    {
-      "condition": {
-        "type": "ascension:on_purity_in_range",
-        "start": 75,
-        "end": 75
-      },
-      "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_azure_thunder_dragon_bloodline_spirit_a5",
-                  "value": 1.4742857143
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:3_heaven_azure_thunder_dragon_bloodline_spirit_a5_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0014285714
-                }
-              ]
-            }
-          }
-        }
-      ]
-    },
-    {
-      "condition": {
-        "type": "ascension:on_purity_in_range",
-        "start": 100,
-        "end": 100
-      },
-      "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_azure_thunder_dragon_bloodline_vitality_a6",
-                  "value": 1.8533333333
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:3_heaven_azure_thunder_dragon_bloodline_vitality_a6_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0058333333
-                }
-              ]
-            },
-            "ascension:strength": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_azure_thunder_dragon_bloodline_strength_a6",
-                  "value": 1.9927272727
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:3_heaven_azure_thunder_dragon_bloodline_strength_a6_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0054545455
-                }
-              ]
-            },
-            "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_azure_thunder_dragon_bloodline_spirit_a6",
-                  "value": 2.9485714286
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:3_heaven_azure_thunder_dragon_bloodline_spirit_a6_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0028571429
-                }
-              ]
             }
           }
         }

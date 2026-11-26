@@ -16,65 +16,38 @@
       "condition": "ascension:all_purity",
       "actions": [
         {
-          "type": "ascension:give_stats_using_purity",
-          "conflict_action": "replace",
+          "type": "ascension:give_scaled_purity_stats",
+          "scaling": "ascension:bloodline",
           "stats": {
             "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:4_saint_dreamless_sovereign_turtle_bloodline_vitality_a1",
-                  "value": 0.0760754717
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:4_saint_dreamless_sovereign_turtle_bloodline_vitality_a1_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0006084906
-                }
-              ]
+              "continuous": 30.0,
+              "milestones": {
+                "25": 4.0,
+                "50": 5.0,
+                "75": 4.0,
+                "100": 10.0
+              }
             },
             "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:4_saint_dreamless_sovereign_turtle_bloodline_spirit_a1",
-                  "value": 0.0744
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:4_saint_dreamless_sovereign_turtle_bloodline_spirit_a1_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.00045
-                }
-              ]
+              "continuous": 24.0,
+              "milestones": {
+                "25": 3.0,
+                "75": 5.0,
+                "100": 8.0
+              }
             },
             "ascension:strength": {
-              "flat": [
-                {
-                  "id": "ascension:4_saint_dreamless_sovereign_turtle_bloodline_strength_a1",
-                  "value": 0.0624
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:4_saint_dreamless_sovereign_turtle_bloodline_strength_a1_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0001836957
-                }
-              ]
+              "continuous": 13.0,
+              "milestones": {
+                "50": 4.0,
+                "100": 6.0
+              }
             },
             "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:4_saint_dreamless_sovereign_turtle_bloodline_agility_a1",
-                  "value": 0.05
-                }
-              ],
-              "multiplier": []
+              "continuous": 5.0,
+              "milestones": {
+                "100": 3.0
+              }
             }
           }
         },
@@ -136,93 +109,10 @@
     {
       "condition": {
         "type": "ascension:on_purity_in_range",
-        "start": 25,
-        "end": 25
-      },
-      "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:4_saint_dreamless_sovereign_turtle_bloodline_vitality_a3",
-                  "value": 1.0143396226
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:4_saint_dreamless_sovereign_turtle_bloodline_vitality_a3_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0081132075
-                }
-              ]
-            },
-            "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:4_saint_dreamless_sovereign_turtle_bloodline_spirit_a3",
-                  "value": 0.93
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:4_saint_dreamless_sovereign_turtle_bloodline_spirit_a3_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.005625
-                }
-              ]
-            }
-          }
-        }
-      ]
-    },
-    {
-      "condition": {
-        "type": "ascension:on_purity_in_range",
         "start": 50,
         "end": 50
       },
       "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:4_saint_dreamless_sovereign_turtle_bloodline_vitality_a4",
-                  "value": 1.2679245283
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:4_saint_dreamless_sovereign_turtle_bloodline_vitality_a4_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0101415094
-                }
-              ]
-            },
-            "ascension:strength": {
-              "flat": [
-                {
-                  "id": "ascension:4_saint_dreamless_sovereign_turtle_bloodline_strength_a4",
-                  "value": 1.92
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:4_saint_dreamless_sovereign_turtle_bloodline_strength_a4_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0056521739
-                }
-              ]
-            }
-          }
-        },
         {
           "type": "ascension:give_path_bonuses",
           "bonuses": {
@@ -249,43 +139,6 @@
       },
       "actions": [
         {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:4_saint_dreamless_sovereign_turtle_bloodline_spirit_a6",
-                  "value": 1.55
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:4_saint_dreamless_sovereign_turtle_bloodline_spirit_a6_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.009375
-                }
-              ]
-            },
-            "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:4_saint_dreamless_sovereign_turtle_bloodline_vitality_a6",
-                  "value": 1.0143396226
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:4_saint_dreamless_sovereign_turtle_bloodline_vitality_a6_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0081132075
-                }
-              ]
-            }
-          }
-        },
-        {
           "type": "ascension:give_path_bonuses",
           "bonuses": {
             "ascension:affinity": {
@@ -310,68 +163,6 @@
         "end": 100
       },
       "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:4_saint_dreamless_sovereign_turtle_bloodline_vitality_a8",
-                  "value": 2.5358490566
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:4_saint_dreamless_sovereign_turtle_bloodline_vitality_a8_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0202830189
-                }
-              ]
-            },
-            "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:4_saint_dreamless_sovereign_turtle_bloodline_spirit_a8",
-                  "value": 2.48
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:4_saint_dreamless_sovereign_turtle_bloodline_spirit_a8_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.015
-                }
-              ]
-            },
-            "ascension:strength": {
-              "flat": [
-                {
-                  "id": "ascension:4_saint_dreamless_sovereign_turtle_bloodline_strength_a8",
-                  "value": 2.88
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:4_saint_dreamless_sovereign_turtle_bloodline_strength_a8_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0084782609
-                }
-              ]
-            },
-            "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:4_saint_dreamless_sovereign_turtle_bloodline_agility_a8",
-                  "value": 3.0
-                }
-              ],
-              "multiplier": []
-            }
-          }
-        },
         {
           "type": "ascension:give_path_bonuses",
           "bonuses": {

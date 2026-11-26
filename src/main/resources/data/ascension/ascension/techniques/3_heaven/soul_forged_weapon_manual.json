@@ -47,12 +47,10 @@
   ],
   "stats_per_realm": {
     "ascension:spirit": {
-      "flat": 0.19231,
-      "multiplier": 0.04
+      "profile": "ascension:heaven/primary"
     },
     "ascension:strength": {
-      "flat": 0.05769,
-      "multiplier": 0.0133333333
+      "profile": "ascension:heaven/secondary"
     }
   },
   "item_tooltip": {

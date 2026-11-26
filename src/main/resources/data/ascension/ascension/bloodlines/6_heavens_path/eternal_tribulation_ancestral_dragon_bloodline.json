@@ -16,72 +16,41 @@
       "condition": "ascension:all_purity",
       "actions": [
         {
-          "type": "ascension:give_stats_using_purity",
-          "conflict_action": "replace",
+          "type": "ascension:give_scaled_purity_stats",
+          "scaling": "ascension:bloodline",
           "stats": {
             "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:6_heavens_path_eternal_tribulation_ancestral_dragon_bloodline_vitality_a1",
-                  "value": 0.130625
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:6_heavens_path_eternal_tribulation_ancestral_dragon_bloodline_vitality_a1_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0022265625
-                }
-              ]
+              "continuous": 95.0,
+              "milestones": {
+                "10": 10.0,
+                "50": 20.0,
+                "100": 35.0
+              }
             },
             "ascension:strength": {
-              "flat": [
-                {
-                  "id": "ascension:6_heavens_path_eternal_tribulation_ancestral_dragon_bloodline_strength_a1",
-                  "value": 0.1254193548
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:6_heavens_path_eternal_tribulation_ancestral_dragon_bloodline_strength_a1_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0021048387
-                }
-              ]
+              "continuous": 90.0,
+              "milestones": {
+                "10": 10.0,
+                "50": 20.0,
+                "100": 35.0
+              }
             },
             "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:6_heavens_path_eternal_tribulation_ancestral_dragon_bloodline_spirit_a1",
-                  "value": 0.0989333333
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:6_heavens_path_eternal_tribulation_ancestral_dragon_bloodline_spirit_a1_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0016333333
-                }
-              ]
+              "continuous": 70.0,
+              "milestones": {
+                "25": 15.0,
+                "50": 15.0,
+                "75": 20.0,
+                "100": 30.0
+              }
             },
             "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:6_heavens_path_eternal_tribulation_ancestral_dragon_bloodline_agility_a1",
-                  "value": 0.0838095238
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:6_heavens_path_eternal_tribulation_ancestral_dragon_bloodline_agility_a1_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0011309524
-                }
-              ]
+              "continuous": 50.0,
+              "milestones": {
+                "25": 10.0,
+                "75": 20.0,
+                "100": 25.0
+              }
             }
           }
         },
@@ -143,93 +112,10 @@
     {
       "condition": {
         "type": "ascension:on_purity_in_range",
-        "start": 10,
-        "end": 10
-      },
-      "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:6_heavens_path_eternal_tribulation_ancestral_dragon_bloodline_vitality_a3",
-                  "value": 1.375
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:6_heavens_path_eternal_tribulation_ancestral_dragon_bloodline_vitality_a3_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0234375
-                }
-              ]
-            },
-            "ascension:strength": {
-              "flat": [
-                {
-                  "id": "ascension:6_heavens_path_eternal_tribulation_ancestral_dragon_bloodline_strength_a3",
-                  "value": 1.3935483871
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:6_heavens_path_eternal_tribulation_ancestral_dragon_bloodline_strength_a3_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0233870968
-                }
-              ]
-            }
-          }
-        }
-      ]
-    },
-    {
-      "condition": {
-        "type": "ascension:on_purity_in_range",
         "start": 25,
         "end": 25
       },
       "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:6_heavens_path_eternal_tribulation_ancestral_dragon_bloodline_spirit_a4",
-                  "value": 2.12
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:6_heavens_path_eternal_tribulation_ancestral_dragon_bloodline_spirit_a4_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.035
-                }
-              ]
-            },
-            "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:6_heavens_path_eternal_tribulation_ancestral_dragon_bloodline_agility_a4",
-                  "value": 1.6761904762
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:6_heavens_path_eternal_tribulation_ancestral_dragon_bloodline_agility_a4_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0226190476
-                }
-              ]
-            }
-          }
-        },
         {
           "type": "ascension:give_path_bonuses",
           "bonuses": {
@@ -256,59 +142,6 @@
       },
       "actions": [
         {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:6_heavens_path_eternal_tribulation_ancestral_dragon_bloodline_vitality_a6",
-                  "value": 2.75
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:6_heavens_path_eternal_tribulation_ancestral_dragon_bloodline_vitality_a6_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.046875
-                }
-              ]
-            },
-            "ascension:strength": {
-              "flat": [
-                {
-                  "id": "ascension:6_heavens_path_eternal_tribulation_ancestral_dragon_bloodline_strength_a6",
-                  "value": 2.7870967742
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:6_heavens_path_eternal_tribulation_ancestral_dragon_bloodline_strength_a6_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0467741935
-                }
-              ]
-            },
-            "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:6_heavens_path_eternal_tribulation_ancestral_dragon_bloodline_spirit_a6",
-                  "value": 2.12
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:6_heavens_path_eternal_tribulation_ancestral_dragon_bloodline_spirit_a6_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.035
-                }
-              ]
-            }
-          }
-        },
-        {
           "type": "ascension:give_path_bonuses",
           "bonuses": {
             "ascension:affinity": {
@@ -333,43 +166,6 @@
         "end": 75
       },
       "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:6_heavens_path_eternal_tribulation_ancestral_dragon_bloodline_agility_a8",
-                  "value": 3.3523809524
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:6_heavens_path_eternal_tribulation_ancestral_dragon_bloodline_agility_a8_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0452380952
-                }
-              ]
-            },
-            "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:6_heavens_path_eternal_tribulation_ancestral_dragon_bloodline_spirit_a8",
-                  "value": 2.8266666667
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:6_heavens_path_eternal_tribulation_ancestral_dragon_bloodline_spirit_a8_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0466666667
-                }
-              ]
-            }
-          }
-        },
         {
           "type": "ascension:give_path_bonuses",
           "bonuses": {
@@ -404,75 +200,6 @@
         "end": 100
       },
       "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:6_heavens_path_eternal_tribulation_ancestral_dragon_bloodline_vitality_a10",
-                  "value": 4.8125
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:6_heavens_path_eternal_tribulation_ancestral_dragon_bloodline_vitality_a10_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.08203125
-                }
-              ]
-            },
-            "ascension:strength": {
-              "flat": [
-                {
-                  "id": "ascension:6_heavens_path_eternal_tribulation_ancestral_dragon_bloodline_strength_a10",
-                  "value": 4.8774193548
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:6_heavens_path_eternal_tribulation_ancestral_dragon_bloodline_strength_a10_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0818548387
-                }
-              ]
-            },
-            "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:6_heavens_path_eternal_tribulation_ancestral_dragon_bloodline_spirit_a10",
-                  "value": 4.24
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:6_heavens_path_eternal_tribulation_ancestral_dragon_bloodline_spirit_a10_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.07
-                }
-              ]
-            },
-            "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:6_heavens_path_eternal_tribulation_ancestral_dragon_bloodline_agility_a10",
-                  "value": 4.1904761905
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:6_heavens_path_eternal_tribulation_ancestral_dragon_bloodline_agility_a10_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.056547619
-                }
-              ]
-            }
-          }
-        },
         {
           "type": "ascension:give_path_bonuses",
           "bonuses": {

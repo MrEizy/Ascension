@@ -17,49 +17,29 @@
       "condition": "ascension:all_purity",
       "actions": [
         {
-          "type": "ascension:give_stats_using_purity",
-          "conflict_action": "replace",
+          "type": "ascension:give_scaled_purity_stats",
+          "scaling": "ascension:bloodline",
           "stats": {
             "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_nine_tailed_fox_bloodline_spirit_a1",
-                  "value": 0.07168
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:3_heaven_nine_tailed_fox_bloodline_spirit_a1_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.00024
-                }
-              ]
+              "continuous": 16.0,
+              "milestones": {
+                "25": 2.0,
+                "75": 2.0,
+                "100": 5.0
+              }
             },
             "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_nine_tailed_fox_bloodline_agility_a1",
-                  "value": 0.0709333333
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:3_heaven_nine_tailed_fox_bloodline_agility_a1_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0001333333
-                }
-              ]
+              "continuous": 12.0,
+              "milestones": {
+                "50": 2.0,
+                "100": 4.0
+              }
             },
             "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_nine_tailed_fox_bloodline_vitality_a1",
-                  "value": 0.04
-                }
-              ],
-              "multiplier": []
+              "continuous": 4.0,
+              "milestones": {
+                "100": 1.0
+              }
             }
           }
         },
@@ -112,151 +92,15 @@
     {
       "condition": {
         "type": "ascension:on_purity_in_range",
-        "start": 25,
-        "end": 25
-      },
-      "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_nine_tailed_fox_bloodline_spirit_a3",
-                  "value": 0.896
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:3_heaven_nine_tailed_fox_bloodline_spirit_a3_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.003
-                }
-              ]
-            }
-          }
-        }
-      ]
-    },
-    {
-      "condition": {
-        "type": "ascension:on_purity_in_range",
-        "start": 50,
-        "end": 50
-      },
-      "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_nine_tailed_fox_bloodline_agility_a4",
-                  "value": 1.1822222222
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:3_heaven_nine_tailed_fox_bloodline_agility_a4_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0022222222
-                }
-              ]
-            }
-          }
-        }
-      ]
-    },
-    {
-      "condition": {
-        "type": "ascension:on_purity_in_range",
         "start": 75,
         "end": 75
       },
       "actions": [
         {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_nine_tailed_fox_bloodline_spirit_a5",
-                  "value": 0.896
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:3_heaven_nine_tailed_fox_bloodline_spirit_a5_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.003
-                }
-              ]
-            }
-          }
-        },
-        {
           "type": "ascension:grant_skills",
           "skills": [
             "ascension:passive/bloodline/nine_tailed_fox/ninefold_glamour"
           ]
-        }
-      ]
-    },
-    {
-      "condition": {
-        "type": "ascension:on_purity_in_range",
-        "start": 100,
-        "end": 100
-      },
-      "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_nine_tailed_fox_bloodline_spirit_a6",
-                  "value": 2.24
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:3_heaven_nine_tailed_fox_bloodline_spirit_a6_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0075
-                }
-              ]
-            },
-            "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_nine_tailed_fox_bloodline_agility_a6",
-                  "value": 2.3644444444
-                }
-              ],
-              "multiplier": [
-                {
-                  "id": "ascension:3_heaven_nine_tailed_fox_bloodline_agility_a6_cultivation_growth",
-                  "group": "ascension:bloodline_cultivation_growth",
-                  "operation_group": 0,
-                  "value": 0.0044444444
-                }
-              ]
-            },
-            "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_nine_tailed_fox_bloodline_vitality_a6",
-                  "value": 1.0
-                }
-              ],
-              "multiplier": []
-            }
-          }
         }
       ]
     }
