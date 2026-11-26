@@ -1,7 +1,5 @@
 package net.zic.ascension.common.gui.elements.skill_casting;
 
-import net.lucent.easygui.gui.RenderableElement;
-import net.lucent.easygui.gui.UIFrame;
 import net.lucent.easygui.gui.textures.ITextureData;
 import net.lucent.easygui.gui.textures.TextureData;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -9,7 +7,7 @@ import net.minecraft.resources.Identifier;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.common.gui.data.ClientAscensionData;
 
-public class SkillSegment extends RenderableElement {
+public class SkillSegment {
     private static final Identifier SELECTED_SEGMENT_TEXTURE = Identifier.fromNamespaceAndPath(
             AscensionCraft.MOD_ID,
             "textures/gui/overlay/skill_wheel_segment_selected.png"
@@ -30,20 +28,16 @@ public class SkillSegment extends RenderableElement {
     private final SkillHotBarContainer owner;
     private final int slot;
 
-    public SkillSegment(UIFrame frame, SkillHotBarContainer owner, int slot) {
-        super(frame);
+    public SkillSegment(SkillHotBarContainer owner, int slot) {
         this.owner = owner;
         this.slot = slot;
-        setWidth(SIZE);
-        setHeight(SIZE);
     }
 
     public int getSlot() {
         return slot;
     }
 
-    @Override
-    public void render(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+    public void render(GuiGraphicsExtractor graphics) {
         renderSelectedSegment(graphics);
         renderSkillIcon(graphics);
     }
